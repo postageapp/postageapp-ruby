@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "lib/postageapp.rb",
+     "postageapp.gemspec",
      "test/helper.rb",
      "test/test_postageapp.rb"
   ]
