@@ -1,7 +1,9 @@
-require 'helper'
+require File.dirname(__FILE__) + '/helper'
 
-class TestPostageapp < Test::Unit::TestCase
-  def test_something_for_real
-    flunk "hey buddy, you should probably rename this file and start testing for real"
+class TestPostageApp < Test::Unit::TestCase
+  
+  def test_method_configure
+    
   end
+  
 end
