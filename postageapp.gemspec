@@ -24,8 +24,11 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "lib/postageapp.rb",
+     "lib/postageapp/configuration.rb",
+     "lib/postageapp/version.rb",
      "postageapp.gemspec",
      "test/helper.rb",
+     "test/test_configuration.rb",
      "test/test_postageapp.rb"
   ]
   s.homepage = %q{http://github.com/theworkinggroup/postageapp-gem}

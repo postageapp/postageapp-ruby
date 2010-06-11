@@ -1,6 +1,6 @@
 module PostageApp
   VERSION = begin 
-    IO.read(File.join(File.dirname(__FILE__), '/../../VERSION'))
+    IO.read(File.join(File.dirname(__FILE__), '/../../VERSION')).chomp
   rescue
     'UNKNOWN'
   end
