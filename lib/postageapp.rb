@@ -7,7 +7,7 @@ module PostageApp
   
   class << self
     
-    # Configuration object. See PostageApp::Cofiguration
+    # Accessor for the PostageApp::Configuration object
     attr_accessor :configuration
     
     # Call this method to modify your configuration
@@ -17,9 +17,9 @@ module PostageApp
     #    config.api_key             = '1234567890abcdef'
     #    config.recipient_override  = 'test@test.test' if Rails.env.staging?
     #  end
-    def self.configure
+    def configure
       self.configuration ||= Configuration.new
-      yield configuration
+      yield self.configuration
     end
     
   end

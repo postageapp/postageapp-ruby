@@ -10,8 +10,9 @@ class PostageApp::Configuration
   # and 'http' for insecure connections)
   attr_accessor :protocol
   
-  # The host to connect to (default: 'api.postageapp.com')
-  attr_accessor :host
+  # A list of hosts to connect to. Will attempt to connect to the next one
+  # down the list if first connection fails (default: ['api.postageapp.com'])
+  attr_accessor :hosts
   
   # The port on which PostageApp service runs (default: 443 for secure, 80 for 
   # insecure connections)
@@ -52,12 +53,15 @@ class PostageApp::Configuration
   # The version of this gem (like: 1.0.0)
   attr_accessor :client_version
   
+  # The platform this gem is running from (like: Rails 2.0.2)
+  attr_accessor :platform
+  
   # The logger used by this gem
   attr_accessor :logger
   
   def initialize
     @secure                     = true
-    @host                       = 'api.postageapp.com'
+    @hosts                      = %w( api.postageapp.com )
     @http_open_timeout          = 2
     @http_read_timeout          = 5
     @development_environments   = %w( test )
