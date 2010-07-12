@@ -1,6 +1,6 @@
-require File.dirname(__FILE__) + '/helper'
+require File.expand_path('../helper', __FILE__)
 
-class TestConfiguration < Test::Unit::TestCase
+class ConfigurationTest < Test::Unit::TestCase
   
   def test_intitialization_defaults
     config = PostageApp::Configuration.new
@@ -8,14 +8,14 @@ class TestConfiguration < Test::Unit::TestCase
     assert_equal true,                      config.secure
     assert_equal nil,                       config.api_key
     assert_equal 'https',                   config.protocol
-    assert_equal %w( api.postageapp.com ),  config.hosts
+    assert_equal 'api.postageapp.com',      config.host
     assert_equal 443,                       config.port
     assert_equal nil,                       config.proxy_host
     assert_equal nil,                       config.proxy_port
     assert_equal nil,                       config.proxy_user
-    assert_equal nil,                       config.proxy_password
-    assert_equal 2,                         config.http_open_timeout
-    assert_equal 5,                         config.http_read_timeout
+    assert_equal nil,                       config.proxy_pass
+    assert_equal 5,                         config.http_open_timeout
+    assert_equal 10,                        config.http_read_timeout
     assert_equal nil,                       config.recipient_override
     assert_equal %w( test ),                config.development_environments
     assert_equal %w( send_message ),        config.failed_requests_to_capture
@@ -55,6 +55,13 @@ class TestConfiguration < Test::Unit::TestCase
     assert_equal 80,      config.port
     
     assert !config.secure?
+  end
+  
+  def test_method_url
+    config = PostageApp::Configuration.new
+    
+    config.host = 'api.postageapp.com'
+    assert_equal 'https://api.postageapp.com:443', config.url
   end
   
 end

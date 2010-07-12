@@ -10,9 +10,8 @@ class PostageApp::Configuration
   # and 'http' for insecure connections)
   attr_accessor :protocol
   
-  # A list of hosts to connect to. Will attempt to connect to the next one
-  # down the list if first connection fails (default: ['api.postageapp.com'])
-  attr_accessor :hosts
+  # The host to connect to (default: 'api.postageapp.com')
+  attr_accessor :host
   
   # The port on which PostageApp service runs (default: 443 for secure, 80 for 
   # insecure connections)
@@ -28,7 +27,7 @@ class PostageApp::Configuration
   attr_accessor :proxy_user
   
   # The password for the proxy server (if using proxy)
-  attr_accessor :proxy_password
+  attr_accessor :proxy_pass
   
   # The HTTP open timeout in seconds (defaults to 2).
   attr_accessor :http_open_timeout
@@ -53,7 +52,7 @@ class PostageApp::Configuration
   # The version of this gem (like: 1.0.0)
   attr_accessor :client_version
   
-  # The platform this gem is running from (like: Rails 2.0.2)
+  # The platform this gem is running from (like: Rails 2.3.5)
   attr_accessor :platform
   
   # The logger used by this gem
@@ -61,9 +60,9 @@ class PostageApp::Configuration
   
   def initialize
     @secure                     = true
-    @hosts                      = %w( api.postageapp.com )
-    @http_open_timeout          = 2
-    @http_read_timeout          = 5
+    @host                       = 'api.postageapp.com'
+    @http_open_timeout          = 5
+    @http_read_timeout          = 10
     @development_environments   = %w( test )
     @failed_requests_to_capture = %w( send_message )
     @client_version             = PostageApp::VERSION
@@ -86,4 +85,9 @@ class PostageApp::Configuration
       80
     end
   end
+  
+  def url
+    "#{self.protocol}://#{self.host}:#{self.port}"
+  end
+  
 end

@@ -1,14 +1,14 @@
-require File.dirname(__FILE__) + '/helper'
+require File.expand_path('../helper', __FILE__)
 
-class TestPostageApp < Test::Unit::TestCase
+class PostageAppTest < Test::Unit::TestCase
   
   def test_method_configure
     PostageApp.configure do |config|
       config.api_key  = 'abcdefg12345'
-      config.hosts    = ['test.test']
+      config.host     = 'test.test'
     end
     assert_equal 'abcdefg12345',  PostageApp.configuration.api_key
-    assert_equal %w( test.test ), PostageApp.configuration.hosts
+    assert_equal 'test.test',     PostageApp.configuration.host
   end
   
 end

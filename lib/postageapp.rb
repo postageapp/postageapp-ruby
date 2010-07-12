@@ -1,9 +1,12 @@
-require 'net/http'
-require 'net/https'
 require 'postageapp/version'
 require 'postageapp/configuration'
+require 'postageapp/request'
+require 'postageapp/response'
 
 module PostageApp
+  
+  class Error < StandardError
+  end
   
   class << self
     
