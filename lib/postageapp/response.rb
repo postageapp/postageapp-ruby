@@ -27,4 +27,13 @@ class PostageApp::Response
     @status   = 'fail'
   end
   
+  # Little helper that checks for the Response status
+  #   => @response.ok?
+  #   >> true
+  #   => @response.fail?
+  #   >> false
+  def method_missing(method)
+    /.*?\?$/.match(method.to_s) ? "#{self.status}?" == method.to_s : super(method)
+  end
+  
 end

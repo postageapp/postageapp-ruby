@@ -7,14 +7,15 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'postageapp'
 
 begin require 'redgreen' unless ENV['TM_FILEPATH']; rescue LoadError; end
+require 'mocha'
 
 class Test::Unit::TestCase
   
   def setup
     # resetting to default configuration
     PostageApp.configure do |config|
-      config.secure                     = false
-      config.host                       = 'api.postageapp.local'
+      config.secure                     = true
+      config.host                       = 'api.postageapp.com'
       config.api_key                    = '1234567890abcdef'
       config.http_open_timeout          = 5
       config.http_read_timeout          = 10

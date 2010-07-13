@@ -3,10 +3,19 @@ require File.expand_path('../helper', __FILE__)
 class RequestIntegrationTest < Test::Unit::TestCase
   
   # Note: Need access to a live PostageApp.com account
+  # See helper.rb to set host / api key
   unless false # set to +true+ to run tests
     puts "\e[5m\e[31m!!!\e[0m \e[0m\e[31mSkipping #{File.basename(__FILE__)}\e[0m"
     def test_nothing ; end
   else
+    
+    def setup
+      PostageApp.configure do |config|
+        config.secure   = false
+        config.host     = 'api.postageapp.local'
+        config.api_key  = '1234567890abcdef'
+      end
+    end
     
     def test_request_get_method_list
       request = PostageApp::Request.new(:get_method_list)
@@ -22,7 +31,7 @@ class RequestIntegrationTest < Test::Unit::TestCase
     
     def test_request_send_message
       request = PostageApp::Request.new(:send_message, {
-        :headers    => { 'from'     => 'test2@test.test',
+        :headers    => { 'from'     => 'sender@test.test',
                          'subject'  => 'Test Message'},
         :recipients => 'test@test.test',
         :content    => {

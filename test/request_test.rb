@@ -12,8 +12,8 @@ class RequestTest < Test::Unit::TestCase
   
   def test_method_url
     request = PostageApp::Request.new(:test_method)
-    assert_equal 'api.postageapp.local',    request.url.host
-    assert_equal 80,                        request.url.port
+    assert_equal 'api.postageapp.com',      request.url.host
+    assert_equal 443,                       request.url.port
     assert_equal '/v.1.0/test_method.json', request.url.path
   end
   
@@ -31,11 +31,48 @@ class RequestTest < Test::Unit::TestCase
   end
   
   def test_send
-    flunk
+    Net::HTTP.any_instance.stubs(:post).returns(Net::HTTPResponse.new(nil, nil, nil))
+    Net::HTTPResponse.any_instance.stubs(:body).returns({
+      :response => { 
+        :uid    => 'md5_hash_uid',
+        :status => 'ok'
+      },
+      :data => {
+        :message => { :id => 999 }
+      }
+    }.to_json)
+    
+    request = PostageApp::Request.new(:send_message, {
+      :headers    => { 'from'     => 'sender@test.test',
+                       'subject'  => 'Test Message'},
+      :recipients => 'test@test.test',
+      :content    => {
+        'text/plain'  => 'text content',
+        'text/html'   => 'html content'
+      }
+    })
+    response = request.send
+    assert_equal 'ok', response.status
+    assert_equal 'md5_hash_uid', response.uid
+    assert_equal ({'message' => { 'id' => 999 }}), response.data
   end
   
   def test_send_failure
-    flunk
+    Net::HTTP.any_instance.stubs(:post).returns(nil)
+    
+    request = PostageApp::Request.new(:send_message, {
+      :headers    => { 'from'     => 'sender@test.test',
+                       'subject'  => 'Test Message'},
+      :recipients => 'test@test.test',
+      :content    => {
+        'text/plain'  => 'text content',
+        'text/html'   => 'html content'
+      }
+    })
+    response = request.send
+    assert_equal 'fail', response.status
+    assert_equal nil, response.uid
+    assert_equal nil, response.data
   end
   
 end
