@@ -1,8 +1,3 @@
-require 'net/http'
-require 'net/https'
-require 'json'
-require 'digest/md5'
-
 class PostageApp::Request
   
   API_VERSION = '1.0'
