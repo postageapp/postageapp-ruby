@@ -9,25 +9,32 @@ This is the gem used to integrate Ruby apps with PostageApp service.
   end
 
 == Usage
-
+  
   request = PostageApp::Request.new(:send_message, {
-    :headers    => { 'from'     => 'sender@example.com',
-                     'subject'  => 'Email Subject' },
-    :recipients => 'recipient@example.com',
-    :content    => {
+    'headers'     => { 'from'     => 'sender@example.com',
+                       'subject'  => 'Email Subject' },
+    'recipients'  => 'recipient@example.com',
+    'content'     => {
       'text/plain'  => 'text email content',
       'text/html'   => 'html email content'
     }
   })
   response = request.send
   
-  # If successful will return 'ok'. If http call failed in some fashion
-  # 'fail' will be returned. Status can be quickly checked with
-  # helper methods like these: +response.ok?+ or +response.fail?+
+`PostageApp::Response` object allows you to check the status:
+  
   >> response.status
   => 'ok'
   
-  # Response data coming from postageapp.com
+Alternatively you may use:
+
+  >> response.fail?
+  => false
+  >> response.ok?
+  => true
+  
+Response comes back with data:
+  
   >> response.data
   => { 'message' => { 'id' => '12345' }}
 
