@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Oleg Khabarov, The Working Group Inc"]
-  s.date = %q{2010-06-11}
+  s.date = %q{2010-07-13}
   s.description = %q{Gem that interfaces with PostageApp.com service to send emails from web apps}
   s.email = %q{oleg@twg.ca}
   s.extra_rdoc_files = [
@@ -25,11 +25,16 @@ Gem::Specification.new do |s|
      "VERSION",
      "lib/postageapp.rb",
      "lib/postageapp/configuration.rb",
+     "lib/postageapp/request.rb",
+     "lib/postageapp/response.rb",
      "lib/postageapp/version.rb",
      "postageapp.gemspec",
+     "test/configuration_test.rb",
      "test/helper.rb",
-     "test/test_configuration.rb",
-     "test/test_postageapp.rb"
+     "test/postageapp_test.rb",
+     "test/request_integration_test.rb",
+     "test/request_test.rb",
+     "test/response_test.rb"
   ]
   s.homepage = %q{http://github.com/theworkinggroup/postageapp-gem}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -37,9 +42,12 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{Easier way to send email from web apps}
   s.test_files = [
-    "test/helper.rb",
-     "test/test_configuration.rb",
-     "test/test_postageapp.rb"
+    "test/configuration_test.rb",
+     "test/helper.rb",
+     "test/postageapp_test.rb",
+     "test/request_integration_test.rb",
+     "test/request_test.rb",
+     "test/response_test.rb"
   ]
 
   if s.respond_to? :specification_version then
@@ -47,9 +55,15 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<json>, ["= 1.2.4"])
+      s.add_development_dependency(%q<mocha>, [">= 0.9.8"])
     else
+      s.add_dependency(%q<json>, ["= 1.2.4"])
+      s.add_dependency(%q<mocha>, [">= 0.9.8"])
     end
   else
+    s.add_dependency(%q<json>, ["= 1.2.4"])
+    s.add_dependency(%q<mocha>, [">= 0.9.8"])
   end
 end
 

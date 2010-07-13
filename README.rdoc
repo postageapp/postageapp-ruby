@@ -1,17 +1,40 @@
-= postageapp
+= PostageApp Gem
 
-Description goes here.
+This is the gem used to integrate Ruby apps with PostageApp service. 
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+== Installation
+  
+  PostageApp.configure do |config|
+    config.api_key = 'POSTAGEAPP_PROJECT_API_KEY'
+  end
+
+== Usage
+
+  request = PostageApp::Request.new(:send_message, {
+    :headers    => { 'from'     => 'sender@example.com',
+                     'subject'  => 'Email Subject' },
+    :recipients => 'recipient@example.com',
+    :content    => {
+      'text/plain'  => 'text email content',
+      'text/html'   => 'html email content'
+    }
+  })
+  response = request.send
+  
+  # If successful will return 'ok'. If http call failed in some fashion
+  # 'fail' will be returned. Status can be quickly checked with
+  # helper methods like these: +response.ok?+ or +response.fail?+
+  >> response.status
+  => 'ok'
+  
+  # Response data coming from postageapp.com
+  >> response.data
+  => { 'message' => { 'id' => '12345' }}
+
+== ActionMailer Integration
+
+TODO
 
 == Copyright
 
-Copyright (c) 2010 Oleg. See LICENSE for details.
+(C) 2009 {The Working Group, Inc}[http://www.twg.ca/]

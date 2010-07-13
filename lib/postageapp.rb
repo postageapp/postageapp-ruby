@@ -16,10 +16,10 @@ module PostageApp
     # Call this method to modify your configuration
     # 
     # Example:
-    #  PostageApp.configure do |config|
-    #    config.api_key             = '1234567890abcdef'
-    #    config.recipient_override  = 'test@test.test' if Rails.env.staging?
-    #  end
+    #   PostageApp.configure do |config|
+    #     config.api_key             = '1234567890abcdef'
+    #     config.recipient_override  = 'test@test.test' if Rails.env.staging?
+    #   end
     def configure
       self.configuration ||= Configuration.new
       yield self.configuration
