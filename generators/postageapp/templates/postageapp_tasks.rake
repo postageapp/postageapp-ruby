@@ -3,48 +3,38 @@ namespace :postageapp do
   desc 'Verify postageapp gem installation by requesting project info from PostageApp.com'
   task :test => :environment do 
     
-    puts "Attempting to contact PostageApp..."
-    response = Postage::Request.new(:get_project_info).call
+    puts "Attempting to contact #{PostageApp.configuration.host} ..."
+    response = PostageApp::Request.new(:get_project_info).send
     
-    unless response.blank?
+    if response.ok?
+      project_name  = response.data['project']['name']
+      project_url   = response.data['project']['url']
+      user_emails   = response.data['project']['users']
       
-      if response.success?
-        project_name  = response.data['project']['name']
-        project_url   = response.data['project']['url']
-        user_emails   = response.data['project']['users']
-        
-        puts %{
+      puts %{
   Found Project:
   ----------------------------
    Name:  #{ project_name }
     URL:  #{ project_url }
   Users:  #{ user_emails.keys.join(', ') }
-        }
+      }
         
-        # Sending test email to all users in the project
-        # Most likely a single user if it's a new project
-        unless user_emails.empty?
-          puts 'Sending test message to users in the project...'
-          r = send_test_message(user_emails)
-          if r && r.success?
-            puts '  Message was successfully sent!'
-            puts ''
-            puts 'Your application is ready to use PostageApp!'
-          else
-            puts 'Failed to send test message. Please try again. Check logs if issue persists.'
-          end
-        else
-          puts 'Seems that there are no users to send test message to. Aborting.'
-        end
-        
+      # Sending test email to all users in the project
+      # Most likely a single user if it's a new project
+      puts 'Sending test message to users in the project...'
+      r = send_test_message(user_emails)
+      if r.ok?
+        puts "Message was successfully sent!\n\n"
+        puts 'Your application is ready to use PostageApp!'
       else
-        puts "Received unexpected response: #{response.response[:message]}"
-        puts 'Check your configuration please.'
+        puts 'Failed to send test message. Please try again. Check logs if issue persists.'
+        puts 'This was the response:'
+        puts r.to_yaml
       end
       
     else
-      puts 'Failed to recieve any type of response from PostageApp. Please try again.'
-      puts 'Check logs if problem persists.'
+      puts 'Failed to fetch information about your project. This was the response:'
+      puts response.to_yaml
     end
   end
   
@@ -83,10 +73,10 @@ The PostageApp Team
 def send_test_message(recipients)
   recipients_with_variables = {}
   recipients.each do |email, name|
-    recipients_with_variables[email] = {'name' => name}
+    recipients_with_variables[email] = { 'name' => name }
   end
   
-  Postage.call(:send_message,
+  PostageApp::Request.new(:send_message,
     :message => {
       'text/html'  => HTML_MESSAGE,
       'text/plain' => TEXT_MESSAGE
@@ -96,5 +86,5 @@ def send_test_message(recipients)
       'Subject' => '[PostageApp] Test Message',
       'From'    => 'no-return@postageapp.com'
     }
-  )
+  ).send
 end
