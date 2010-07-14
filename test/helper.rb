@@ -21,7 +21,6 @@ class Test::Unit::TestCase
       config.http_read_timeout          = 10
       config.development_environments   = %w( test )
       config.failed_requests_to_capture = %w( send_message )
-      config.client_version             = PostageApp::VERSION
     end
   end
   

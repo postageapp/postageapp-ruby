@@ -20,8 +20,6 @@ class ConfigurationTest < Test::Unit::TestCase
     assert_equal %w( test ),                config.development_environments
     assert_equal %w( send_message ),        config.failed_requests_to_capture
     assert_equal nil,                       config.failed_requests_path
-    assert_equal PostageApp::VERSION,       config.client_version
-    assert_equal nil,                       config.platform
     assert_equal nil,                       config.logger
   end
   

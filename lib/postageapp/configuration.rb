@@ -49,12 +49,6 @@ class PostageApp::Configuration
   # The file path where all failed requests are saved
   attr_accessor :failed_requests_path
   
-  # The version of this gem (like: 1.0.0)
-  attr_accessor :client_version
-  
-  # The platform this gem is running from (like: Rails 2.3.5)
-  attr_accessor :platform
-  
   # The logger used by this gem
   attr_accessor :logger
   
@@ -65,7 +59,6 @@ class PostageApp::Configuration
     @http_read_timeout          = 10
     @development_environments   = %w( test )
     @failed_requests_to_capture = %w( send_message )
-    @client_version             = PostageApp::VERSION
   end
   
   alias_method :secure?, :secure
