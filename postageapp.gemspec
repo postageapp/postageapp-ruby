@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
      "generators/postageapp/postageapp_generator.rb",
      "generators/postageapp/templates/initializer.rb",
      "generators/postageapp/templates/postageapp_tasks.rake",
+     "lib/generators/postageapp/postageapp_generator.rb",
      "lib/postageapp.rb",
      "lib/postageapp/configuration.rb",
      "lib/postageapp/request.rb",
