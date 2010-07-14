@@ -29,7 +29,6 @@ class PostageappGenerator < Rails::Generator::Base
         :collision  => :force
       m.rake 'postageapp:test'
     end
-    
   end
   
 end
