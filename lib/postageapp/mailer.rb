@@ -9,3 +9,5 @@ if ActionMailer::VERSION::MAJOR >= 3
 else
   require File.expand_path('../mailer/mailer_am2', __FILE__)
 end
+
+# TODO: Add helper methods for PostageApp::Request so it can be tested as a TMail::Mail / Mail object

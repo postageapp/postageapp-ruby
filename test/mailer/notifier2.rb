@@ -1,4 +1,5 @@
-class Notifier < PostageApp::Mailer
+# Test mailer for ActionMailer 2
+class Notifier2 < PostageApp::Mailer
   
   self.template_root = File.expand_path('../templates', __FILE__)
   
