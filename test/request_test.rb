@@ -31,16 +31,7 @@ class RequestTest < Test::Unit::TestCase
   end
   
   def test_send
-    Net::HTTP.any_instance.stubs(:post).returns(Net::HTTPResponse.new(nil, nil, nil))
-    Net::HTTPResponse.any_instance.stubs(:body).returns({
-      :response => { 
-        :uid    => 'md5_hash_uid',
-        :status => 'ok'
-      },
-      :data => {
-        :message => { :id => 999 }
-      }
-    }.to_json)
+    mock_successful_send
     
     request = PostageApp::Request.new(:send_message, {
       :headers    => { 'from'     => 'sender@test.test',

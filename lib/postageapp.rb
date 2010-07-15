@@ -2,7 +2,6 @@ require 'net/http'
 require 'net/https'
 require 'digest/md5'
 
-require 'rubygems'
 require 'json'
 
 require 'postageapp/version'

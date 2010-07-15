@@ -1,9 +1,11 @@
 # Postage::Mailer allows you to use/re-use existing mailers set up using
 # ActionMailer. The only catch is to change inheritance from ActionMailer::Base
-# to PostageApp::Mailer
+# to PostageApp::Mailer. Also don't forget to require 'postageapp/mailer'
 #
 # Here's an example of a valid PostageApp::Mailer class
-# 
+#  
+#   require 'postageapp/mailer'
+#  
 #   class Notifier < PostageApp::Mailer
 #     def signup_notification(recipient)
 #       recipients  recipient.email_address
@@ -20,39 +22,39 @@
 # Sending email
 #
 #   Notifier.deliver_signup_notification(user) # attempts to deliver to PostageApp (depending on env)
-#   request = Notifier.create_signup_notification(user) # creates Postage::Request object
+#   request = Notifier.create_signup_notification(user) # creates PostageApp::Request object
 #
 class PostageApp::Mailer < ActionMailer::Base
-
+  
   require 'base64'
-
-  self.delivery_method = :postage # unless TODO
-
+  
+  self.delivery_method = :postage
+  
   adv_attr_accessor :postage_template
   adv_attr_accessor :postage_variables
-
+  
   def perform_delivery_postage(mail)
-    mail.call
+    mail.send
   end
-
+  
   def deliver!(mail = @mail)
-    raise 'Postage::Request object not present, cannot deliver' unless mail
+    raise 'PostageApp::Request object not present, cannot deliver' unless mail
     __send__("perform_delivery_#{delivery_method}", mail) if perform_deliveries
   end
-
+  
   # Creating a Postage::Request object unlike TMail one in ActionMailer::Base
   def create_mail
     params = { }
     params[:recipients] = self.recipients unless self.recipients.blank?
-  
+    
     params[:headers] = { }
     params[:headers][:subject]  = self.subject  unless self.subject.blank?
     params[:headers][:from]     = self.from     unless self.from.blank?
     params[:headers].merge!(self.headers)       unless self.headers.blank?
-  
+    
     params[:content] = { }
     params[:attachments] = { }
-  
+    
     if @parts.empty?
       params[:content][self.content_type] = self.body unless self.body.blank?
     else
@@ -69,22 +71,18 @@ class PostageApp::Mailer < ActionMailer::Base
         end
       end
     end
-  
+    
     params[:template] = self.postage_template unless self.postage_template.blank?
     params[:variables] = self.postage_variables unless self.postage_variables.blank?
-  
+    
     params.delete(:headers)     if params[:headers].blank?
     params.delete(:content)     if params[:content].blank?
     params.delete(:attachments) if params[:attachments].blank?
-  
-    unless PostageApp.configuration.recipient_override.blank?
-      params[:recipient_override] = PostageApp.configuration.recipient_override
-    end
-  
+    
     @mail = PostageApp::Request.new(:send_message, params)
   end
   
-  # Not insisting rendering a view if it's not there. Postage can send blank content
+  # Not insisting rendering a view if it's not there. PostageApp gem can send blank content
   # provided that the template is defined.
   def render(opts)
     super(opts)

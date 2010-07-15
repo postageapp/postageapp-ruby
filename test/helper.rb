@@ -5,6 +5,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
 require 'postageapp'
+require 'postageapp/mailer'
 
 begin require 'redgreen' unless ENV['TM_FILEPATH']; rescue LoadError; end
 require 'mocha'
@@ -22,6 +23,19 @@ class Test::Unit::TestCase
       config.development_environments   = %w( test )
       config.failed_requests_to_capture = %w( send_message )
     end
+  end
+  
+  def mock_successful_send
+    Net::HTTP.any_instance.stubs(:post).returns(Net::HTTPResponse.new(nil, nil, nil))
+    Net::HTTPResponse.any_instance.stubs(:body).returns({
+      :response => { 
+        :uid    => 'md5_hash_uid',
+        :status => 'ok'
+      },
+      :data => {
+        :message => { :id => 999 }
+      }
+    }.to_json)
   end
   
 end

@@ -71,7 +71,19 @@ Response comes back with data:
 ActionMailer Integration
 ------------------------
 
-TODO
+PostageApp gem can integrate quite easily with ActionMailer. Here's an example for Rails 2.*
+    
+    require 'postageapp/mailer'
+    
+    class Notifier < PostageApp::Mailer
+      def signup_notification(recipient)
+        recipients  recipient.email_address
+        from        'system@example.com'
+        subject     'New Account Information'
+      end
+    end
+    
+TODO: More details and Rails 3 mailer info
 
 Copyright
 ---------
