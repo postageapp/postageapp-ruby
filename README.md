@@ -14,7 +14,7 @@ Add postageapp gem to your Gemfile:
 Then from the Rails project's root run:
     
     bundle install
-    script/rails generate postageapp --api-key POSTAGEAPP_PROJECT_API_KEY
+    script/rails generate postageapp --api-key PROJECT_API_KEY
   
 ### Rails 2.*
 In config/environment.rb add the following:
@@ -25,7 +25,7 @@ Then from the Rails project's root run:
     
     rake gems:install
     rake gems:unpack GEM=postageapp
-    script/generate postageapp --api-key POSTAGEAPP_PROJECT_API_KEY
+    script/generate postageapp --api-key PROJECT_API_KEY
 
 ### Sinatra / Rack / Others
 It's as simple as doing something like this:
@@ -33,7 +33,7 @@ It's as simple as doing something like this:
     require 'postageapp'
     
     PostageApp.configure do |config|
-      config.api_key = 'POSTAGEAPP_PROJECT_API_KEY'
+      config.api_key = 'PROJECT_API_KEY'
     end
 
 Usage
