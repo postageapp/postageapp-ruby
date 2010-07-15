@@ -80,6 +80,8 @@ class MailerTest < Test::Unit::TestCase
       assert request = Notifier2.create_with_custom_postage_variables
       assert_equal 'test_template', request.arguments[:template]
       assert_equal ({ :variable => 'value' }), request.arguments[:variables]
+      assert_equal ({ 'test2@test.text' => { 'name' => 'Test 2'}, 
+                      'test1@test.text' => { 'name' => 'Test 1'}}), request.arguments[:recipients]
     end
     
     def test_create_with_recipient_override

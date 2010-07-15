@@ -29,7 +29,7 @@ class Notifier2 < PostageApp::Mailer
           :body         => 'html content'
     part  :content_type => 'text/plain',
           :body         => 'text content'
-    attachment  :content_type => 'image/jpeg', 
+    attachment  :content_type => 'image/jpeg',
                 :filename     => 'foo.jpg',
                 :body         => '123456789'
   end
@@ -42,9 +42,16 @@ class Notifier2 < PostageApp::Mailer
   end
   
   def with_custom_postage_variables
-    setup_headers
+    from    'test@test.test'
+    subject 'Test Email'
+    
+    recipients ({
+      'test1@test.text' => { 'name' => 'Test 1' },
+      'test2@test.text' => { 'name' => 'Test 2' }
+    })
     postage_template 'test_template'
     postage_variables :variable => 'value'
+    
   end
   
 private
