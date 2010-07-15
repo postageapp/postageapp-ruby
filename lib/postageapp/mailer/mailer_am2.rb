@@ -45,39 +45,39 @@ class PostageApp::Mailer < ActionMailer::Base
   # Creating a Postage::Request object unlike TMail one in ActionMailer::Base
   def create_mail
     params = { }
-    params[:recipients] = self.recipients unless self.recipients.blank?
+    params['recipients'] = self.recipients unless self.recipients.blank?
     
-    params[:headers] = { }
-    params[:headers][:subject]  = self.subject  unless self.subject.blank?
-    params[:headers][:from]     = self.from     unless self.from.blank?
-    params[:headers].merge!(self.headers)       unless self.headers.blank?
+    params['headers'] = { }
+    params['headers']['subject']  = self.subject  unless self.subject.blank?
+    params['headers']['from']     = self.from     unless self.from.blank?
+    params['headers'].merge!(self.headers)        unless self.headers.blank?
     
-    params[:content] = { }
-    params[:attachments] = { }
+    params['content'] = { }
+    params['attachments'] = { }
     
     if @parts.empty?
-      params[:content][self.content_type] = self.body unless self.body.blank?
+      params['content'][self.content_type] = self.body unless self.body.blank?
     else
       self.parts.each do |part|
         case part.content_disposition
         when 'inline'
           part.content_type = 'text/plain' if part.content_type.blank? && String === part.body
-          params[:content][part.content_type] = part.body
+          params['content'][part.content_type] = part.body
         when 'attachment'
-          params[:attachments][part.filename] = {
-            :content_type => part.content_type,
-            :content      => Base64.encode64(part.body)
+          params['attachments'][part.filename] = {
+            'content_type' => part.content_type,
+            'content'      => Base64.encode64(part.body)
           }
         end
       end
     end
     
-    params[:template] = self.postage_template unless self.postage_template.blank?
-    params[:variables] = self.postage_variables unless self.postage_variables.blank?
+    params['template'] = self.postage_template unless self.postage_template.blank?
+    params['variables'] = self.postage_variables unless self.postage_variables.blank?
     
-    params.delete(:headers)     if params[:headers].blank?
-    params.delete(:content)     if params[:content].blank?
-    params.delete(:attachments) if params[:attachments].blank?
+    params.delete('headers')     if params['headers'].blank?
+    params.delete('content')     if params['content'].blank?
+    params.delete('attachments') if params['attachments'].blank?
     
     @mail = PostageApp::Request.new(:send_message, params)
   end

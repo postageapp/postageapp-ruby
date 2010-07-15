@@ -50,7 +50,7 @@ class Notifier2 < PostageApp::Mailer
       'test2@test.text' => { 'name' => 'Test 2' }
     })
     postage_template 'test_template'
-    postage_variables :variable => 'value'
+    postage_variables 'variable' => 'value'
     
   end
   

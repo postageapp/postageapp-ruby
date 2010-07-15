@@ -20,14 +20,14 @@ class RequestTest < Test::Unit::TestCase
   def test_method_arguments_to_send
     request = PostageApp::Request.new(:test_method)
     args = request.arguments_to_send
-    assert_equal '1234567890abcdef', args[:api_key]
-    assert_match /\w{32}/, args[:uid]
+    assert_equal '1234567890abcdef', args['api_key']
+    assert_match /\w{32}/, args['uid']
     
-    request.arguments = { :data => 'content' }
+    request.arguments = { 'data' => 'content' }
     args = request.arguments_to_send
-    assert_equal '1234567890abcdef', args[:api_key]
-    assert_match /\w{32}/, args[:uid]
-    assert_equal 'content', args[:arguments][:data]
+    assert_equal '1234567890abcdef', args['api_key']
+    assert_match /\w{32}/, args['uid']
+    assert_equal 'content', args['arguments']['data']
   end
   
   def test_send
@@ -64,6 +64,25 @@ class RequestTest < Test::Unit::TestCase
     assert_equal 'fail', response.status
     assert_equal nil, response.uid
     assert_equal nil, response.data
+  end
+  
+  def test_mailer_helper_methods
+    request = PostageApp::Request.new(:send_message, {
+      :headers    => { 'from'     => 'sender@test.test',
+                       'subject'  => 'Test Message'},
+      :recipients => 'test@test.test',
+      :content    => {
+        'text/plain'  => 'text content',
+        'text/html'   => 'html content'
+      }
+    })
+    assert_equal 'test@test.test', request.to
+    assert_equal 'sender@test.test', request.from
+    assert_equal 'Test Message', request.subject
+    assert_equal ({
+      'text/html'   => 'html content', 
+      'text/plain'  => 'text content'
+    }), request.body
   end
   
 end

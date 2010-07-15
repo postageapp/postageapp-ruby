@@ -10,4 +10,24 @@ else
   require File.expand_path('../mailer/mailer_am2', __FILE__)
 end
 
-# TODO: Add helper methods for PostageApp::Request so it can be tested as a TMail::Mail / Mail object
+# A set of methods that are useful when request needs to behave as
+# TMail::Mail or Mail object
+class PostageApp::Request
+  
+  def to
+    self.arguments_to_send.dig('arguments', 'recipients')
+  end
+  
+  def from
+    self.arguments_to_send.dig('arguments', 'headers', 'from')
+  end
+  
+  def subject
+    self.arguments_to_send.dig('arguments', 'headers', 'subject')
+  end
+  
+  def body
+    self.arguments_to_send.dig('arguments', 'content')
+  end
+  
+end

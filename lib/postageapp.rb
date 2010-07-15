@@ -4,6 +4,7 @@ require 'digest/md5'
 
 require 'json'
 
+require 'postageapp/utils'
 require 'postageapp/version'
 require 'postageapp/configuration'
 require 'postageapp/request'

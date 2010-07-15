@@ -57,13 +57,13 @@ class PostageApp::Request
   
   # Arguments need to be appended with some some stuff before it's ready to be send out
   def arguments_to_send
-    hash = { :uid => self.uid, :api_key  => PostageApp.configuration.api_key }
+    hash = { 'uid' => self.uid, 'api_key'  => PostageApp.configuration.api_key }
     
     if !self.arguments.nil? && !self.arguments.empty?
       if PostageApp.configuration.recipient_override.present? && self.method.to_sym == :send_message
-        self.arguments.merge!(:recipient_override => PostageApp.configuration.recipient_override)
+        self.arguments.merge!('recipient_override' => PostageApp.configuration.recipient_override)
       end
-      hash.merge!(:arguments => self.arguments) 
+      hash.merge!('arguments' => self.arguments.stringify_keys!) 
     end
     hash
   end
