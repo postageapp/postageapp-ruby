@@ -28,7 +28,11 @@ Then from the Rails project's root run:
     script/generate postageapp --api-key PROJECT_API_KEY
 
 ### Sinatra / Rack / Others
-It's as simple as doing something like this:
+You'll need to install the gem first:
+    
+    $ sudo gem install postageapp
+    
+And then it's as simple as doing something like this:
     
     require 'postageapp'
     
@@ -38,7 +42,7 @@ It's as simple as doing something like this:
 
 Usage
 -----
-Here's an example of sending a message. {See full API documentation}[http://TODO/] 
+Here's an example of sending a message ([See full API documentation](http://TODO/)):
   
     request = PostageApp::Request.new(:send_message, {
       'headers'     => { 'from'     => 'sender@example.com',
@@ -63,10 +67,18 @@ Alternatively you may use:
     >> response.ok?
     => true
   
-Response comes back with data:
+Response usually comes back with data:
   
     >> response.data
     => { 'message' => { 'id' => '12345' }}
+    
+### Recipient Override
+Sometimes you don't want to send emails to real people in your application. For that there's an ability to override to what address all emails will be delivered. All you need to do is modify configuration block like this:
+
+    PostageApp.configure do |config|
+      config.api_key            = 'PROJECT_API_KEY'
+      config.recipient_override = 'you@example.com' unless Rails.env.production?
+    end
 
 ActionMailer Integration
 ------------------------
@@ -88,4 +100,4 @@ TODO: More details and Rails 3 mailer info
 Copyright
 ---------
 
-(C) 2009 {The Working Group, Inc}[http://www.twg.ca/]
+(C) 2009 [The Working Group, Inc](http://www.twg.ca/)
