@@ -1,7 +1,9 @@
+# Mailer Test
+# This test will test integration with either ActionMailer 2.* or 3.*
+# depending what you have installed
+
 require File.expand_path('../helper', __FILE__)
 require File.expand_path('../mailer/notifier', __FILE__)
-
-require 'action_mailer'
 
 class MailerTest < Test::Unit::TestCase
   
