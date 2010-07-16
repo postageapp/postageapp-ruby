@@ -1,7 +1,7 @@
 # Test mailer for ActionMailer 2
-class Notifier2 < PostageApp::Mailer
+class Notifier < PostageApp::Mailer
   
-  self.template_root = File.expand_path('../templates', __FILE__)
+  self.template_root = File.expand_path('../../templates', __FILE__)
   
   def blank
     # ...

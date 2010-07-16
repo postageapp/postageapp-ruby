@@ -1,5 +1,7 @@
 # Test mailer for ActionMailer 3
-class Notifier3 < PostageApp::Mailer
+class Notifier < PostageApp::Mailer
+  
+  self.append_view_path(File.expand_path('../../templates', __FILE__))
   
   def blank
     # ...
@@ -38,12 +40,21 @@ class Notifier3 < PostageApp::Mailer
   #               :filename     => 'foo.jpg',
   #               :body         => '123456789'
   # end
-  # 
-  # def with_custom_postage_variables
-  #   setup_headers
-  #   postage_template 'test_template'
-  #   postage_variables :variable => 'value'
-  # end
+  #
+  
+  def with_custom_postage_variables
+    postage_template 'test_template'
+    postage_variables 'variable' => 'value'
+    
+    mail(
+      :from     => 'test@test.test',
+      :subject  => 'Test Message',
+      :to       => {
+        'test1@test.text' => { 'name' => 'Test 1' },
+        'test2@test.text' => { 'name' => 'Test 2' }
+      }
+    )
+  end
   
 private
   
