@@ -44,11 +44,11 @@ class PostageApp::Mailer < ActionMailer::Base
   end
   
   def postage_template(value)
-    # todo
+    @_message.arguments['template'] = value
   end
   
   def postage_variables(variables = {})
-    # todo
+    @_message.arguments['variables'] = variables
   end
   
   def attachments
@@ -79,9 +79,12 @@ class PostageApp::Mailer < ActionMailer::Base
     # Set configure delivery behavior
     wrap_delivery_behavior!(headers.delete(:delivery_method))
     
+    # Assigning recipients
+    m.arguments['recipients'] = headers.delete(:to)
+    
     # Assign all headers except parts_order, content_type and body
     assignable = headers.except(:parts_order, :content_type, :body, :template_name, :template_path)
-    m.arguments[:headers] = assignable
+    m.arguments['headers'] = assignable
     
     # Render the templates and blocks
     responses, explicit_order = collect_responses_and_parts_order(headers, &block)
@@ -113,11 +116,11 @@ class PostageApp::Request
                 :charset
   
   def deliver
-    raise 'deliver this thing!'
+    self.send
   end
   
   def delivery_method(method = nil, settings = {})
-    
+    # no idea at the moment
   end
   
 end

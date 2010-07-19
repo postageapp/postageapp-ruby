@@ -1,14 +1,14 @@
 # Test mailer for ActionMailer 3
-class Notifier3 < PostageApp::Mailer
+class Notifier < PostageApp::Mailer
   
-  self.append_view_path(File.expand_path('../../templates', __FILE__))
+  self.append_view_path(File.expand_path('../', __FILE__))
   
   def blank
     # ...
   end
   
   def with_no_content
-    
+    mail(headers_hash)
   end
   
   def with_text_only_view
@@ -55,8 +55,8 @@ class Notifier3 < PostageApp::Mailer
       :from     => 'test@test.test',
       :subject  => 'Test Message',
       :to       => {
-        'test1@test.text' => { 'name' => 'Test 1' },
-        'test2@test.text' => { 'name' => 'Test 2' }
+        'test1@test.test' => { 'name' => 'Test 1' },
+        'test2@test.test' => { 'name' => 'Test 2' }
       }
     )
   end
