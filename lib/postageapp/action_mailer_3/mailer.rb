@@ -18,10 +18,10 @@ class PostageApp::Mailer < ActionMailer::Base
   
   
   # dammit!
-  def initialize_defaults(method)
-    super
-    @mail_was_called = true
-  end
+  # def initialize_defaults(method)
+  #   super
+  #   @mail_was_called = true
+  # end
   
   def postage_template(value)
     # todo

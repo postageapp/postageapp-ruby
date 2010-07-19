@@ -82,6 +82,7 @@ Sometimes you don't want to send emails to real people in your application. For 
 
 ActionMailer Integration
 ------------------------
+You can quickly convert your existing mailers to use PostageApp service by simply changing `class MyMailer < ActionMailer::Base` to `class MyMailer < PostageApp::Mailer`
 
 ### Rails 3.x
 
@@ -89,8 +90,6 @@ TODO
 
 
 ### Rails 2.x
-
-You can quickly convert your existing mailers to use PostageApp service by simply changing `class MyMailer < ActionMailer::Base` to `class MyMailer < PostageApp::Mailer`
 
 Here's an example of a mailer you'd set in in a Rails 2 environment.
     
@@ -121,4 +120,4 @@ Here's an example of a mailer you'd set in in a Rails 2 environment.
 Copyright
 ---------
 
-(C) 2009 [The Working Group, Inc](http://www.twg.ca/)
+(C) 2010 [The Working Group, Inc](http://www.twg.ca/)
