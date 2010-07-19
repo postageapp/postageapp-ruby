@@ -86,12 +86,48 @@ You can quickly convert your existing mailers to use PostageApp service by simpl
 
 ### Rails 3.x
 
-TODO
+Here's an example of a mailer in Rails 3 environment:
 
+    require 'postageapp/mailer'
+    
+    class Notifier < PostageApp::Mailer
+    
+      def signup_notification
+        
+        attachments['example.zip'] = File.read('/path/to/example.zip')
+        
+        headers['Special-Header'] = 'SpecialValue'
+        
+        # PostageApp specific elements:
+        postage_template 'example_template'
+        postage_variables 'global_variable' => 'value'
+        
+        mail(
+          :from     => 'test@test.test',
+          :subject  => 'Test Message',
+          :to       => {
+            'recipient_1@example.com' => { 'variable' => 'value' },
+            'recipient_2@example.com' => { 'variable' => 'value' }
+          })
+      end
+    end
+  
+API of previous ActionMailer is partially supported under Rails 3 environment. Please note that it's not 100% integrated, some methods/syntax will not work. You may still define you mailers in this way (but really shouldn't):
+
+    require 'postageapp/mailer'
+    
+    class Notifier < PostageApp::Mailer
+    
+      def signup_notification
+        from    'test@test.test'
+        subject 'Test Email'
+        recipients 'test@test.test'
+      end
+    end
 
 ### Rails 2.x
 
-Here's an example of a mailer you'd set in in a Rails 2 environment.
+Here's an example of a mailer you'd set in in a Rails 2 environment:
     
     require 'postageapp/mailer'
     
