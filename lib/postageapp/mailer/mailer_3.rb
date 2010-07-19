@@ -1,6 +1,4 @@
 # PostageApp::Mailer intergration with ActionMailer::Base
-# However, it's not backwards compartible with ActionMailer 2 api.
-
 class PostageApp::Mailer < ActionMailer::Base
   
   # Wrapper for creating attachments
@@ -9,7 +7,7 @@ class PostageApp::Mailer < ActionMailer::Base
   #    'content_type' => 'content/type',
   #    'content'      => 'base64_encoded_content'
   #   }
-  class Attachments < ActiveSupport::HashWithIndifferentAccess
+  class Attachments < Hash
     
     def initialize(message)
       @_message = message
@@ -19,8 +17,8 @@ class PostageApp::Mailer < ActionMailer::Base
     def []=(filename, attachment)
       default_content_type = MIME::Types.type_for(filename).first.content_type rescue ''
       if attachment.is_a?(Hash)
-        content_type  = attachment['content_type'] || default_content_type
-        content       = Base64.encode64(attachment['body'])
+        content_type  = attachment[:content_type] || default_content_type
+        content       = Base64.encode64(attachment[:body])
       else
         content_type  = default_content_type
         content       = Base64.encode64(attachment)
@@ -99,6 +97,27 @@ protected
     responses.each do |part|
       content[part[:content_type]] = part[:body]
     end
+  end
+  
+end
+
+
+# A set of methods that are useful when request needs to behave as Mail
+class PostageApp::Request
+  
+  # a pile of accessors so we can just ignore them later
+  attr_accessor :delivery_handler,
+                :delivery_method,
+                :perform_deliveries,
+                :raise_delivery_errors,
+                :charset
+  
+  def deliver
+    raise 'deliver this thing!'
+  end
+  
+  def delivery_method(method = nil, settings = {})
+    
   end
   
 end

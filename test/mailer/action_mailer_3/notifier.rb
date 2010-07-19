@@ -30,8 +30,18 @@ class Notifier3 < PostageApp::Mailer
     
   end
   
-  def with_body_and_attachment
+  def with_body_and_attachment_as_file
     attachments['sample_file.txt'] = 'File content'
+    mail(headers_hash) do |format|
+      format.html { render :text => 'manual body text'}
+    end
+  end
+  
+  def with_body_and_attachment_as_hash
+    attachments['sample_file.txt'] = {
+      :content_type => 'text/rich',
+      :body         => 'File content'
+    }
     mail(headers_hash) do |format|
       format.html { render :text => 'manual body text'}
     end

@@ -66,23 +66,4 @@ class RequestTest < Test::Unit::TestCase
     assert_equal nil, response.data
   end
   
-  def test_mailer_helper_methods
-    request = PostageApp::Request.new(:send_message, {
-      :headers    => { 'from'     => 'sender@test.test',
-                       'subject'  => 'Test Message'},
-      :recipients => 'test@test.test',
-      :content    => {
-        'text/plain'  => 'text content',
-        'text/html'   => 'html content'
-      }
-    })
-    assert_equal 'test@test.test', request.to
-    assert_equal 'sender@test.test', request.from
-    assert_equal 'Test Message', request.subject
-    assert_equal ({
-      'text/html'   => 'html content', 
-      'text/plain'  => 'text content'
-    }), request.body
-  end
-  
 end

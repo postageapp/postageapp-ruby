@@ -5,7 +5,7 @@ class RequestIntegrationTest < Test::Unit::TestCase
   # Note: Need access to a live PostageApp.com account
   # See helper.rb to set host / api key
   unless false # set to +true+ to run tests
-    puts "\e[5m\e[31m!!!\e[0m \e[0m\e[31mSkipping #{File.basename(__FILE__)}\e[0m"
+    puts "\e[0m\e[31mSkipping #{File.basename(__FILE__)}\e[0m"
     def test_nothing ; end
   else
     
