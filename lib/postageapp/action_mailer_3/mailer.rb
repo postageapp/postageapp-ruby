@@ -1,3 +1,6 @@
+# PostageApp::Mailer intergration with ActionMailer::Base
+# However, it's not backwards compartible with ActionMailer 2 api.
+
 class PostageApp::Mailer < ActionMailer::Base
   
   # In API call we can specify PostageApp template that will be used
@@ -13,20 +16,24 @@ class PostageApp::Mailer < ActionMailer::Base
     process(method_name, *args) if method_name
   end
   
+  
+  # dammit!
+  def initialize_defaults(method)
+    super
+    @mail_was_called = true
+  end
+  
   def postage_template(value)
-    
+    # todo
   end
   
   def postage_variables(variables = {})
-    
+    # todo
   end
   
   # Overriding method that prepares Mail object. This time we'll be 
   # contructing PostageApp::Request payload.
   def mail(headers = {}, &block)
-    # Guard flag to prevent both the old and the new API from firing
-    # Should be removed when old API is removed
-    @mail_was_called = true
     m = @_message
     
     # At the beginning, do not consider class default for parts order neither content_type

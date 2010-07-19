@@ -7,40 +7,32 @@ class Notifier < PostageApp::Mailer
     # ...
   end
   
-  # def with_no_content
-  #   setup_headers
-  # end
-  # 
-  # def with_text_only_view
-  #   setup_headers
-  # end
-  # 
-  # def with_html_and_text_views
-  #   setup_headers
-  # end
-  # 
-  # def with_simple_view
-  #   setup_headers
-  # end
-  # 
-  # def with_manual_parts
-  #   setup_headers
-  #   part  :content_type => 'text/html',
-  #         :body         => 'html content'
-  #   part  :content_type => 'text/plain',
-  #         :body         => 'text content'
-  #   attachment  :content_type => 'image/jpeg', 
-  #               :filename     => 'foo.jpg',
-  #               :body         => '123456789'
-  # end
-  # 
-  # def with_body_and_attachment
-  #   setup_headers
-  #   attachment  :content_type => 'image/jpeg',
-  #               :filename     => 'foo.jpg',
-  #               :body         => '123456789'
-  # end
-  #
+  def with_no_content
+    
+  end
+  
+  def with_text_only_view
+    mail(headers_hash)
+  end
+  
+  def with_html_and_text_views
+    mail(headers_hash) do |format|
+      format.text
+      format.html
+    end
+  end
+  
+  def with_simple_view
+    mail(headers_hash)
+  end
+  
+  def with_manual_parts
+    
+  end
+  
+  def with_body_and_attachment
+    
+  end
   
   def with_custom_postage_variables
     postage_template 'test_template'
@@ -58,10 +50,11 @@ class Notifier < PostageApp::Mailer
   
 private
   
-  def setup_headers
-    recipients 'test@test.test'
-    from       'text@test.test'
-    subject    'Test Email'
+  def headers_hash(options = {})
+    { :from     => 'sender@test.test',
+      :subject  => 'Test Message',
+      :to       => 'test@test.test'
+    }.merge(options)
   end
   
 end

@@ -6,7 +6,7 @@ This is the gem used to integrate Ruby apps with PostageApp service.
 Installation
 ------------
 
-### Rails 3.*
+### Rails 3.x
 Add postageapp gem to your Gemfile:
     
     gem 'postageapp'
@@ -16,7 +16,7 @@ Then from the Rails project's root run:
     bundle install
     script/rails generate postageapp --api-key PROJECT_API_KEY
   
-### Rails 2.*
+### Rails 2.x
 In config/environment.rb add the following:
     
     config.gem 'postageapp'
@@ -83,19 +83,40 @@ Sometimes you don't want to send emails to real people in your application. For 
 ActionMailer Integration
 ------------------------
 
-PostageApp gem can integrate quite easily with ActionMailer. Here's an example for Rails 2.*
+### Rails 3.x
+
+TODO
+
+
+### Rails 2.x
+
+You can quickly convert your existing mailers to use PostageApp service by simply changing `class MyMailer < ActionMailer::Base` to `class MyMailer < PostageApp::Mailer`
+
+Here's an example of a mailer you'd set in in a Rails 2 environment.
     
     require 'postageapp/mailer'
     
     class Notifier < PostageApp::Mailer
-      def signup_notification(recipient)
-        recipients  recipient.email_address
+      def signup_notification
+        
         from        'system@example.com'
         subject     'New Account Information'
+        
+        # Recipients can be in any format API allows.
+        # Here's an example of a hash format
+        recipients  ({
+          'recipient_1@example.com' => { 'variable_name_1' => 'value',
+                                         'variable_name_2' => 'value' },
+          'recipient_2@example.com' => { 'variable_name_1' => 'value',
+                                         'variable_name_2' => 'value' },
+        })
+        
+        # PostageApp specific elements:
+        postage_template 'example_template'
+        postage_variables 'global_variable' => 'value'
+        
       end
     end
-    
-TODO: More details and Rails 3 mailer info
 
 Copyright
 ---------

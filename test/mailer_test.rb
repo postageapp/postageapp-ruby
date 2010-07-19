@@ -11,10 +11,25 @@ class MailerTest < Test::Unit::TestCase
   if ActionMailer::VERSION::MAJOR >= 3
     require File.expand_path('../mailer/action_mailer_3/notifier', __FILE__)
     
-    def test_something
-      request = Notifier.with_custom_postage_variables
-      raise request.inspect
+    def test_create_blank
+      mail = Notifier.blank
     end
+    
+    def test_with_simple_view
+      mail = Notifier.with_simple_view
+      raise mail.inspect
+    end
+    
+    def test_with_text_only_view
+      mail = Notifier.with_text_only_view
+      raise mail.arguments['content'].to_yaml
+    end
+    
+    def test_with_html_and_text_views
+      mail = Notifier.with_html_and_text_views
+      raise mail.inspect
+    end
+    
     
   # tests for ActionMailer bundled with Rails 2
   else
