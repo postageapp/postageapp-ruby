@@ -1,4 +1,31 @@
-# PostageApp::Mailer intergration with ActionMailer::Base
+# Postage::Mailer allows you to use/re-use existing mailers set up using
+# ActionMailer. The only catch is to change inheritance from ActionMailer::Base
+# to PostageApp::Mailer. Also don't forget to require 'postageapp/mailer'
+#
+# Here's an example of a valid PostageApp::Mailer class
+#  
+#   require 'postageapp/mailer'
+#  
+#   class Notifier < PostageApp::Mailer
+#     def signup_notification(recipient)
+#       mail(
+#         :to       => recipient.email,
+#         :from     => 'sender@test.test',
+#         :subject  => 'Test Message'
+#       )
+#     end
+#   end
+#
+# Postage::Mailer introduces a few mailer methods specific to Postage:
+#
+# * postage_template  - template name that is defined in your PostageApp project
+# * postage_variables - extra variables you want to send along with the message
+#
+# Sending email
+#
+#   request = Notifier.signup_notification(user) # creates PostageApp::Request object
+#   response = request.deliver # attempts to deliver the message and creates a PostageApp::Response
+#
 class PostageApp::Mailer < ActionMailer::Base
   
   # Wrapper for creating attachments

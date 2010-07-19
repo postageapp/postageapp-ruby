@@ -146,6 +146,10 @@ Here's an example of a mailer you'd set in in a Rails 2 environment:
                                          'variable_name_2' => 'value' },
         })
         
+        attachment  :content_type => 'application/zip',
+                    :filename     => 'example.zip',
+                    :body         => File.read('/path/to/example.zip')
+        
         # PostageApp specific elements:
         postage_template 'example_template'
         postage_variables 'global_variable' => 'value'
@@ -155,5 +159,4 @@ Here's an example of a mailer you'd set in in a Rails 2 environment:
 
 Copyright
 ---------
-
 (C) 2010 [The Working Group, Inc](http://www.twg.ca/)
