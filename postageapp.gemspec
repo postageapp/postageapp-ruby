@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Oleg Khabarov, The Working Group Inc"]
-  s.date = %q{2010-07-16}
+  s.date = %q{2010-07-19}
   s.description = %q{Gem that interfaces with PostageApp.com service to send emails from web apps}
   s.email = %q{oleg@twg.ca}
   s.extra_rdoc_files = [
@@ -43,12 +43,15 @@ Gem::Specification.new do |s|
      "test/helper.rb",
      "test/mailer/action_mailer_2/notifier.rb",
      "test/mailer/action_mailer_3/notifier.rb",
-     "test/mailer/templates/notifier/with_body_and_attachment.rhtml",
-     "test/mailer/templates/notifier/with_custom_postage_variables.erb",
-     "test/mailer/templates/notifier/with_html_and_text_views.text.html.rhtml",
-     "test/mailer/templates/notifier/with_html_and_text_views.text.plain.rhtml",
-     "test/mailer/templates/notifier/with_simple_view.rhtml",
-     "test/mailer/templates/notifier/with_text_only_view.text.plain.rhtml",
+     "test/mailer/templates/notifier2/with_body_and_attachment.erb",
+     "test/mailer/templates/notifier2/with_html_and_text_views.text.html.erb",
+     "test/mailer/templates/notifier2/with_html_and_text_views.text.plain.erb",
+     "test/mailer/templates/notifier2/with_simple_view.erb",
+     "test/mailer/templates/notifier2/with_text_only_view.text.plain.erb",
+     "test/mailer/templates/notifier3/with_html_and_text_views.html.erb",
+     "test/mailer/templates/notifier3/with_html_and_text_views.text.erb",
+     "test/mailer/templates/notifier3/with_simple_view.erb",
+     "test/mailer/templates/notifier3/with_text_only_view.text.erb",
      "test/mailer_test.rb",
      "test/postageapp_test.rb",
      "test/request_integration_test.rb",
