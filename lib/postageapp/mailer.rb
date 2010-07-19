@@ -14,6 +14,21 @@ end
 # of Mail for testing
 class PostageApp::Request
   
+  # Getter and setter for headers. You can specify headers in the following
+  # formats:
+  #   headers['Custom-Header'] = 'Custom Value'
+  #   headers 'Custom-Header-1' => 'Custom Value 1',
+  #           'Custom-Header-2' => 'Custom Value 2'
+  def headers(value = nil)
+    self.arguments['headers'] ||= { }
+    if value && value.is_a?(Hash)
+      value.each do |k, v|
+        self.arguments['headers'][k.to_s] = v.to_s
+      end
+    end
+    self.arguments['headers']
+  end
+  
   def to
     self.arguments_to_send.dig('arguments', 'recipients')
   end

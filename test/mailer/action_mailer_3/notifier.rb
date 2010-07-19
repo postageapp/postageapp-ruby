@@ -4,7 +4,7 @@ class Notifier < PostageApp::Mailer
   self.append_view_path(File.expand_path('../', __FILE__))
   
   def blank
-    # ...
+    # ... nothing to see here
   end
   
   def with_no_content
@@ -24,10 +24,6 @@ class Notifier < PostageApp::Mailer
   
   def with_simple_view
     mail(headers_hash)
-  end
-  
-  def with_manual_parts
-    
   end
   
   def with_body_and_attachment_as_file
@@ -59,6 +55,35 @@ class Notifier < PostageApp::Mailer
         'test2@test.test' => { 'name' => 'Test 2' }
       }
     )
+  end
+  
+  def with_old_api
+    from    'test@test.test'
+    subject 'Test Email'
+    recipients 'test@test.test'
+  end
+  
+  def with_old_api_and_manual_parts
+    from    'test@test.test'
+    subject 'Test Email'
+    
+    headers ({'custom_header' => 'value'})
+    
+    recipients ({
+      'test1@test.test' => { 'name' => 'Test 1' },
+      'test2@test.test' => { 'name' => 'Test 2' }
+    })
+    
+    part  :content_type => 'text/html',
+          :body         => 'html content'
+    part  :content_type => 'text/plain',
+          :body         => 'text content'
+    attachment  :content_type => 'image/jpeg',
+                :filename     => 'foo.jpg',
+                :body         => '123456789'
+    
+    postage_template 'test_template'
+    postage_variables 'variable' => 'value'
   end
   
 private

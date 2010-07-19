@@ -11,7 +11,7 @@ class PostageApp::Mailer < ActionMailer::Base
     
     def initialize(message)
       @_message = message
-      @_message.arguments['attachments'] ||= { }
+      message.arguments['attachments'] ||= { }
     end
     
     def []=(filename, attachment)
@@ -93,6 +93,41 @@ class PostageApp::Mailer < ActionMailer::Base
     m
   end
   
+  # Overriding method to create mesage from the old_api
+  def create_mail
+    m = @_message
+    
+    m.arguments['headers'] ||= { }
+    m.arguments['headers']['from'] = from
+    m.arguments['headers']['subject'] = subject
+    m.arguments['recipients'] = recipients
+    
+    m
+  end
+  
+  # Overriding part assignment from old_api
+  # For now only accepting a hash
+  def part(params)
+    @_message.arguments['content'] ||= { }
+    @_message.arguments['content'][params[:content_type]] = params[:body]
+  end
+  
+  # Overriding attachment assignment from old_api
+  # For now only accepting a hash
+  def attachment(params)
+    @_message.arguments['attachments'] ||= { }
+    @_message.arguments['attachments'][params[:filename]] = {
+      'content_type'  => params[:content_type],
+      'content'       => Base64.encode64(params[:body].to_s)
+    }
+  end
+  
+  # Overriding method in old_api
+  def create_inline_part(body, mime_type = nil)
+    @_message.arguments['content'] ||= { }
+    @_message.arguments['content'][mime_type && mime_type.to_s || 'text/plain'] = body
+  end
+  
 protected
 
   def create_parts_from_responses(m, responses) #:nodoc:
@@ -104,23 +139,19 @@ protected
   
 end
 
-
 # A set of methods that are useful when request needs to behave as Mail
 class PostageApp::Request
   
-  # a pile of accessors so we can just ignore them later
   attr_accessor :delivery_handler,
-                :delivery_method,
                 :perform_deliveries,
-                :raise_delivery_errors,
-                :charset
+                :raise_delivery_errors
   
   def deliver
-    self.send
+    send
   end
   
   def delivery_method(method = nil, settings = {})
-    # no idea at the moment
+    # ???
   end
   
 end

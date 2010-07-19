@@ -4,7 +4,7 @@ class Notifier < PostageApp::Mailer
   self.template_root = File.expand_path('../', __FILE__)
   
   def blank
-    # ...
+    # ... nothing to see here
   end
   
   def with_no_content
@@ -51,7 +51,6 @@ class Notifier < PostageApp::Mailer
     })
     postage_template 'test_template'
     postage_variables 'variable' => 'value'
-    
   end
   
 private
