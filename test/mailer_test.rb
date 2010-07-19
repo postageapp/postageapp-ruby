@@ -12,22 +12,50 @@ class MailerTest < Test::Unit::TestCase
     require File.expand_path('../mailer/action_mailer_3/notifier', __FILE__)
     
     def test_create_blank
-      mail = Notifier.blank
+      flunk 'todo'
     end
     
-    def test_with_simple_view
-      mail = Notifier.with_simple_view
-      raise mail.inspect
+    def test_create_with_no_content
+      flunk 'todo'
     end
     
-    def test_with_text_only_view
-      mail = Notifier.with_text_only_view
-      raise mail.arguments['content'].to_yaml
+    def test_create_with_simple_view
+      mail = Notifier3.with_simple_view
+      assert_equal 'simple view content', mail.arguments['content']['text/html']
     end
     
-    def test_with_html_and_text_views
-      mail = Notifier.with_html_and_text_views
-      raise mail.inspect
+    def test_create_with_text_only_view
+      mail = Notifier3.with_text_only_view
+      assert_equal 'text content', mail.arguments['content']['text/plain']
+    end
+    
+    def test_create_with_html_and_text_views
+      mail = Notifier3.with_html_and_text_views
+      assert_equal 'text content', mail.arguments['content']['text/plain']
+      assert_equal 'html content', mail.arguments['content']['text/html']
+    end
+    
+    def test_deliver_with_html_and_text_views
+      flunk 'todo'
+    end
+    
+    def test_create_with_body_and_attachment
+      mail = Notifier3.with_body_and_attachment
+      assert_equal 'manual body text', mail.arguments['content']['text/html']
+      assert_equal 'text/plain', mail.arguments['attachments']['sample_file.txt']['content_type']
+      assert_equal "RmlsZSBjb250ZW50\n", mail.arguments['attachments']['sample_file.txt']['content']
+    end
+    
+    def test_create_with_custom_postage_variables
+      flunk 'todo'
+    end
+    
+    def test_create_with_old_api
+      flunk 'todo'
+    end
+    
+    def test_create_with_recipient_override
+      flunk 'todo'
     end
     
     

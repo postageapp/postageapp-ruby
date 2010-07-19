@@ -1,5 +1,5 @@
 # Test mailer for ActionMailer 3
-class Notifier < PostageApp::Mailer
+class Notifier3 < PostageApp::Mailer
   
   self.append_view_path(File.expand_path('../../templates', __FILE__))
   
@@ -31,7 +31,10 @@ class Notifier < PostageApp::Mailer
   end
   
   def with_body_and_attachment
-    
+    attachments['sample_file.txt'] = 'File content'
+    mail(headers_hash) do |format|
+      format.html { render :text => 'manual body text'}
+    end
   end
   
   def with_custom_postage_variables
