@@ -17,10 +17,10 @@ class ConfigurationTest < Test::Unit::TestCase
     assert_equal 5,                         config.http_open_timeout
     assert_equal 10,                        config.http_read_timeout
     assert_equal nil,                       config.recipient_override
-    assert_equal %w( test ),                config.development_environments
-    assert_equal %w( send_message ),        config.failed_requests_to_capture
-    assert_equal nil,                       config.failed_requests_path
+    assert_equal %w( send_message ),        config.requests_to_resend
+    assert_equal nil,                       config.project_root
     assert_equal nil,                       config.logger
+    assert_equal 'undefined',               config.framework
   end
   
   def test_initialization_overrides

@@ -9,11 +9,11 @@ require 'postageapp/version'
 require 'postageapp/configuration'
 require 'postageapp/request'
 require 'postageapp/response'
+require 'postageapp/rails' if defined?(Rails)
 
 module PostageApp
   
-  class Error < StandardError
-  end
+  class Error < StandardError ; end
   
   class << self
     

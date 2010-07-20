@@ -39,26 +39,27 @@ class PostageApp::Configuration
   # all messages while overriding original addresses
   attr_accessor :recipient_override
   
-  # A list of environments when there's no connection made to the service
-  attr_accessor :development_environments
-  
   # A list of API method names payloads of which are captured and resent
   # in case of service unavailability
-  attr_accessor :failed_requests_to_capture
+  attr_accessor :requests_to_resend
   
-  # The file path where all failed requests are saved
-  attr_accessor :failed_requests_path
+  # The file path of the project. This is where logs and failed requests
+  # can be stored
+  attr_accessor :project_root
+  
+  # The framework PostageApp gem runs in
+  attr_accessor :framework
   
   # The logger used by this gem
   attr_accessor :logger
   
   def initialize
-    @secure                     = true
-    @host                       = 'api.postageapp.com'
-    @http_open_timeout          = 5
-    @http_read_timeout          = 10
-    @development_environments   = %w( test )
-    @failed_requests_to_capture = %w( send_message )
+    @secure             = true
+    @host               = 'api.postageapp.com'
+    @http_open_timeout  = 5
+    @http_read_timeout  = 10
+    @requests_to_resend = %w( send_message )
+    @framework          = 'undefined'
   end
   
   alias_method :secure?, :secure

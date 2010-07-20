@@ -3,9 +3,8 @@ class PostageApp::Request
   API_VERSION = '1.0'
   
   HEADERS = {
-    'Content-type'            => 'application/json',
-    'Accept'                  => 'text/json, application/json',
-    'User-Agent'              => "PostageApp RubyGem v.#{PostageApp::VERSION}"
+    'Content-type'  => 'application/json',
+    'Accept'        => 'text/json, application/json'
   }
   
   # The API method being called (example: send_message)
@@ -36,7 +35,11 @@ class PostageApp::Request
     http.use_ssl      = PostageApp.configuration.secure?
     
     http_response = begin
-      http.post(url.path, self.arguments_to_send.to_json, HEADERS)
+      http.post(
+        url.path, 
+        self.arguments_to_send.to_json, 
+        HEADERS.merge('User-Agent' => "PostageApp RubyGem v.#{PostageApp::VERSION} (Ruby: #{RUBY_VERSION}, Framework: #{PostageApp.configuration.framework})")
+      )
     rescue TimeoutError
       nil
     end
