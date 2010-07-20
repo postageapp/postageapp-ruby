@@ -26,9 +26,8 @@
 #
 class PostageApp::Mailer < ActionMailer::Base
   
-  require 'base64'
-  
-  self.delivery_method = :postage
+  # Using :test as a delivery method if set somewhere else
+  self.delivery_method = :postage unless (self.delivery_method == :test)
   
   adv_attr_accessor :postage_template
   adv_attr_accessor :postage_variables

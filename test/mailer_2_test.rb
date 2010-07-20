@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-# tests for ActionMailer bundled with Rails 3
+# tests for ActionMailer bundled with Rails 2
 class Mailer3Test < Test::Unit::TestCase
   
   if ActionMailer::VERSION::MAJOR < 3

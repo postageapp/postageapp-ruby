@@ -173,12 +173,20 @@ class PostageApp::Request
                 :perform_deliveries,
                 :raise_delivery_errors
   
+  # Either doing an actual send, or passing it along to Mail::TestMailer
+  # Probably not the best way as we're skipping way too many intermediate methods
   def deliver
-    send
+    if @delivery_method == Mail::TestMailer
+      mailer = @delivery_method.new(nil)
+      mailer.deliver!(self)
+    else
+      self.send
+    end
   end
   
+  # Not 100% on this, but I need to assign this so I can properly handle deliver method
   def delivery_method(method = nil, settings = {})
-    
+    @delivery_method = method
   end
   
 end
