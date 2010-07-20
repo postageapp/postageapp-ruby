@@ -178,7 +178,7 @@ class PostageApp::Request
   end
   
   def delivery_method(method = nil, settings = {})
-    # ???
+    
   end
   
 end
