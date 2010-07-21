@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
      "lib/postageapp.rb",
      "lib/postageapp/configuration.rb",
      "lib/postageapp/failed_request.rb",
+     "lib/postageapp/logger.rb",
      "lib/postageapp/mailer.rb",
      "lib/postageapp/mailer/mailer_2.rb",
      "lib/postageapp/mailer/mailer_3.rb",

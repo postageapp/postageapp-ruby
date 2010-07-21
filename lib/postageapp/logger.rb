@@ -6,7 +6,7 @@ class PostageApp::Logger < ::Logger
       when PostageApp::Request
         "REQUEST [#{msg.url}]\n #{msg.arguments_to_send.to_json}"
       when PostageApp::Response
-        "RESPONSE [#{msg.status}]\n #{msg.data.to_json}"
+        "RESPONSE [#{msg.status} #{msg.uid} #{msg.message}]\n #{msg.data.to_json}"
       else
         msg
     end
