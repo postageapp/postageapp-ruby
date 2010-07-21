@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Oleg Khabarov, The Working Group Inc"]
-  s.date = %q{2010-07-20}
+  s.date = %q{2010-07-21}
   s.description = %q{Gem that interfaces with PostageApp.com service to send emails from web apps}
   s.email = %q{oleg@twg.ca}
   s.extra_rdoc_files = [
@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
      "lib/generators/postageapp/postageapp_generator.rb",
      "lib/postageapp.rb",
      "lib/postageapp/configuration.rb",
+     "lib/postageapp/failed_request.rb",
      "lib/postageapp/mailer.rb",
      "lib/postageapp/mailer/mailer_2.rb",
      "lib/postageapp/mailer/mailer_3.rb",
@@ -39,6 +40,7 @@ Gem::Specification.new do |s|
      "lib/postageapp/version.rb",
      "postageapp.gemspec",
      "test/configuration_test.rb",
+     "test/failed_request_test.rb",
      "test/helper.rb",
      "test/mailer/action_mailer_2/notifier.rb",
      "test/mailer/action_mailer_2/notifier/with_body_and_attachment.erb",
@@ -69,6 +71,7 @@ Gem::Specification.new do |s|
   s.summary = %q{Easier way to send email from web apps}
   s.test_files = [
     "test/configuration_test.rb",
+     "test/failed_request_test.rb",
      "test/helper.rb",
      "test/mailer/action_mailer_2/notifier.rb",
      "test/mailer/action_mailer_3/notifier.rb",
