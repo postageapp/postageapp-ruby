@@ -8,6 +8,7 @@ require 'json'
 require 'postageapp/utils'
 require 'postageapp/version'
 require 'postageapp/configuration'
+require 'postageapp/logger'
 require 'postageapp/request'
 require 'postageapp/failed_request'
 require 'postageapp/response'
@@ -32,6 +33,22 @@ module PostageApp
       self.configuration ||= Configuration.new
       yield self.configuration
     end
+    
+    # Logger for the plugin
+    def logger
+      raise Error, 'Need configuration to be set before logger can be used' if !configuration
+      @logger ||= begin
+        configuration.logger || PostageApp::Logger.new(
+          if configuration.project_root
+            FileUtils.mkdir_p(File.join(File.expand_path(configuration.project_root), 'log'))
+            File.join(configuration.project_root, "log/postageapp_#{configuration.environment}.log")
+          else
+            STDOUT
+          end
+        )
+      end
+    end
+    
   end
 end
 

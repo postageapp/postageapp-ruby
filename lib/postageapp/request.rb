@@ -39,6 +39,8 @@ class PostageApp::Request
     http.open_timeout = PostageApp.configuration.http_open_timeout
     http.use_ssl      = PostageApp.configuration.secure?
     
+    PostageApp.logger.info(self)
+    
     http_response = begin
       http.post(
         url.path, 
@@ -50,6 +52,8 @@ class PostageApp::Request
     end
     
     response = PostageApp::Response.new(http_response)
+    
+    PostageApp.logger.info(response)
     
     unless skip_failed_requests_processing
       response.fail?? PostageApp::FailedRequest.store(self) : PostageApp::FailedRequest.resend_all

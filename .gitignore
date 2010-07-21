@@ -21,3 +21,4 @@ pkg
 ## PROJECT::SPECIFIC
 
 test/tmp
+test/log

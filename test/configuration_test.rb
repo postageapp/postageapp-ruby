@@ -19,6 +19,7 @@ class ConfigurationTest < Test::Unit::TestCase
     assert_equal nil,                       config.recipient_override
     assert_equal %w( send_message ),        config.requests_to_resend
     assert_equal nil,                       config.project_root
+    assert_equal 'production',              config.environment
     assert_equal nil,                       config.logger
     assert_equal 'undefined framework',     config.framework
   end

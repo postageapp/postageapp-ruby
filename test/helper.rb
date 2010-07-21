@@ -28,7 +28,8 @@ class Test::Unit::TestCase
       config.http_read_timeout  = 10
       config.recipient_override = nil
       config.requests_to_resend = %w( send_message )
-      config.project_root       = nil
+      config.project_root       = File.expand_path('../', __FILE__)
+      config.environment        = 'production'
       config.logger             = nil
       config.framework          = 'undefined framework'
     end

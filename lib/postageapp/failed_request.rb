@@ -9,6 +9,8 @@ module PostageApp::FailedRequest
       f.write(Marshal.dump(request))
     end unless File.exists?(file_path(request.uid))
     
+    PostageApp.logger.info "STORING FAILED REQUEST [#{request.uid}]"
+    
     true
   end
   
@@ -20,6 +22,8 @@ module PostageApp::FailedRequest
       next if !filename.match /\w{32}/
       
       request = initialize_request(filename)
+      
+      PostageApp.logger.info "RESENDING FAILED REQUEST [#{filename}]"
       response = request.send(true)
       
       # Not a fail, so we can remove this file, if it was then

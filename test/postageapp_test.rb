@@ -11,4 +11,8 @@ class PostageAppTest < Test::Unit::TestCase
     assert_equal 'test.test',     PostageApp.configuration.host
   end
   
+  def test_logger
+    assert PostageApp.logger.is_a?(Logger)
+  end
+  
 end

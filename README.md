@@ -161,7 +161,7 @@ Automatic resending in case of failure
 --------------------------------------
 For those ultra rare occasions when api.postageapp.com is not reachable this gem will temporarily store requests and then will attempt to resend them with the next successful connection. In Rails environment it will create a folder: `RAILS_ROOT/tmp/postageapp_failed_requests` and save all failed requests there. On successful resend file for that request will be deleted.
 
-For projects other than rails you'll need to tell where there project_root is at:
+For projects other than Rails you'll need to tell where there project_root is at:
   
     PostageApp.configure do |config|
       config.api_key      = 'PROJECT_API_KEY'

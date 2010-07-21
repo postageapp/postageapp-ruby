@@ -50,6 +50,9 @@ class PostageApp::Configuration
   # The framework PostageApp gem runs in
   attr_accessor :framework
   
+  # Environment gem is running in
+  attr_accessor :environment
+  
   # The logger used by this gem
   attr_accessor :logger
   
@@ -60,6 +63,7 @@ class PostageApp::Configuration
     @http_read_timeout  = 10
     @requests_to_resend = %w( send_message )
     @framework          = 'undefined framework'
+    @environment        = 'production'
   end
   
   alias_method :secure?, :secure
