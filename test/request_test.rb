@@ -5,7 +5,7 @@ class RequestTest < Test::Unit::TestCase
   def test_method_uid
     request = PostageApp::Request.new(:test_method)
     uid = request.uid
-    assert_match /\w{32}/, uid
+    assert_match /^\w{40}$/, uid
     assert_equal uid, request.uid
     assert_not_equal uid, request.uid(true)
   end
@@ -21,18 +21,18 @@ class RequestTest < Test::Unit::TestCase
     request = PostageApp::Request.new(:test_method)
     args = request.arguments_to_send
     assert_equal '1234567890abcdef', args['api_key']
-    assert_match /\w{32}/, args['uid']
+    assert_match /^\w{40}$/, args['uid']
     
     request.arguments = { 'data' => 'content' }
     args = request.arguments_to_send
     assert_equal '1234567890abcdef', args['api_key']
-    assert_match /\w{32}/, args['uid']
+    assert_match /^\w{40}$/, args['uid']
     assert_equal 'content', args['arguments']['data']
   end
   
   def test_uid_is_enforceable
     request = PostageApp::Request.new(:test_method)
-    assert_match /\w{32}/, request.arguments_to_send['uid']
+    assert_match /^\w{40}$/, request.arguments_to_send['uid']
     
     request.uid = 'my_uid'
     assert_equal 'my_uid', request.arguments_to_send['uid']
@@ -52,7 +52,7 @@ class RequestTest < Test::Unit::TestCase
     })
     response = request.send
     assert_equal 'ok', response.status
-    assert_equal 'md5_hash_uid', response.uid
+    assert_equal 'sha1hashuid23456789012345678901234567890', response.uid
     assert_equal ({'message' => { 'id' => 999 }}), response.data
   end
   

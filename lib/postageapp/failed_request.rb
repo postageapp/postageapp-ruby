@@ -19,7 +19,7 @@ module PostageApp::FailedRequest
     return false if !store_path
     
     Dir.foreach(store_path) do |filename|
-      next if !filename.match /\w{32}/
+      next if !filename.match /^\w{40}$/
       
       request = initialize_request(filename)
       

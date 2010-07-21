@@ -1,6 +1,6 @@
 require 'net/http'
 require 'net/https'
-require 'digest/md5'
+require 'digest'
 require 'logger'
 
 require 'json'

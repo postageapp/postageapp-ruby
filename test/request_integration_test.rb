@@ -22,7 +22,7 @@ class RequestIntegrationTest < Test::Unit::TestCase
       response = request.send
       assert_equal 'PostageApp::Response', response.class.name
       assert_equal 'ok', response.status
-      assert_match /\w{32}/, response.uid
+      assert_match /\^w{40}$/, response.uid
       assert_equal nil, response.message
       assert_equal ({
         'methods' => 'get_account_info, get_method_list, get_project_info, send_message'
@@ -42,7 +42,7 @@ class RequestIntegrationTest < Test::Unit::TestCase
       response = request.send
       assert_equal 'PostageApp::Response', response.class.name
       assert_equal 'ok', response.status
-      assert_match /\w{32}/, response.uid
+      assert_match /\^w{40}$/, response.uid
       assert_equal nil, response.message
       assert_match /\d+/, response.data['message']['id'].to_s
     end
@@ -52,7 +52,7 @@ class RequestIntegrationTest < Test::Unit::TestCase
       response = request.send
       assert_equal 'PostageApp::Response', response.class.name
       assert_equal 'internal_server_error', response.status
-      assert_match /\w{32}/, response.uid
+      assert_match /\^w{40}$/, response.uid
       assert_equal 'No action responded to non_existant. Actions: get_account_info, get_method_list, get_project_info, and send_message', response.message
       assert_equal nil, response.data
     end
