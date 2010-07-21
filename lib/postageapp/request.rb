@@ -7,6 +7,9 @@ class PostageApp::Request
     'Accept'        => 'text/json, application/json'
   }
   
+  # Unique ID of the request
+  attr_accessor :uid
+  
   # The API method being called (example: send_message)
   # This controls the url of the request (example: https://api.postageapp.com/v.1.0/send_message.json)
   attr_accessor :method
@@ -22,7 +25,9 @@ class PostageApp::Request
     @arguments  = arguments
   end
   
-  def send
+  # Skipping resend doesn't trigger PostageApp::FailedRequest.resend_all
+  # it's needed so the request being resend doesn't create duplicate queue
+  def send(skip_failed_requests_processing = false)
     http = Net::HTTP::Proxy(
       PostageApp.configuration.proxy_host,
       PostageApp.configuration.proxy_port,
@@ -38,13 +43,18 @@ class PostageApp::Request
       http.post(
         url.path, 
         self.arguments_to_send.to_json, 
-        HEADERS.merge('User-Agent' => "PostageApp RubyGem v.#{PostageApp::VERSION} (Ruby: #{RUBY_VERSION}, Framework: #{PostageApp.configuration.framework})")
+        HEADERS.merge('User-Agent' => "PostageApp-RubyGem #{PostageApp::VERSION} (Ruby #{RUBY_VERSION}, #{PostageApp.configuration.framework})")
       )
     rescue TimeoutError
       nil
     end
     
-    PostageApp::Response.new(http_response)
+    response = PostageApp::Response.new(http_response)
+    
+    unless skip_failed_requests_processing
+      response.fail?? PostageApp::FailedRequest.store(self) : PostageApp::FailedRequest.resend_all
+    end
+    response
   end
   
   # URL of the where PostageApp::Request will be directed at

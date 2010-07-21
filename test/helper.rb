@@ -15,13 +15,22 @@ class Test::Unit::TestCase
   def setup
     # resetting to default configuration
     PostageApp.configure do |config|
-      config.secure             = true
-      config.host               = 'api.postageapp.com'
       config.api_key            = '1234567890abcdef'
+      config.secure             = true
+      config.protocol           = 'https'
+      config.host               = 'api.postageapp.com'
+      config.port               = 443
+      config.proxy_host         = nil
+      config.proxy_port         = nil
+      config.proxy_user         = nil
+      config.proxy_pass         = nil
       config.http_open_timeout  = 5
       config.http_read_timeout  = 10
+      config.recipient_override = nil
       config.requests_to_resend = %w( send_message )
-      config.framework          = 'undefined'
+      config.project_root       = nil
+      config.logger             = nil
+      config.framework          = 'undefined framework'
     end
   end
   
@@ -36,6 +45,10 @@ class Test::Unit::TestCase
         :message => { :id => 999 }
       }
     }.to_json)
+  end
+  
+  def mock_failed_send
+    Net::HTTP.any_instance.stubs(:post).returns(nil)
   end
   
 end

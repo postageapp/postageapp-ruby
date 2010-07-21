@@ -30,6 +30,14 @@ class RequestTest < Test::Unit::TestCase
     assert_equal 'content', args['arguments']['data']
   end
   
+  def test_uid_is_enforceable
+    request = PostageApp::Request.new(:test_method)
+    assert_match /\w{32}/, request.arguments_to_send['uid']
+    
+    request.uid = 'my_uid'
+    assert_equal 'my_uid', request.arguments_to_send['uid']
+  end
+  
   def test_send
     mock_successful_send
     
@@ -49,7 +57,7 @@ class RequestTest < Test::Unit::TestCase
   end
   
   def test_send_failure
-    Net::HTTP.any_instance.stubs(:post).returns(nil)
+    mock_failed_send
     
     request = PostageApp::Request.new(:send_message, {
       :headers    => { 'from'     => 'sender@test.test',

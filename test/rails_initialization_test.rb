@@ -6,11 +6,8 @@ class RailsInitializationTest < Test::Unit::TestCase
   
   include ConstantDefinitions
   
-  def test_something
+  def test_initialization
     rails = Module.new do
-      def self.logger
-        'RAILS LOGGER'
-      end
       def self.version
         '9.9.9'
       end
@@ -21,8 +18,7 @@ class RailsInitializationTest < Test::Unit::TestCase
     define_constant('Rails', rails)
     PostageApp::Rails.initialize
     
-    assert_equal 'RAILS LOGGER', PostageApp.configuration.logger
-    assert_equal 'Rails v.9.9.9', PostageApp.configuration.framework
+    assert_equal 'Rails 9.9.9', PostageApp.configuration.framework
     assert_equal 'RAILS ROOT', PostageApp.configuration.project_root
   end
   

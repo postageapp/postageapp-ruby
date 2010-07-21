@@ -1,12 +1,12 @@
 class PostageApp::Response
   
-  # The status of the response in string format (like: ok, bad_request)
-  # Will be set to +fail+ if Request times out
-  attr_reader :status
-  
   # The UID should match the Request's UID. If Request didn't provide with one
   # PostageApp service should generate it for the Response
   attr_reader :uid
+  
+  # The status of the response in string format (like: ok, bad_request)
+  # Will be set to +fail+ if Request times out
+  attr_reader :status
   
   # The message of the response. Could be used as an error explanation.
   attr_reader :message

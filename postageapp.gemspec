@@ -32,6 +32,7 @@ Gem::Specification.new do |s|
      "lib/postageapp/mailer.rb",
      "lib/postageapp/mailer/mailer_2.rb",
      "lib/postageapp/mailer/mailer_3.rb",
+     "lib/postageapp/rails.rb",
      "lib/postageapp/request.rb",
      "lib/postageapp/response.rb",
      "lib/postageapp/utils.rb",
@@ -56,6 +57,7 @@ Gem::Specification.new do |s|
      "test/mailer_3_test.rb",
      "test/mailer_helper_methods_test.rb",
      "test/postageapp_test.rb",
+     "test/rails_initialization_test.rb",
      "test/request_integration_test.rb",
      "test/request_test.rb",
      "test/response_test.rb"
@@ -74,6 +76,7 @@ Gem::Specification.new do |s|
      "test/mailer_3_test.rb",
      "test/mailer_helper_methods_test.rb",
      "test/postageapp_test.rb",
+     "test/rails_initialization_test.rb",
      "test/request_integration_test.rb",
      "test/request_test.rb",
      "test/response_test.rb"

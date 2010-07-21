@@ -1,6 +1,7 @@
 require 'net/http'
 require 'net/https'
 require 'digest/md5'
+require 'logger'
 
 require 'json'
 
@@ -8,8 +9,8 @@ require 'postageapp/utils'
 require 'postageapp/version'
 require 'postageapp/configuration'
 require 'postageapp/request'
+require 'postageapp/failed_request'
 require 'postageapp/response'
-require 'postageapp/rails' if defined?(Rails)
 
 module PostageApp
   
@@ -31,6 +32,8 @@ module PostageApp
       self.configuration ||= Configuration.new
       yield self.configuration
     end
-    
   end
 end
+
+# Loading Rails hook
+require 'postageapp/rails' if defined?(Rails)

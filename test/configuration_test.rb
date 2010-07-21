@@ -20,7 +20,7 @@ class ConfigurationTest < Test::Unit::TestCase
     assert_equal %w( send_message ),        config.requests_to_resend
     assert_equal nil,                       config.project_root
     assert_equal nil,                       config.logger
-    assert_equal 'undefined',               config.framework
+    assert_equal 'undefined framework',     config.framework
   end
   
   def test_initialization_overrides

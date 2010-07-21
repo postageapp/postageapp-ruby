@@ -1,10 +1,10 @@
 class PostageApp::Configuration
   
-  # +true+ for https, +false+ for http connections (default: is +true+)
-  attr_accessor :secure
-  
   # The API key for your postageapp.com project
   attr_accessor :api_key
+  
+  # +true+ for https, +false+ for http connections (default: is +true+)
+  attr_accessor :secure
   
   # The protocol used to connect to the service (default: 'https' for secure 
   # and 'http' for insecure connections)
@@ -59,7 +59,7 @@ class PostageApp::Configuration
     @http_open_timeout  = 5
     @http_read_timeout  = 10
     @requests_to_resend = %w( send_message )
-    @framework          = 'undefined'
+    @framework          = 'undefined framework'
   end
   
   alias_method :secure?, :secure
