@@ -58,6 +58,7 @@ class PostageApp::Request
     unless skip_failed_requests_processing
       response.fail?? PostageApp::FailedRequest.store(self) : PostageApp::FailedRequest.resend_all
     end
+    
     response
   end
   

@@ -63,7 +63,13 @@ class FailedRequestTest < Test::Unit::TestCase
     assert File.exists?(file_path)
     
     mock_successful_send
+    
     request = PostageApp::Request.new(:get_project_info)
+    
+    message_receipt_response = stub(:ok? => false, :not_found? => true)
+    message_receipt_request = stub(:send => message_receipt_response)
+    PostageApp::Request.stubs(:new).with{|a,b| a == :get_message_receipt}.returns(message_receipt_request)
+    
     response = request.send
     assert response.ok?
     
