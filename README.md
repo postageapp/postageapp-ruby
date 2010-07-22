@@ -1,7 +1,10 @@
 PostageApp Gem
 ==============
 
-This is the gem used to integrate Ruby apps with PostageApp service. 
+This is the gem used to integrate Ruby apps with PostageApp service.
+Personalized, mass email sending can be offloaded to PostageApp via JSON based API.
+
+Problems, questions, suggestions? Please go to: [help.postageapp.com](http://help.postageapp.com)
 
 Installation
 ------------
@@ -73,7 +76,7 @@ Response usually comes back with data:
     => { 'message' => { 'id' => '12345' }}
     
 ### Recipient Override
-Sometimes you don't want to send emails to real people in your application. For that there's an ability to override to what address all emails will be delivered. All you need to do is modify configuration block like this:
+Sometimes you don't want to send emails to real people in your application. For that there's an ability to override to what address all emails will be delivered. All you need to do is modify configuration block like this (in Rails projects it's usually found in `RAILS_ROOT/config/initializers/postageapp.rb`):
 
     PostageApp.configure do |config|
       config.api_key            = 'PROJECT_API_KEY'
@@ -82,7 +85,7 @@ Sometimes you don't want to send emails to real people in your application. For 
 
 ActionMailer Integration
 ------------------------
-You can quickly convert your existing mailers to use PostageApp service by simply changing `class MyMailer < ActionMailer::Base` to `class MyMailer < PostageApp::Mailer`
+You can quickly convert your existing mailers to use PostageApp service by simply changing `class MyMailer < ActionMailer::Base` to `class MyMailer < PostageApp::Mailer`. And don't forget to `require 'postageapp/mailer`
 
 ### Rails 3.x
 
