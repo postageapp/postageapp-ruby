@@ -36,6 +36,10 @@ class RequestTest < Test::Unit::TestCase
     
     request.uid = 'my_uid'
     assert_equal 'my_uid', request.arguments_to_send['uid']
+    
+    request = PostageApp::Request.new(:test_method, :uid => 'new_uid', :data => 'value')
+    assert_equal 'new_uid', request.uid
+    assert_equal ({:data => 'value'}), request.arguments
   end
   
   def test_send

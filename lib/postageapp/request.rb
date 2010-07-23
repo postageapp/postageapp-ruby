@@ -17,11 +17,9 @@ class PostageApp::Request
   # A list of arguments in a Hash format passed along with the request
   attr_accessor :arguments
   
-  # The PostageApp::Response object that comes after a successful request
-  attr_accessor :response
-  
   def initialize(method, arguments = {})
     @method     = method
+    @uid        = arguments.delete(:uid)
     @arguments  = arguments
   end
   

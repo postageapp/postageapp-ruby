@@ -23,7 +23,7 @@ class PostageApp::Response
     @uid      = hash['response']['uid']
     @message  = hash['response']['message']
     @data     = hash['data']
-  rescue 
+  rescue
     @status   = 'fail'
   end
   
