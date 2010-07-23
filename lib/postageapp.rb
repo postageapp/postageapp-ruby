@@ -19,24 +19,26 @@ module PostageApp
   
   class << self
     
-    # Accessor for the PostageApp::Configuration object
-    attr_accessor :configuration
-    
     # Call this method to modify your configuration
-    # 
     # Example:
     #   PostageApp.configure do |config|
     #     config.api_key             = '1234567890abcdef'
     #     config.recipient_override  = 'test@test.test' if Rails.env.staging?
     #   end
     def configure
-      self.configuration ||= Configuration.new
-      yield self.configuration
+      yield configuration
     end
+    
+    # Accessor for the PostageApp::Configuration object
+    # Example use:
+    #   PostageApp.configuration.api_key = '1234567890abcdef'
+    def configuration
+      @configuration ||= Configuration.new
+    end
+    alias :config :configuration
     
     # Logger for the plugin
     def logger
-      raise Error, 'Need configuration to be set before logger can be used' if !configuration
       @logger ||= begin
         configuration.logger || PostageApp::Logger.new(
           if configuration.project_root
