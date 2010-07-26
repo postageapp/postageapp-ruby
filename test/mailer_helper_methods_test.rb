@@ -12,13 +12,13 @@ class MailerHelperMethodsTest < Test::Unit::TestCase
         'text/html'   => 'html content'
       }
     })
-    assert_equal 'test@test.test', request.to
-    assert_equal 'sender@test.test', request.from
+    assert_equal ['test@test.test'], request.to
+    assert_equal ['sender@test.test'], request.from
     assert_equal 'Test Message', request.subject
     assert_equal ({
       'text/html'   => 'html content', 
       'text/plain'  => 'text content'
-    }), request.body
+    }).to_s, request.body
   end
   
 end

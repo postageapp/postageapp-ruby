@@ -1,4 +1,5 @@
 require 'postageapp'
+require 'postageapp/mailer' if defined?(ActionMailer)
 
 module PostageApp::Rails
   

@@ -30,11 +30,12 @@ class PostageApp::Request
   end
   
   def to
-    self.arguments_to_send.dig('arguments', 'recipients')
+    out = self.arguments_to_send.dig('arguments', 'recipients')
+    out = out.is_a?(Hash) ? out : [out].flatten
   end
   
   def from
-    self.arguments_to_send.dig('arguments', 'headers', 'from')
+    [self.arguments_to_send.dig('arguments', 'headers', 'from')].flatten
   end
   
   def subject
@@ -42,7 +43,7 @@ class PostageApp::Request
   end
   
   def body
-    self.arguments_to_send.dig('arguments', 'content')
+    self.arguments_to_send.dig('arguments', 'content').to_s
   end
   
 end
