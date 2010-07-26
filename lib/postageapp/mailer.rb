@@ -31,7 +31,7 @@ class PostageApp::Request
   
   def to
     out = self.arguments_to_send.dig('arguments', 'recipients')
-    out = out.is_a?(Hash) ? out : [out].flatten
+    out.is_a?(Hash) ? out : [out].flatten
   end
   
   def from
@@ -43,7 +43,8 @@ class PostageApp::Request
   end
   
   def body
-    self.arguments_to_send.dig('arguments', 'content').to_s
+    out = self.arguments_to_send.dig('arguments', 'content')
+    out.is_a?(Hash) ? out.values.join("\n\n") : out.to_s
   end
   
 end

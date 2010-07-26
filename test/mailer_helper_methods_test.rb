@@ -15,10 +15,7 @@ class MailerHelperMethodsTest < Test::Unit::TestCase
     assert_equal ['test@test.test'], request.to
     assert_equal ['sender@test.test'], request.from
     assert_equal 'Test Message', request.subject
-    assert_equal ({
-      'text/html'   => 'html content', 
-      'text/plain'  => 'text content'
-    }).to_s, request.body
+    assert_equal "html content\n\ntext content", request.body
   end
   
 end
