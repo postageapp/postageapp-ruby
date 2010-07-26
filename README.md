@@ -1,10 +1,10 @@
-PostageApp Gem
-==============
+[PostageApp](http://postageapp.com) Gem
+=======================================
 
-This is the gem used to integrate Ruby apps with PostageApp service.
+This is the gem used to integrate Ruby apps with [PostageApp](http://postageapp.com) service.
 Personalized, mass email sending can be offloaded to PostageApp via JSON based API.
 
-Problems, questions, suggestions? Please go to: [help.postageapp.com](http://help.postageapp.com)
+### [API Documentation](http://help.postageapp.com/faqs/api-reference) &bull; [PostageApp FAQs](http://help.postageapp.com/faqs) &bull; [PostageApp Help Portal](http://help.postageapp.com)
 
 Installation
 ------------
@@ -45,7 +45,7 @@ And then it's as simple as doing something like this:
 
 Usage
 -----
-Here's an example of sending a message ([See full API documentation](http://TODO/)):
+Here's an example of sending a message ([See full API documentation](http://help.postageapp.com/faqs/api-reference/send_message)):
   
     request = PostageApp::Request.new(:send_message, {
       'headers'     => { 'from'     => 'sender@example.com',
@@ -122,9 +122,9 @@ API of previous ActionMailer is partially supported under Rails 3 environment. P
     class Notifier < PostageApp::Mailer
     
       def signup_notification
-        from    'test@test.test'
-        subject 'Test Email'
-        recipients 'test@test.test'
+        from        'sender@example.com'
+        subject     'Test Email'
+        recipients  'recipient@example.com'
       end
     end
 
