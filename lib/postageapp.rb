@@ -51,6 +51,5 @@ module PostageApp
         )
       end
     end
-    
   end
 end
