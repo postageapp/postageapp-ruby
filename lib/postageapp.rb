@@ -12,6 +12,7 @@ require 'postageapp/logger'
 require 'postageapp/request'
 require 'postageapp/failed_request'
 require 'postageapp/response'
+require 'postageapp/rails/railtie' if defined?(Rails::Railtie)
 
 module PostageApp
   
@@ -53,6 +54,3 @@ module PostageApp
     
   end
 end
-
-# Loading Rails hook
-require 'postageapp/rails' if defined?(Rails)
