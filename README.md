@@ -4,7 +4,7 @@
 This is the gem used to integrate Ruby apps with PostageApp service.
 Personalized, mass email sending can be offloaded to PostageApp via JSON based API.
 
-### [API Documentation](http://help.postageapp.com/faqs/api-reference) &bull; [PostageApp FAQs](http://help.postageapp.com/faqs) &bull; [PostageApp Help Portal](http://help.postageapp.com)
+### [API Documentation](http://help.postageapp.com/faqs/api) &bull; [PostageApp FAQs](http://help.postageapp.com/faqs) &bull; [PostageApp Help Portal](http://help.postageapp.com)
 
 Installation
 ------------
@@ -45,7 +45,7 @@ And then it's as simple as doing something like this:
 
 Usage
 -----
-Here's an example of sending a message ([See full API documentation](http://help.postageapp.com/faqs/api-reference/send_message)):
+Here's an example of sending a message ([See full API documentation](http://help.postageapp.com/faqs/api/send_message)):
   
     request = PostageApp::Request.new(:send_message, {
       'headers'     => { 'from'     => 'sender@example.com',
