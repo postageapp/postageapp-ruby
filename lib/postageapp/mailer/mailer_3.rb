@@ -82,6 +82,11 @@ class PostageApp::Mailer < ActionMailer::Base
     @_attachments ||= Attachments.new(@_message)
   end
   
+  # Override for headers assignment
+  def headers(args=nil)
+    @_message.headers(args)
+  end
+  
   # Overriding method that prepares Mail object. This time we'll be 
   # contructing PostageApp::Request payload.
   def mail(headers = {}, &block)
@@ -111,7 +116,7 @@ class PostageApp::Mailer < ActionMailer::Base
     
     # Assign all headers except parts_order, content_type and body
     assignable = headers.except(:parts_order, :content_type, :body, :template_name, :template_path)
-    m.arguments['headers'] = assignable
+    m.headers.merge!(assignable)
     
     # Render the templates and blocks
     responses, explicit_order = collect_responses_and_parts_order(headers, &block)

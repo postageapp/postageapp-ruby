@@ -64,6 +64,8 @@ class Mailer3Test < Test::Unit::TestCase
       }), mail.arguments['recipients']
       assert_equal 'test_template', mail.arguments['template']
       assert_equal ({ 'variable' => 'value' }), mail.arguments['variables']
+      assert_equal 'CustomValue1', mail.arguments['headers']['CustomHeader1']
+      assert_equal 'CustomValue2', mail.arguments['headers']['CustomHeader2']
     end
     
     def test_create_with_old_api

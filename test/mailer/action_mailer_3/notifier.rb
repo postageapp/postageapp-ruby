@@ -44,6 +44,9 @@ class Notifier < PostageApp::Mailer
   end
   
   def with_custom_postage_variables
+    headers['CustomHeader1'] = 'CustomValue1'
+    headers 'CustomHeader2' => 'CustomValue2'
+    
     postage_template 'test_template'
     postage_variables 'variable' => 'value'
     
