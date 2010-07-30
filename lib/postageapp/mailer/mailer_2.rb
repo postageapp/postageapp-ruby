@@ -16,8 +16,8 @@
 #
 # Postage::Mailer introduces a few mailer methods specific to Postage:
 #
-# * postage_template  - template name that is defined in your PostageApp project
-# * postage_variables - extra variables you want to send along with the message
+# * template  - template name that is defined in your PostageApp project
+# * variables - extra variables you want to send along with the message
 #
 # Sending email
 #
@@ -29,8 +29,8 @@ class PostageApp::Mailer < ActionMailer::Base
   # Using :test as a delivery method if set somewhere else
   self.delivery_method = :postage unless (self.delivery_method == :test)
   
-  adv_attr_accessor :postage_template
-  adv_attr_accessor :postage_variables
+  adv_attr_accessor :postageapp_template
+  adv_attr_accessor :postageapp_variables
   
   def perform_delivery_postage(mail)
     mail.send
@@ -71,8 +71,8 @@ class PostageApp::Mailer < ActionMailer::Base
       end
     end
     
-    params['template'] = self.postage_template unless self.postage_template.blank?
-    params['variables'] = self.postage_variables unless self.postage_variables.blank?
+    params['template'] = self.postageapp_template unless self.postageapp_template.blank?
+    params['variables'] = self.postageapp_variables unless self.postageapp_variables.blank?
     
     params.delete('headers')     if params['headers'].blank?
     params.delete('content')     if params['content'].blank?

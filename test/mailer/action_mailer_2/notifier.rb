@@ -49,8 +49,8 @@ class Notifier < PostageApp::Mailer
       'test1@test.text' => { 'name' => 'Test 1' },
       'test2@test.text' => { 'name' => 'Test 2' }
     })
-    postage_template 'test_template'
-    postage_variables 'variable' => 'value'
+    postageapp_template 'test-template'
+    postageapp_variables 'variable' => 'value'
   end
   
 private

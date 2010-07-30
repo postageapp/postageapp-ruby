@@ -47,8 +47,8 @@ class Notifier < PostageApp::Mailer
     headers['CustomHeader1'] = 'CustomValue1'
     headers 'CustomHeader2' => 'CustomValue2'
     
-    postage_template 'test_template'
-    postage_variables 'variable' => 'value'
+    postageapp_template 'test-template'
+    postageapp_variables 'variable' => 'value'
     
     mail(
       :from     => 'test@test.test',
@@ -85,8 +85,8 @@ class Notifier < PostageApp::Mailer
                 :filename     => 'foo.jpg',
                 :body         => '123456789'
     
-    postage_template 'test_template'
-    postage_variables 'variable' => 'value'
+    postageapp_template 'test-template'
+    postageapp_variables 'variable' => 'value'
   end
   
 private

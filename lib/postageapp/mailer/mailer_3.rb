@@ -18,8 +18,8 @@
 #
 # Postage::Mailer introduces a few mailer methods specific to Postage:
 #
-# * postage_template  - template name that is defined in your PostageApp project
-# * postage_variables - extra variables you want to send along with the message
+# * postageapp_template  - template name that is defined in your PostageApp project
+# * postageapp_variables - extra variables you want to send along with the message
 #
 # Sending email
 #
@@ -57,25 +57,21 @@ class PostageApp::Mailer < ActionMailer::Base
     end
   end
   
-  # In API call we can specify PostageApp template that will be used
-  # to generate content of the message
-  attr_accessor :postage_template
-  
-  # Hash of variables that will be used to inject into the content
-  attr_accessor :postage_variables
-  
   # Instead of initializing Mail object, we prepare PostageApp::Request
   def initialize(method_name = nil, *args)
     @_message = PostageApp::Request.new(:send_message)
     process(method_name, *args) if method_name
   end
   
-  def postage_template(value)
-    @_message.arguments['template'] = value
+  # In API call we can specify PostageApp template that will be used
+  # to generate content of the message
+  def postageapp_template(value = nil)
+    value ? @_message.arguments['template'] = value : @_message.arguments['template']
   end
   
-  def postage_variables(variables = {})
-    @_message.arguments['variables'] = variables
+  # Hash of variables that will be used to inject into the content
+  def postageapp_variables(value = nil)
+    value ? @_message.arguments['variables'] = value : @_message.arguments['variables']
   end
   
   def attachments

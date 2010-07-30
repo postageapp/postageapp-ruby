@@ -1,7 +1,7 @@
 require File.expand_path('../helper', __FILE__)
 
 # tests for ActionMailer bundled with Rails 2
-class Mailer3Test < Test::Unit::TestCase
+class Mailer2Test < Test::Unit::TestCase
   
   if ActionMailer::VERSION::MAJOR < 3
     
@@ -67,10 +67,12 @@ class Mailer3Test < Test::Unit::TestCase
     
     def test_create_with_custom_postage_variables
       assert mail = Notifier.create_with_custom_postage_variables
-      assert_equal 'test_template', mail.arguments['template']
+      assert_equal 'test-template', mail.arguments['template']
       assert_equal ({ 'variable' => 'value' }), mail.arguments['variables']
       assert_equal ({ 'test2@test.text' => { 'name' => 'Test 2'}, 
                       'test1@test.text' => { 'name' => 'Test 1'}}), mail.arguments['recipients']
+      assert_equal 'text content', mail.arguments['content']['text/plain']
+      assert_equal 'html content', mail.arguments['content']['text/html']
     end
     
     def test_create_with_recipient_override

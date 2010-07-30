@@ -87,6 +87,8 @@ ActionMailer Integration
 ------------------------
 You can quickly convert your existing mailers to use PostageApp service by simply changing `class MyMailer < ActionMailer::Base` to `class MyMailer < PostageApp::Mailer`.  If you using ActionMailer from outside of Rails make sure you have this line somewhere: `require 'postageapp/mailer'`
 
+There are custom methods that allow setting of `template` and `variables` parts of the API call. They are `postageapp_template` and `postageapp_variables`. Examples how they are used are below. For details what they do please see [documentation](http://help.postageapp.com/faqs)
+
 ### Rails 3.x
 
 Here's an example of a mailer in Rails 3 environment:
@@ -102,8 +104,8 @@ Here's an example of a mailer in Rails 3 environment:
         headers['Special-Header'] = 'SpecialValue'
         
         # PostageApp specific elements:
-        postage_template 'example_template'
-        postage_variables 'global_variable' => 'value'
+        postageapp_template 'example_template'
+        postageapp_variables 'global_variable' => 'value'
         
         mail(
           :from     => 'test@test.test',
@@ -154,8 +156,8 @@ Here's an example of a mailer you'd set in in a Rails 2 environment:
                     :body         => File.read('/path/to/example.zip')
         
         # PostageApp specific elements:
-        postage_template 'example_template'
-        postage_variables 'global_variable' => 'value'
+        postageapp_template 'example_template'
+        postageapp_variables 'global_variable' => 'value'
         
       end
     end
