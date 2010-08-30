@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-require 'postageapp/rails'
+require File.expand_path('../../lib/postageapp/rails/rails', __FILE__)
 
 class RailsInitializationTest < Test::Unit::TestCase
   

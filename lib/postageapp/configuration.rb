@@ -1,6 +1,6 @@
 class PostageApp::Configuration
   
-  # The API key for your postageapp.com project
+  # The API key of your postageapp.com project
   attr_accessor :api_key
   
   # +true+ for https, +false+ for http connections (default: is +true+)
