@@ -26,7 +26,7 @@ module PostageApp::FailedRequest
       receipt_response = PostageApp::Request.new(:get_message_receipt, :uid => filename).send(true)
       if receipt_response.ok?
         PostageApp.logger.info "NOT RESENDING FAILED REQUEST [#{filename}]"
-        File.delete(file_path(filename))
+        File.delete(file_path(filename)) rescue nil
         
       elsif receipt_response.not_found?
         PostageApp.logger.info "RESENDING FAILED REQUEST [#{filename}]"
@@ -34,7 +34,7 @@ module PostageApp::FailedRequest
         
         # Not a fail, so we can remove this file, if it was then
         # there will be another attempt to resend
-        File.delete(file_path(filename)) if !response.fail?
+        File.delete(file_path(filename)) rescue nil if !response.fail?
       end
     end
     
