@@ -1,8 +1,5 @@
 class PostageApp::Configuration
   
-  # The API key of your postageapp.com project
-  attr_accessor :api_key
-  
   # +true+ for https, +false+ for http connections (default: is +true+)
   attr_accessor :secure
   
@@ -67,6 +64,14 @@ class PostageApp::Configuration
   end
   
   alias_method :secure?, :secure
+  
+  def api_key=(key)
+    @api_key = key
+  end
+  
+  def api_key
+    @api_key || ENV['POSTAGEAPP_API_KEY']
+  end
   
   def protocol
     @protocol || if secure?

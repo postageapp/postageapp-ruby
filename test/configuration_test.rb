@@ -2,7 +2,7 @@ require File.expand_path('../helper', __FILE__)
 
 class ConfigurationTest < Test::Unit::TestCase
   
-  def test_intitialization_defaults
+  def test_initialization_defaults
     config = PostageApp::Configuration.new
     
     assert_equal true,                      config.secure
@@ -34,7 +34,7 @@ class ConfigurationTest < Test::Unit::TestCase
     assert_equal 999,     config.port
   end
   
-  def test_intitialization_for_secure
+  def test_initialization_for_secure
     config = PostageApp::Configuration.new
     
     config.secure = true
@@ -45,7 +45,7 @@ class ConfigurationTest < Test::Unit::TestCase
     assert config.secure?
   end
   
-  def test_intialization_for_insecure
+  def test_initialization_for_insecure
     config = PostageApp::Configuration.new
     
     config.secure = false
@@ -54,6 +54,25 @@ class ConfigurationTest < Test::Unit::TestCase
     assert_equal 80,      config.port
     
     assert !config.secure?
+  end
+  
+  def test_initialization_with_env_api_key
+    ENV['POSTAGEAPP_API_KEY'] = 'env_api_key'
+    
+    config = PostageApp::Configuration.new
+    assert_equal 'env_api_key', config.api_key
+    
+    ENV['POSTAGEAPP_API_KEY'] = nil # must unset for other methods to run properly
+  end
+  
+  def test_that_configuration_overrides_the_env_var
+    ENV['POSTAGEAPP_API_KEY'] = 'env_api_key'
+    
+    config = PostageApp::Configuration.new
+    config.api_key = 'config_api_key'
+    assert_equal 'config_api_key', config.api_key
+    
+    ENV['POSTAGEAPP_API_KEY'] = nil # must unset for other methods to run properly
   end
   
   def test_method_url

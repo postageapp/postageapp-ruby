@@ -26,6 +26,10 @@ module PostageApp
     #     config.api_key             = '1234567890abcdef'
     #     config.recipient_override  = 'test@test.test' if Rails.env.staging?
     #   end
+    # 
+    # If you do not want/need to initialize the gem in this way, you can use the environment
+    # variable POSTAGEAPP_API_KEY to set up your key.
+    
     def configure
       yield configuration
     end
