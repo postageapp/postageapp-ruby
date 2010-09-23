@@ -62,13 +62,6 @@ class ConfigurationTest < Test::Unit::TestCase
     config = PostageApp::Configuration.new
     assert_equal 'env_api_key', config.api_key
     
-    ENV['POSTAGEAPP_API_KEY'] = nil # must unset for other methods to run properly
-  end
-  
-  def test_that_configuration_overrides_the_env_var
-    ENV['POSTAGEAPP_API_KEY'] = 'env_api_key'
-    
-    config = PostageApp::Configuration.new
     config.api_key = 'config_api_key'
     assert_equal 'config_api_key', config.api_key
     
