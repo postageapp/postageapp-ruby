@@ -11,7 +11,7 @@ begin
     gem.homepage    = 'http://github.com/theworkinggroup/postageapp-gem'
     gem.authors     = ['Oleg Khabarov, The Working Group Inc']
     
-    gem.add_dependency 'json', '1.2.4' # newer versions crash at the moment
+    gem.add_dependency 'json', '>=1.4.6'
     gem.add_development_dependency 'mocha', '>= 0.9.8'
   end
   Jeweler::GemcutterTasks.new
