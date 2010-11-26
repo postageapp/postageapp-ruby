@@ -8,7 +8,7 @@ begin
     gem.summary     = 'Easier way to send email from web apps'
     gem.description = 'Gem that interfaces with PostageApp.com service to send emails from web apps'
     gem.email       = 'oleg@twg.ca'
-    gem.homepage    = 'http://github.com/theworkinggroup/postageapp-gem'
+    gem.homepage    = 'http://github.com/postageapp/postageapp-ruby'
     gem.authors     = ['Oleg Khabarov, The Working Group Inc']
     
     gem.add_dependency 'json', '>=1.4.6'
