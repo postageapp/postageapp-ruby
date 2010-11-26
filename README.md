@@ -1,4 +1,4 @@
-[PostageApp](http://postageapp.com) Gem
+[PostageApp](http://postageapp.com) Ruby Gem
 =======================================
 
 This is the gem used to integrate Ruby apps with PostageApp service.
