@@ -66,7 +66,7 @@ class FailedRequestTest < Test::Unit::TestCase
     
     request = PostageApp::Request.new(:get_project_info)
     
-    message_receipt_response = stub(:ok? => false, :not_found? => true)
+    message_receipt_response = stub(:fail? => false, :ok? => false, :not_found? => true)
     message_receipt_request = stub(:send => message_receipt_response)
     PostageApp::Request.stubs(:new).with{|a,b| a == :get_message_receipt}.returns(message_receipt_request)
     
@@ -76,4 +76,25 @@ class FailedRequestTest < Test::Unit::TestCase
     assert !File.exists?(file_path)
   end
   
+  def test_resend_all_failure
+    mock_failed_send
+    request = PostageApp::Request.new(:send_message, {
+      :headers    => { 'from'     => 'sender@test.test',
+                       'subject'  => 'Test Message'},
+      :recipients => 'test@test.test',
+      :content    => {
+        'text/plain'  => 'text content',
+        'text/html'   => 'html content'
+      }
+    })
+    response = request.send
+    assert response.fail?
+    file_path = File.join(PostageApp::FailedRequest.store_path, request.uid)
+    assert File.exists?(file_path)
+    
+    # Forcing to resend. Should quit right away as we can't connect
+    PostageApp::FailedRequest.resend_all
+    
+    assert File.exists?(file_path)
+  end
 end

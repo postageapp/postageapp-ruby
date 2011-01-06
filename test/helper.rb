@@ -35,12 +35,12 @@ class Test::Unit::TestCase
     end
   end
   
-  def mock_successful_send
+  def mock_successful_send(status = 'ok')
     Net::HTTP.any_instance.stubs(:post).returns(Net::HTTPResponse.new(nil, nil, nil))
     Net::HTTPResponse.any_instance.stubs(:body).returns({
       :response => { 
         :uid    => 'sha1hashuid23456789012345678901234567890',
-        :status => 'ok'
+        :status => status
       },
       :data => {
         :message => { :id => 999 }

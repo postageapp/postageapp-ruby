@@ -4,6 +4,7 @@ require 'digest'
 require 'logger'
 
 require 'json'
+require 'base64'
 
 require 'postageapp/utils'
 require 'postageapp/version'
