@@ -83,7 +83,7 @@ class PostageApp::Request
       if !PostageApp.configuration.recipient_override.nil? && self.method.to_sym == :send_message
         self.arguments.merge!('recipient_override' => PostageApp.configuration.recipient_override)
       end
-      hash.merge!('arguments' => self.arguments.stringify_keys!) 
+      hash.merge!('arguments' => self.arguments.recursive_stringify_keys!) 
     end
     hash
   end

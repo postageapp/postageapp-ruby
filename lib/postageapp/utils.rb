@@ -11,9 +11,10 @@ class Hash
   end
   
   # Destructively convert all keys to strings.
-  def stringify_keys!
+  def recursive_stringify_keys!
     keys.each do |key|
-      self[key.to_s] = delete(key)
+      value = delete(key)
+      self[key.to_s] = value.is_a?(Hash) ? value.recursive_stringify_keys! : value
     end
     self
   end
