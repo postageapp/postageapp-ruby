@@ -54,6 +54,12 @@ Here's an example of sending a message ([See full API documentation](http://help
       'content'     => {
         'text/plain'  => 'text email content',
         'text/html'   => 'html email content'
+      },
+      'attachments' => {
+        'document.pdf' => {
+          'content_type'  => 'application/pdf',
+          'content'       => Base64.encode64(File.open('/path/to/document.pdf', 'rb').read)
+        }
       }
     })
     response = request.send
