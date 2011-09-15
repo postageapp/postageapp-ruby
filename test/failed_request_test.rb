@@ -34,6 +34,12 @@ class FailedRequestTest < Test::Unit::TestCase
     assert !PostageApp::FailedRequest.initialize_request('not_there')
   end
   
+  def test_initialize_requests_with_bad_file
+    file_path = File.join(PostageApp::FailedRequest.store_path, '1234567890')
+    FileUtils.touch(file_path)
+    assert !PostageApp::FailedRequest.initialize_request('1234567890')
+  end
+  
   def test_store_for_wrong_call_type
     request = PostageApp::Request.new(:get_project_info)
     assert !PostageApp::FailedRequest.store(request)

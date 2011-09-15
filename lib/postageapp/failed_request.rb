@@ -49,7 +49,14 @@ module PostageApp::FailedRequest
   def self.initialize_request(uid)
     return false if !store_path
     
-    Marshal.load(File.read(file_path(uid))) if File.exists?(file_path(uid))
+    if File.exists?(file_path(uid))
+      begin
+        Marshal.load(File.read(file_path(uid))) 
+      rescue
+        File.delete(file_path(uid))
+        return false
+      end
+    end
   end
   
 protected
