@@ -180,4 +180,4 @@ For projects other than Rails you'll need to tell where there project_root is at
 
 Copyright
 ---------
-(C) 2010 [The Working Group, Inc](http://www.twg.ca/)
+(C) 2011 Oleg Khabarov, [The Working Group, Inc](http://www.twg.ca/)
