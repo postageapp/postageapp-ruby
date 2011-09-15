@@ -4,3 +4,4 @@ rdoc
 pkg
 test/tmp
 test/log
+Gemfile.lock
