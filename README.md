@@ -1,4 +1,4 @@
-# [PostageApp](http://postageapp.com) Ruby Gem [![Build Status](http://travis-ci.org/postageapp/postageapp-ruby.png)](http://travis-ci.org/postageapp/postageapp-ruby)
+# [PostageApp](http://postageapp.com) Ruby Gem [![Build Status](https://secure.travis-ci.org/postageapp/postageapp-ruby.png)](http://travis-ci.org/postageapp/postageapp-ruby)
 
 This is the gem used to integrate Ruby apps with PostageApp service.
 Personalized, mass email sending can be offloaded to PostageApp via JSON based API.

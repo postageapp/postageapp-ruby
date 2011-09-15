@@ -5,7 +5,7 @@ module PostageApp::FailedRequest
   def self.store(request)
     return false if !store_path || !PostageApp.configuration.requests_to_resend.member?(request.method.to_s)
     
-    open(file_path(request.uid), 'w') do |f|
+    open(file_path(request.uid), 'wb') do |f|
       f.write(Marshal.dump(request))
     end unless File.exists?(file_path(request.uid))
     
