@@ -1,4 +1,12 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.0'
-gem 'jeweler'
+gem 'json'
+
+group :development do
+  gem 'jeweler'
+end
+
+group :test do
+  gem 'rails', '3.1.0'
+  gem 'mocha'
+end
