@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{postageapp}
-  s.version = "1.0.11"
+  s.version = "1.0.12"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Oleg Khabarov, The Working Group Inc"]
-  s.date = %q{2011-06-22}
+  s.date = %q{2011-09-14}
   s.description = %q{Gem that interfaces with PostageApp.com service to send emails from web apps}
   s.email = %q{oleg@twg.ca}
   s.extra_rdoc_files = [
@@ -18,6 +18,8 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".document",
+    ".travis.yml",
+    "Gemfile",
     "LICENSE",
     "README.md",
     "Rakefile",
@@ -43,6 +45,9 @@ Gem::Specification.new do |s|
     "rails/init.rb",
     "test/configuration_test.rb",
     "test/failed_request_test.rb",
+    "test/gemfiles/Gemfile.rails-2.3.x",
+    "test/gemfiles/Gemfile.rails-3.0.x",
+    "test/gemfiles/Gemfile.rails-3.1.x",
     "test/helper.rb",
     "test/live_test.rb",
     "test/mailer/action_mailer_2/notifier.rb",
@@ -71,23 +76,24 @@ Gem::Specification.new do |s|
     "test/response_test.rb"
   ]
   s.homepage = %q{http://github.com/postageapp/postageapp-ruby}
+  s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.7.2}
+  s.rubygems_version = %q{1.6.2}
   s.summary = %q{Easier way to send email from web apps}
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<json>, [">= 1.4.6"])
-      s.add_development_dependency(%q<mocha>, [">= 0.9.8"])
+      s.add_runtime_dependency(%q<json>, [">= 0"])
+      s.add_development_dependency(%q<jeweler>, [">= 0"])
     else
-      s.add_dependency(%q<json>, [">= 1.4.6"])
-      s.add_dependency(%q<mocha>, [">= 0.9.8"])
+      s.add_dependency(%q<json>, [">= 0"])
+      s.add_dependency(%q<jeweler>, [">= 0"])
     end
   else
-    s.add_dependency(%q<json>, [">= 1.4.6"])
-    s.add_dependency(%q<mocha>, [">= 0.9.8"])
+    s.add_dependency(%q<json>, [">= 0"])
+    s.add_dependency(%q<jeweler>, [">= 0"])
   end
 end
 
