@@ -3,6 +3,6 @@ rvm:
   - 1.9.2
   - ree
 gemfile:
-  - test/gemfiles/Gemfile.rails-2.0.x
+  - test/gemfiles/Gemfile.rails-2.3.x
   - test/gemfiles/Gemfile.rails-3.0.x
   - test/gemfiles/Gemfile.rails-3.1.x
