@@ -72,7 +72,7 @@ class PostageApp::Request
   # Unique ID of the request
   def uid(reload = false)
     @uid = nil if reload
-    @uid ||= Digest::SHA1.hexdigest("#{Time.now.to_f}#{self.arguments}")
+    @uid ||= Digest::SHA1.hexdigest("#{rand}#{Time.now.to_f}#{self.arguments}")
   end
   
   # Arguments need to be appended with some some stuff before it's ready to be send out
