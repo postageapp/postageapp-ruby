@@ -4,14 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{postageapp}
-  s.version = "1.0.13"
+  s.name = "postageapp"
+  s.version = "1.0.14"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Oleg Khabarov, The Working Group Inc"]
-  s.date = %q{2011-09-15}
-  s.description = %q{Gem that interfaces with PostageApp.com service to send emails from web apps}
-  s.email = %q{oleg@twg.ca}
+  s.date = "2011-11-15"
+  s.description = "Gem that interfaces with PostageApp.com service to send emails from web apps"
+  s.email = "oleg@twg.ca"
   s.extra_rdoc_files = [
     "LICENSE",
     "README.md"
@@ -74,11 +74,11 @@ Gem::Specification.new do |s|
     "test/request_test.rb",
     "test/response_test.rb"
   ]
-  s.homepage = %q{http://github.com/postageapp/postageapp-ruby}
+  s.homepage = "http://github.com/postageapp/postageapp-ruby"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.6.2}
-  s.summary = %q{Easier way to send email from web apps}
+  s.rubygems_version = "1.8.10"
+  s.summary = "Easier way to send email from web apps"
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
