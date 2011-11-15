@@ -45,7 +45,7 @@ class PostageApp::Request
         self.arguments_to_send.to_json, 
         HEADERS.merge('User-Agent' => "PostageApp-RubyGem #{PostageApp::VERSION} (Ruby #{RUBY_VERSION}, #{PostageApp.configuration.framework})")
       )
-    rescue TimeoutError
+    rescue TimeoutError, Errno::ECONNREFUSED
       nil
     end
     

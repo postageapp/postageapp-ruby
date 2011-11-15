@@ -94,6 +94,12 @@ You can quickly convert your existing mailers to use PostageApp service by simpl
 
 There are custom methods that allow setting of `template` and `variables` parts of the API call. They are `postageapp_template` and `postageapp_variables`. Examples how they are used are below. For details what they do please see [documentation](http://help.postageapp.com/faqs)
 
+Please note that `deliver` method will return `PostageApp::Response` object. This way you can immediately check the status of the delivery. For example:
+
+    >> response = UserMailer.welcome_email(@user).deliver
+    >> response.ok?
+    => true
+
 ### Rails 3.x
 
 Here's an example of a mailer in Rails 3 environment:
