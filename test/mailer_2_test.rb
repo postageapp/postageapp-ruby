@@ -68,6 +68,7 @@ class Mailer2Test < Test::Unit::TestCase
     def test_create_with_custom_postage_variables
       assert mail = Notifier.create_with_custom_postage_variables
       assert_equal 'test-template', mail.arguments['template']
+      assert_equal 'custom_api_key', mail.arguments['api_key']
       assert_equal ({ 'variable' => 'value' }), mail.arguments['variables']
       assert_equal ({ 'test2@test.text' => { 'name' => 'Test 2'}, 
                       'test1@test.text' => { 'name' => 'Test 1'}}), mail.arguments['recipients']

@@ -57,6 +57,14 @@ class RequestTest < Test::Unit::TestCase
     assert_equal ({:data => 'value'}), request.arguments
   end
   
+  def test_api_key
+    request = PostageApp::Request.new(:test_method)
+    assert_equal PostageApp.configuration.api_key, request.api_key
+    
+    request = PostageApp::Request.new(:test_method, {:api_key => 'custom_api_key'})
+    assert_equal 'custom_api_key', request.api_key
+  end
+  
   def test_send
     mock_successful_send
     

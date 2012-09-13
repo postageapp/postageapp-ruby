@@ -64,34 +64,11 @@ class Mailer3Test < Test::Unit::TestCase
       }), mail.arguments['recipients']
       assert_equal 'test-template', mail.arguments['template']
       assert_equal ({ 'variable' => 'value' }), mail.arguments['variables']
+      assert_equal 'custom_api_key', mail.arguments['api_key']
       assert_equal 'CustomValue1', mail.arguments['headers']['CustomHeader1']
       assert_equal 'CustomValue2', mail.arguments['headers']['CustomHeader2']
       assert_equal 'text content', mail.arguments['content']['text/plain']
       assert_equal 'html content', mail.arguments['content']['text/html']
-    end
-    
-    def test_create_with_old_api
-      mail = Notifier.with_old_api
-      assert_equal 'test@test.test', mail.arguments['headers']['from']
-      assert_equal 'Test Email', mail.arguments['headers']['subject']
-      assert_equal 'test@test.test', mail.arguments['recipients']
-      assert_equal 'html content', mail.arguments['content']['text/html']
-      assert_equal 'text content', mail.arguments['content']['text/plain']
-    end
-    
-    def test_create_with_old_api_and_manual_parts
-      mail = Notifier.with_old_api_and_manual_parts
-      assert_equal ({
-        'test2@test.test' => { 'name' => 'Test 2'},
-        'test1@test.test' => { 'name' => 'Test 1'}
-      }), mail.arguments['recipients']
-      assert_equal 'test@test.test', mail.arguments['headers']['from']
-      assert_equal 'Test Email', mail.arguments['headers']['subject']
-      assert_equal 'value', mail.arguments['headers']['custom_header']
-      assert_equal 'html content', mail.arguments['content']['text/html']
-      assert_equal 'text content', mail.arguments['content']['text/plain']
-      assert_equal 'image/jpeg', mail.arguments['attachments']['foo.jpg']['content_type']
-      assert_equal "MTIzNDU2Nzg5\n", mail.arguments['attachments']['foo.jpg']['content']
     end
     
     def test_create_with_recipient_override

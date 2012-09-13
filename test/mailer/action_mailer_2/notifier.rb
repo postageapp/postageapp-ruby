@@ -51,6 +51,7 @@ class Notifier < PostageApp::Mailer
     })
     postageapp_template 'test-template'
     postageapp_variables 'variable' => 'value'
+    postageapp_api_key 'custom_api_key'
   end
   
 private

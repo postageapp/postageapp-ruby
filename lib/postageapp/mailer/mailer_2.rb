@@ -31,6 +31,7 @@ class PostageApp::Mailer < ActionMailer::Base
   
   adv_attr_accessor :postageapp_template
   adv_attr_accessor :postageapp_variables
+  adv_attr_accessor :postageapp_api_key
   
   def perform_delivery_postage(mail)
     mail.send
@@ -73,6 +74,7 @@ class PostageApp::Mailer < ActionMailer::Base
     
     params['template'] = self.postageapp_template unless self.postageapp_template.blank?
     params['variables'] = self.postageapp_variables unless self.postageapp_variables.blank?
+    params['api_key'] = self.postageapp_api_key unless self.postageapp_api_key.blank?
     
     params.delete('headers')     if params['headers'].blank?
     params.delete('content')     if params['content'].blank?

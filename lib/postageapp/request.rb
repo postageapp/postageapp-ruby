@@ -17,9 +17,13 @@ class PostageApp::Request
   # A list of arguments in a Hash format passed along with the request
   attr_accessor :arguments
   
+  # Ability to set api_key with eash request
+  attr_accessor :api_key
+  
   def initialize(method, arguments = {})
     @method     = method
     @uid        = arguments.delete(:uid)
+    @api_key    = arguments.delete(:api_key) || PostageApp.configuration.api_key
     @arguments  = arguments
   end
   
@@ -77,7 +81,7 @@ class PostageApp::Request
   
   # Arguments need to be appended with some some stuff before it's ready to be send out
   def arguments_to_send
-    hash = { 'uid' => self.uid, 'api_key' => PostageApp.configuration.api_key }
+    hash = { 'uid' => self.uid, 'api_key' => self.api_key }
     
     if !self.arguments.nil? && !self.arguments.empty?
       if !PostageApp.configuration.recipient_override.nil? && self.method.to_sym == :send_message

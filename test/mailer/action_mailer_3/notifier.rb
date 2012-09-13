@@ -49,6 +49,7 @@ class Notifier < PostageApp::Mailer
     
     postageapp_template 'test-template'
     postageapp_variables 'variable' => 'value'
+    postageapp_api_key 'custom_api_key'
     
     mail(
       :from     => 'test@test.test',
@@ -58,35 +59,6 @@ class Notifier < PostageApp::Mailer
         'test2@test.test' => { 'name' => 'Test 2' }
       }
     )
-  end
-  
-  def with_old_api
-    from    'test@test.test'
-    subject 'Test Email'
-    recipients 'test@test.test'
-  end
-  
-  def with_old_api_and_manual_parts
-    from    'test@test.test'
-    subject 'Test Email'
-    
-    headers ({'custom_header' => 'value'})
-    
-    recipients ({
-      'test1@test.test' => { 'name' => 'Test 1' },
-      'test2@test.test' => { 'name' => 'Test 2' }
-    })
-    
-    part  :content_type => 'text/html',
-          :body         => 'html content'
-    part  :content_type => 'text/plain',
-          :body         => 'text content'
-    attachment  :content_type => 'image/jpeg',
-                :filename     => 'foo.jpg',
-                :body         => '123456789'
-    
-    postageapp_template 'test-template'
-    postageapp_variables 'variable' => 'value'
   end
   
 private

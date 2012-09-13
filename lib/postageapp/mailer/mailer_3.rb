@@ -74,6 +74,10 @@ class PostageApp::Mailer < ActionMailer::Base
     value ? @_message.arguments['variables'] = value : @_message.arguments['variables']
   end
   
+  def postageapp_api_key(value = nil)
+    value ? @_message.arguments['api_key'] = value : @_message.arguments['api_key']
+  end
+  
   def attachments
     @_attachments ||= Attachments.new(@_message)
   end
