@@ -38,6 +38,13 @@ namespace :postageapp do
     end
   end
   
+  desc 'Manually trigger resend of all failed emails'
+  task :resend_failed_emails => :environment do
+    puts 'Attempting to resend failed emails...'
+    PostageApp::FailedRequest.resend_all
+    puts 'Done!'
+  end
+  
 end
 
 HTML_MESSAGE = %{
