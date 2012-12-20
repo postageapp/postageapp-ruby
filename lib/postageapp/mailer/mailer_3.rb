@@ -59,6 +59,7 @@ class PostageApp::Mailer < ActionMailer::Base
   
   # Instead of initializing Mail object, we prepare PostageApp::Request
   def initialize(method_name = nil, *args)
+    super()
     @_message = PostageApp::Request.new(:send_message)
     process(method_name, *args) if method_name
   end

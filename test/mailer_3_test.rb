@@ -8,11 +8,6 @@ class Mailer3Test < Test::Unit::TestCase
     require File.expand_path('../mailer/action_mailer_3/notifier', __FILE__)
     puts "\e[0m\e[32mRunning #{File.basename(__FILE__)} for action_mailer #{ActionMailer::VERSION::STRING}\e[0m"
     
-    def test_create_blank
-      mail = Notifier.blank
-      assert mail.is_a?(PostageApp::Request)
-    end
-    
     def test_create_with_no_content
       mail = Notifier.with_no_content
       assert_equal ({}), mail.arguments['content']
@@ -20,7 +15,7 @@ class Mailer3Test < Test::Unit::TestCase
     
     def test_create_with_simple_view
       mail = Notifier.with_simple_view
-      assert_equal 'simple view content', mail.arguments['content']['text/html']
+      assert_equal 'with layout simple view content', mail.arguments['content']['text/html']
     end
     
     def test_create_with_text_only_view
@@ -30,8 +25,8 @@ class Mailer3Test < Test::Unit::TestCase
     
     def test_create_with_html_and_text_views
       mail = Notifier.with_html_and_text_views
-      assert_equal 'text content', mail.arguments['content']['text/plain']
-      assert_equal 'html content', mail.arguments['content']['text/html']
+      assert_equal 'text content',              mail.arguments['content']['text/plain']
+      assert_equal 'with layout html content',  mail.arguments['content']['text/html']
     end
     
     def test_deliver_with_html_and_text_views
@@ -62,13 +57,13 @@ class Mailer3Test < Test::Unit::TestCase
         'test1@test.test' => { 'name' => 'Test 1'},
         'test2@test.test' => { 'name' => 'Test 2'}
       }), mail.arguments['recipients']
-      assert_equal 'test-template', mail.arguments['template']
+      assert_equal 'test-template',             mail.arguments['template']
       assert_equal ({ 'variable' => 'value' }), mail.arguments['variables']
-      assert_equal 'custom_api_key', mail.arguments['api_key']
-      assert_equal 'CustomValue1', mail.arguments['headers']['CustomHeader1']
-      assert_equal 'CustomValue2', mail.arguments['headers']['CustomHeader2']
-      assert_equal 'text content', mail.arguments['content']['text/plain']
-      assert_equal 'html content', mail.arguments['content']['text/html']
+      assert_equal 'custom_api_key',            mail.arguments['api_key']
+      assert_equal 'CustomValue1',              mail.arguments['headers']['CustomHeader1']
+      assert_equal 'CustomValue2',              mail.arguments['headers']['CustomHeader2']
+      assert_equal 'text content',              mail.arguments['content']['text/plain']
+      assert_equal 'with layout html content',  mail.arguments['content']['text/html']
     end
     
     def test_create_with_recipient_override
