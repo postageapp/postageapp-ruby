@@ -7,6 +7,6 @@ group :development do
 end
 
 group :test do
-  gem 'rails', '2.3.14'
+  gem 'rails', '~> 2.3.0'
   gem 'mocha'
 end
