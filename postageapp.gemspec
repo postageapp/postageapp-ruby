@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "postageapp"
-  s.version = "1.0.17"
+  s.version = "1.0.18"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Oleg Khabarov, The Working Group Inc"]
-  s.date = "2012-12-20"
+  s.date = "2013-03-07"
   s.description = "Gem that interfaces with PostageApp.com service to send emails from web apps"
   s.email = "oleg@twg.ca"
   s.extra_rdoc_files = [
@@ -47,6 +47,7 @@ Gem::Specification.new do |s|
     "test/gemfiles/Gemfile.rails-2.3.x",
     "test/gemfiles/Gemfile.rails-3.0.x",
     "test/gemfiles/Gemfile.rails-3.1.x",
+    "test/gemfiles/Gemfile.rails-3.2.x",
     "test/helper.rb",
     "test/live_test.rb",
     "test/mailer/action_mailer_2/notifier.rb",
