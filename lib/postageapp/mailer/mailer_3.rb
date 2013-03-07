@@ -64,6 +64,15 @@ class PostageApp::Mailer < ActionMailer::Base
     process(method_name, *args) if method_name
   end
   
+  # Possible to define custom uid. Should be sufficiently unique
+  def postageapp_uid(value = nil)
+    value ? @_message.uid = value : @_message.uid
+  end
+  
+  def postageapp_api_key(value = nil)
+    value ? @_message.api_key = value : @_message.api_key
+  end
+  
   # In API call we can specify PostageApp template that will be used
   # to generate content of the message
   def postageapp_template(value = nil)
@@ -73,10 +82,6 @@ class PostageApp::Mailer < ActionMailer::Base
   # Hash of variables that will be used to inject into the content
   def postageapp_variables(value = nil)
     value ? @_message.arguments['variables'] = value : @_message.arguments['variables']
-  end
-  
-  def postageapp_api_key(value = nil)
-    value ? @_message.arguments['api_key'] = value : @_message.arguments['api_key']
   end
   
   def attachments

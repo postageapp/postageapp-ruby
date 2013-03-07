@@ -104,74 +104,87 @@ Please note that `deliver` method will return `PostageApp::Response` object. Thi
 
 Here's an example of a mailer in Rails 3 environment:
 
-    require 'postageapp/mailer'
+```ruby
+require 'postageapp/mailer'
+
+class Notifier < PostageApp::Mailer
+
+  def signup_notification
     
-    class Notifier < PostageApp::Mailer
+    attachments['example.zip'] = File.read('/path/to/example.zip')
     
-      def signup_notification
-        
-        attachments['example.zip'] = File.read('/path/to/example.zip')
-        
-        headers['Special-Header'] = 'SpecialValue'
-        
-        # PostageApp specific elements:
-        postageapp_template 'example_template'
-        postageapp_variables 'global_variable' => 'value'
-        
-        mail(
-          :from     => 'test@test.test',
-          :subject  => 'Test Message',
-          :to       => {
-            'recipient_1@example.com' => { 'variable' => 'value' },
-            'recipient_2@example.com' => { 'variable' => 'value' }
-          })
-      end
-    end
+    headers['Special-Header'] = 'SpecialValue'
+    
+    # PostageApp specific elements:
+    postageapp_template 'example_template'
+    postageapp_variables 'global_variable' => 'value'
+    
+    # You may set api key for a specific mailers
+    postageapp_api_key '123456abcde'
+    
+    # You can manually specify uid for the message payload.
+    # Make sure it's sufficiently unique.
+    postageapp_uid Digest::SHA1.hexdigest([@user.id, Time.now].to_s)
+    
+    mail(
+      :from     => 'test@test.test',
+      :subject  => 'Test Message',
+      :to       => {
+        'recipient_1@example.com' => { 'variable' => 'value' },
+        'recipient_2@example.com' => { 'variable' => 'value' }
+      })
+  end
+end
+```
   
 API of previous ActionMailer is partially supported under Rails 3 environment. Please note that it's not 100% integrated, some methods/syntax will not work. You may still define you mailers in this way (but really shouldn't):
 
-    require 'postageapp/mailer'
-    
-    class Notifier < PostageApp::Mailer
-    
-      def signup_notification
-        from        'sender@example.com'
-        subject     'Test Email'
-        recipients  'recipient@example.com'
-      end
-    end
+```ruby
+require 'postageapp/mailer'
+
+class Notifier < PostageApp::Mailer
+
+  def signup_notification
+    from        'sender@example.com'
+    subject     'Test Email'
+    recipients  'recipient@example.com'
+  end
+end
+```
 
 ### Rails 2.x
 
 Here's an example of a mailer you'd set in in a Rails 2 environment:
+
+```ruby
+require 'postageapp/mailer'
+
+class Notifier < PostageApp::Mailer
+  def signup_notification
     
-    require 'postageapp/mailer'
+    from        'system@example.com'
+    subject     'New Account Information'
     
-    class Notifier < PostageApp::Mailer
-      def signup_notification
-        
-        from        'system@example.com'
-        subject     'New Account Information'
-        
-        # Recipients can be in any format API allows.
-        # Here's an example of a hash format
-        recipients  ({
-          'recipient_1@example.com' => { 'variable_name_1' => 'value',
-                                         'variable_name_2' => 'value' },
-          'recipient_2@example.com' => { 'variable_name_1' => 'value',
-                                         'variable_name_2' => 'value' },
-        })
-        
-        attachment  :content_type => 'application/zip',
-                    :filename     => 'example.zip',
-                    :body         => File.read('/path/to/example.zip')
-        
-        # PostageApp specific elements:
-        postageapp_template 'example_template'
-        postageapp_variables 'global_variable' => 'value'
-        
-      end
-    end
+    # Recipients can be in any format API allows.
+    # Here's an example of a hash format
+    recipients  ({
+      'recipient_1@example.com' => { 'variable_name_1' => 'value',
+                                     'variable_name_2' => 'value' },
+      'recipient_2@example.com' => { 'variable_name_1' => 'value',
+                                     'variable_name_2' => 'value' },
+    })
+    
+    attachment  :content_type => 'application/zip',
+                :filename     => 'example.zip',
+                :body         => File.read('/path/to/example.zip')
+    
+    # PostageApp specific elements:
+    postageapp_template 'example_template'
+    postageapp_variables 'global_variable' => 'value'
+    
+  end
+end
+```
     
 Automatic resending in case of failure
 --------------------------------------
@@ -179,11 +192,13 @@ For those ultra rare occasions when api.postageapp.com is not reachable this gem
 
 For projects other than Rails you'll need to tell where there project_root is at:
   
-    PostageApp.configure do |config|
-      config.api_key      = 'PROJECT_API_KEY'
-      config.project_root = "/path/to/your/project"
-    end
+```ruby
+PostageApp.configure do |config|
+  config.api_key      = 'PROJECT_API_KEY'
+  config.project_root = "/path/to/your/project"
+end
+```
 
 Copyright
 ---------
-(C) 2011 Oleg Khabarov, [The Working Group, Inc](http://www.twg.ca/)
+(C) 2011-13 Oleg Khabarov, [The Working Group, Inc](http://www.twg.ca/)

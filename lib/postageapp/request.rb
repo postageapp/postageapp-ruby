@@ -22,8 +22,8 @@ class PostageApp::Request
   
   def initialize(method, arguments = {})
     @method     = method
-    @uid        = arguments.delete(:uid)
-    @api_key    = arguments.delete(:api_key) || PostageApp.configuration.api_key
+    @uid        = arguments.delete('uid')
+    @api_key    = arguments.delete('api_key') || PostageApp.configuration.api_key
     @arguments  = arguments
   end
   

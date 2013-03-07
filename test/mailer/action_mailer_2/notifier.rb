@@ -42,6 +42,11 @@ class Notifier < PostageApp::Mailer
   end
   
   def with_custom_postage_variables
+    postageapp_template   'test-template'
+    postageapp_variables  'variable' => 'value'
+    postageapp_uid        'custom_uid'
+    postageapp_api_key    'custom_api_key'
+    
     from    'test@test.test'
     subject 'Test Email'
     
@@ -49,9 +54,6 @@ class Notifier < PostageApp::Mailer
       'test1@test.text' => { 'name' => 'Test 1' },
       'test2@test.text' => { 'name' => 'Test 2' }
     })
-    postageapp_template 'test-template'
-    postageapp_variables 'variable' => 'value'
-    postageapp_api_key 'custom_api_key'
   end
   
 private

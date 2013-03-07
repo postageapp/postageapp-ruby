@@ -47,9 +47,10 @@ class Notifier < PostageApp::Mailer
     headers['CustomHeader1'] = 'CustomValue1'
     headers 'CustomHeader2' => 'CustomValue2'
     
-    postageapp_template 'test-template'
-    postageapp_variables 'variable' => 'value'
-    postageapp_api_key 'custom_api_key'
+    postageapp_template   'test-template'
+    postageapp_variables  'variable' => 'value'
+    postageapp_api_key    'custom_api_key'
+    postageapp_uid        'custom_uid'
     
     mail(
       :from     => 'test@test.test',

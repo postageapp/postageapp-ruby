@@ -29,9 +29,10 @@ class PostageApp::Mailer < ActionMailer::Base
   # Using :test as a delivery method if set somewhere else
   self.delivery_method = :postage unless (self.delivery_method == :test)
   
+  adv_attr_accessor :postageapp_uid
+  adv_attr_accessor :postageapp_api_key
   adv_attr_accessor :postageapp_template
   adv_attr_accessor :postageapp_variables
-  adv_attr_accessor :postageapp_api_key
   
   def perform_delivery_postage(mail)
     mail.send
@@ -72,15 +73,17 @@ class PostageApp::Mailer < ActionMailer::Base
       end
     end
     
-    params['template'] = self.postageapp_template unless self.postageapp_template.blank?
+    params['template']  = self.postageapp_template  unless self.postageapp_template.blank?
     params['variables'] = self.postageapp_variables unless self.postageapp_variables.blank?
-    params['api_key'] = self.postageapp_api_key unless self.postageapp_api_key.blank?
     
     params.delete('headers')     if params['headers'].blank?
     params.delete('content')     if params['content'].blank?
     params.delete('attachments') if params['attachments'].blank?
     
-    @mail = PostageApp::Request.new(:send_message, params)
+    @mail = PostageApp::Request.new('send_message', params)
+    @mail.uid     = self.postageapp_uid     unless self.postageapp_uid.blank?
+    @mail.api_key = self.postageapp_api_key unless self.postageapp_api_key.blank?
+    @mail
   end
   
   # Not insisting rendering a view if it's not there. PostageApp gem can send blank content

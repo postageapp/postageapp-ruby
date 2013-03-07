@@ -53,17 +53,24 @@ class Mailer3Test < Test::Unit::TestCase
     
     def test_create_with_custom_postage_variables
       mail = Notifier.with_custom_postage_variables
+      args = mail.arguments_to_send
+      
+      assert_equal 'custom_uid',      args['uid']
+      assert_equal 'custom_api_key',  args['api_key']
+      
+      args = args['arguments']
+      
       assert_equal ({
         'test1@test.test' => { 'name' => 'Test 1'},
         'test2@test.test' => { 'name' => 'Test 2'}
-      }), mail.arguments['recipients']
-      assert_equal 'test-template',             mail.arguments['template']
-      assert_equal ({ 'variable' => 'value' }), mail.arguments['variables']
-      assert_equal 'custom_api_key',            mail.arguments['api_key']
-      assert_equal 'CustomValue1',              mail.arguments['headers']['CustomHeader1']
-      assert_equal 'CustomValue2',              mail.arguments['headers']['CustomHeader2']
-      assert_equal 'text content',              mail.arguments['content']['text/plain']
-      assert_equal 'with layout html content',  mail.arguments['content']['text/html']
+      }), args['recipients']
+      
+      assert_equal 'test-template',             args['template']
+      assert_equal ({ 'variable' => 'value' }), args['variables']
+      assert_equal 'CustomValue1',              args['headers']['CustomHeader1']
+      assert_equal 'CustomValue2',              args['headers']['CustomHeader2']
+      assert_equal 'text content',              args['content']['text/plain']
+      assert_equal 'with layout html content',  args['content']['text/html']
     end
     
     def test_create_with_recipient_override

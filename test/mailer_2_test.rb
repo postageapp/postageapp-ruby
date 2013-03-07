@@ -10,7 +10,7 @@ class Mailer2Test < Test::Unit::TestCase
         
     def test_create_blank
       assert mail = Notifier.create_blank
-      assert_equal :send_message, mail.method
+      assert_equal 'send_message', mail.method
       assert_equal 'https://api.postageapp.com/v.1.0/send_message.json', mail.url.to_s
       assert mail.arguments.blank?
     end
@@ -67,8 +67,9 @@ class Mailer2Test < Test::Unit::TestCase
     
     def test_create_with_custom_postage_variables
       assert mail = Notifier.create_with_custom_postage_variables
+      assert_equal 'custom_uid', mail.uid
+      assert_equal 'custom_api_key', mail.api_key
       assert_equal 'test-template', mail.arguments['template']
-      assert_equal 'custom_api_key', mail.arguments['api_key']
       assert_equal ({ 'variable' => 'value' }), mail.arguments['variables']
       assert_equal ({ 'test2@test.text' => { 'name' => 'Test 2'}, 
                       'test1@test.text' => { 'name' => 'Test 1'}}), mail.arguments['recipients']
