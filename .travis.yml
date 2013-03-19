@@ -9,13 +9,14 @@ gemfile:
   - test/gemfiles/Gemfile.rails-3.0.x
   - test/gemfiles/Gemfile.rails-3.1.x
   - test/gemfiles/Gemfile.rails-3.2.x
+  - test/gemfiles/Gemfile.rails.4.0.x
 matrix:
   exclude:
     - rvm: 2.0.0
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
     - rvm: 1.8.7
-      gemfile: test/gemfiles/Gemfile.rails.4.0
+      gemfile: test/gemfiles/Gemfile.rails.4.0.x
     - rvm: ree
-      gemfile: test/gemfiles/Gemfile.rails.4.0
+      gemfile: test/gemfiles/Gemfile.rails.4.0.x
   allow_failures:
-    - gemfile: test/gemfiles/Gemfile.rails.4.0
+    - gemfile: test/gemfiles/Gemfile.rails.4.0.x
