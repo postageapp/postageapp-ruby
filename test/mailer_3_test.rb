@@ -80,6 +80,13 @@ class Mailer3Test < Test::Unit::TestCase
       assert_equal 'oleg@test.test', mail.arguments_to_send['arguments']['recipient_override']
     end
     
+    def test_deliver_for_test_mailer
+      mail = Notifier.with_simple_view
+      mail.delivery_method(Mail::TestMailer)
+      mail.deliver
+      assert_equal [mail], ActionMailer::Base.deliveries
+    end
+    
   else
     puts "\e[0m\e[31mSkipping #{File.basename(__FILE__)}\e[0m"
     def test_nothing ; end
