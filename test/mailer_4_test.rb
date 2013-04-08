@@ -1,17 +1,12 @@
 require File.expand_path('../helper', __FILE__)
 
 # tests for ActionMailer bundled with Rails 3
-class Mailer3Test < Test::Unit::TestCase
+class Mailer4Test < Test::Unit::TestCase
 
-  if ActionMailer::VERSION::MAJOR == 3
+  if ActionMailer::VERSION::MAJOR == 4
 
     require File.expand_path('../mailer/action_mailer_3/notifier', __FILE__)
     puts "\e[0m\e[32mRunning #{File.basename(__FILE__)} for action_mailer #{ActionMailer::VERSION::STRING}\e[0m"
-
-    def test_create_with_no_content
-      mail = Notifier.with_no_content
-      assert_equal ({}), mail.arguments['content']
-    end
 
     def test_create_with_simple_view
       mail = Notifier.with_simple_view
