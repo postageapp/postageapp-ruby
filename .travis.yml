@@ -18,5 +18,3 @@ matrix:
       gemfile: test/gemfiles/Gemfile.rails.4.0.x
     - rvm: ree
       gemfile: test/gemfiles/Gemfile.rails.4.0.x
-  allow_failures:
-    - gemfile: test/gemfiles/Gemfile.rails.4.0.x

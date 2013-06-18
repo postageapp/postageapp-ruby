@@ -1,12 +1,8 @@
 source 'http://rubygems.org'
 
-gem 'json'
-
-group :development do
-  gem 'jeweler'
-end
+gemspec
 
 group :test do
-  gem 'rails', '~> 4.0.0.beta1'
+  gem 'rails', '~> 4.0.0.rc2'
   gem 'mocha'
 end
