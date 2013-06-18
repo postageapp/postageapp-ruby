@@ -3,12 +3,12 @@
 This is the gem used to integrate Ruby apps with PostageApp service.
 Personalized, mass email sending can be offloaded to PostageApp via JSON based API.
 
-### [API Documentation](http://help.postageapp.com/kb/api/api-overview) &bull; [PostageApp Knowledge Base](http://help.postageapp.com/kb) &bull; [PostageApp Help Portal](http://help.postageapp.com)
+### [API Documentation](http://help.postageapp.com/kb/api/api-overview) &bull; [Knowledge Base](http://help.postageapp.com/kb) &bull; [Help Portal](http://help.postageapp.com)
 
 Installation
 ------------
 
-### Rails 3.x
+### Rails 3 / 4
 Add postageapp gem to your Gemfile:
     
     gem 'postageapp'
@@ -18,7 +18,7 @@ Then from the Rails project's root run:
     bundle install
     script/rails generate postageapp --api-key PROJECT_API_KEY
   
-### Rails 2.x
+### Rails 2
 In config/environment.rb add the following:
     
     config.gem 'postageapp'
@@ -106,7 +106,7 @@ Please note that `deliver` method will return `PostageApp::Response` object. Thi
     >> response.ok?
     => true
 
-### Rails 3.x
+### Rails 3 / 4
 
 Here's an example of a mailer in Rails 3 environment:
 
@@ -158,7 +158,7 @@ class Notifier < PostageApp::Mailer
 end
 ```
 
-### Rails 2.x
+### Rails 2
 
 Here's an example of a mailer you'd set in in a Rails 2 environment:
 

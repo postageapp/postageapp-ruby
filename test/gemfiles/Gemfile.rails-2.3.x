@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gemspec
+gem 'json'
 
 group :test do
   gem 'rails', '~> 2.3.0'
