@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.version       = PostageApp::VERSION
   s.authors       = ["Oleg Khabarov", "The Working Group Inc"]
   s.email         = ["oleg@khabarov.ca"]
-  s.homepage      = "http://github.com/twg/api_docs"
+  s.homepage      = "http://github.com/postageapp/postageapp-ruby"
   s.summary       = "Easier way to send email from web apps"
   s.description   = "Gem that interfaces with PostageApp.com service to send emails from web apps"
   
