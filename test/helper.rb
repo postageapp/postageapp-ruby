@@ -8,8 +8,7 @@ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'postageapp'
 require 'postageapp/mailer'
 
-begin require 'redgreen' unless ENV['TM_FILEPATH']; rescue LoadError; end
-require 'mocha'
+require 'mocha/setup'
 
 class Test::Unit::TestCase
   
