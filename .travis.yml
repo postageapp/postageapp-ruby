@@ -19,3 +19,5 @@ matrix:
       gemfile: test/gemfiles/Gemfile.rails-4.0.x
     - rvm: ree
       gemfile: test/gemfiles/Gemfile.rails-4.0.x
+    - rvm: 1.9.2
+      gemfile: test/gemfiles/Gemfile.rails-4.0.x
