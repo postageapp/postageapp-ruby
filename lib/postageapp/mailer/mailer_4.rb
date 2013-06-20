@@ -135,6 +135,14 @@ class PostageApp::Mailer < ActionMailer::Base
   end
 
 protected
+
+  def each_template(paths, name, &block) #:nodoc:
+    templates = lookup_context.find_all(name, paths)
+    if templates.present?
+      templates.uniq { |t| t.formats }.each(&block)
+    end
+  end
+  
   def create_parts_from_responses(m, responses) #:nodoc:
     map = {
       'html' => 'text/html',
