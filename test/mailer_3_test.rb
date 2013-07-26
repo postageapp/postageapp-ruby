@@ -13,6 +13,11 @@ class Mailer3Test < Test::Unit::TestCase
       assert_equal ({}), mail.arguments['content']
     end
 
+    def test_create_with_no_email
+      mail = Notifier.with_no_email
+      assert_equal false, mail.arguments['headers'][:subject].present?
+    end
+
     def test_create_with_simple_view
       mail = Notifier.with_simple_view
       assert_equal 'with layout simple view content', mail.arguments['content']['text/html']
