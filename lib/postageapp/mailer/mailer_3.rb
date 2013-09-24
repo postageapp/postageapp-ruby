@@ -3,9 +3,9 @@
 # to PostageApp::Mailer. Also don't forget to require 'postageapp/mailer'
 #
 # Here's an example of a valid PostageApp::Mailer class
-#  
+#
 #   require 'postageapp/mailer'
-#  
+#
 #   class Notifier < PostageApp::Mailer
 #     def signup_notification(recipient)
 #       mail(
@@ -27,7 +27,7 @@
 #   response = request.deliver # attempts to deliver the message and creates a PostageApp::Response
 #
 class PostageApp::Mailer < ActionMailer::Base
-  
+
   # Wrapper for creating attachments
   # Attachments sent to PostageApp are in the following format:
   #  'filename.ext' => {
@@ -35,12 +35,12 @@ class PostageApp::Mailer < ActionMailer::Base
   #    'content'      => 'base64_encoded_content'
   #   }
   class Attachments < Hash
-    
+
     def initialize(message)
       @_message = message
       message.arguments['attachments'] ||= { }
     end
-    
+
     def []=(filename, attachment)
       default_content_type = MIME::Types.type_for(filename).first.content_type rescue ''
       if attachment.is_a?(Hash)
@@ -56,81 +56,80 @@ class PostageApp::Mailer < ActionMailer::Base
       }
     end
   end
-  
+
   # Instead of initializing Mail object, we prepare PostageApp::Request
   def initialize(method_name = nil, *args)
     super()
     @_message = PostageApp::Request.new(:send_message)
     process(method_name, *args) if method_name
   end
-  
+
   # Possible to define custom uid. Should be sufficiently unique
   def postageapp_uid(value = nil)
     value ? @_message.uid = value : @_message.uid
   end
-  
+
   def postageapp_api_key(value = nil)
     value ? @_message.api_key = value : @_message.api_key
   end
-  
+
   # In API call we can specify PostageApp template that will be used
   # to generate content of the message
   def postageapp_template(value = nil)
     value ? @_message.arguments['template'] = value : @_message.arguments['template']
   end
-  
+
   # Hash of variables that will be used to inject into the content
   def postageapp_variables(value = nil)
     value ? @_message.arguments['variables'] = value : @_message.arguments['variables']
   end
-  
+
   def attachments
     @_attachments ||= Attachments.new(@_message)
   end
-  
+
   # Override for headers assignment
   def headers(args=nil)
     @_message.headers(args)
   end
-  
-  # Overriding method that prepares Mail object. This time we'll be 
+
+  # Overriding method that prepares Mail object. This time we'll be
   # contructing PostageApp::Request payload.
   def mail(headers = {}, &block)
     # Guard flag to prevent both the old and the new API from firing
     # Should be removed when old API is removed
     @mail_was_called = true
     m = @_message
-    
+
     # At the beginning, do not consider class default for parts order neither content_type
     content_type = headers[:content_type]
     parts_order  = headers[:parts_order]
-    
+
     # Call all the procs (if any)
     default_values = self.class.default.merge(self.class.default) do |k,v|
       v.respond_to?(:call) ? v.bind(self).call : v
     end
-    
+
     # Handle defaults
     headers = headers.reverse_merge(default_values)
-    headers[:subject] ||= default_i18n_subject
-    
+
     # Set configure delivery behavior
     wrap_delivery_behavior!(headers.delete(:delivery_method))
-    
+
     # Assigning recipients
     m.arguments['recipients'] = headers.delete(:to)
-    
+
     # Assign all headers except parts_order, content_type and body
     assignable = headers.except(:parts_order, :content_type, :body, :template_name, :template_path)
     m.headers.merge!(assignable)
-    
+
     # Render the templates and blocks
     responses, explicit_order = collect_responses_and_parts_order(headers, &block)
     create_parts_from_responses(m, responses)
-    
+
     m
   end
-  
+
 protected
 
   def create_parts_from_responses(m, responses) #:nodoc:
@@ -139,16 +138,16 @@ protected
       content[part[:content_type]] = part[:body]
     end
   end
-  
+
 end
 
 # A set of methods that are useful when request needs to behave as Mail
 class PostageApp::Request
-  
+
   attr_accessor :delivery_handler,
                 :perform_deliveries,
                 :raise_delivery_errors
-  
+
   # Either doing an actual send, or passing it along to Mail::TestMailer
   # Probably not the best way as we're skipping way too many intermediate methods
   def deliver
@@ -158,10 +157,10 @@ class PostageApp::Request
       self.send
     end
   end
-  
+
   # Not 100% on this, but I need to assign this so I can properly handle deliver method
   def delivery_method(method = nil, settings = {})
     @delivery_method = method
   end
-  
+
 end
