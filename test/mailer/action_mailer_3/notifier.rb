@@ -11,10 +11,10 @@ class Notifier < PostageApp::Mailer
     mail(headers_hash)
   end
 
-  def with_no_email
-    hash_without_email = headers_hash
-    hash_without_email.delete(:subject)
-    mail(hash_without_email)
+  def with_no_subject
+    hash_without_subject = headers_hash
+    hash_without_subject.delete(:subject)
+    mail(hash_without_subject)
   end
 
   def with_text_only_view

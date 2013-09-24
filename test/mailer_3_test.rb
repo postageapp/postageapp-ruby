@@ -13,9 +13,9 @@ class Mailer3Test < Test::Unit::TestCase
       assert_equal ({}), mail.arguments['content']
     end
 
-    def test_create_with_no_email
-      mail = Notifier.with_no_email
-      assert_equal false, mail.arguments['headers'][:subject].present?
+    def test_create_with_no_subject
+      mail = Notifier.with_no_subject
+      assert mail.arguments['headers'][:subject].nil?
     end
 
     def test_create_with_simple_view

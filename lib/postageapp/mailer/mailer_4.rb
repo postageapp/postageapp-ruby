@@ -112,7 +112,6 @@ class PostageApp::Mailer < ActionMailer::Base
 
     # Handle defaults
     headers = headers.reverse_merge(default_values)
-    headers[:subject] ||= default_i18n_subject
 
     # Apply charset at the beginning so all fields are properly quoted
     charset = headers[:charset]
