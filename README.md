@@ -165,7 +165,8 @@ Here's an example of using an interceptor
 ```ruby
 class DevelopmentPostageappInterceptor
   def self.delivering_email(postageapp_msg)
-    postageapp_msg.arguments["headers"][:subject] = "[#{postageapp_msg.arguments["recipients"]}] #{postageapp_msg.arguments["headers"][:subject]}"
+    postageapp_msg.arguments["headers"][:subject] =
+      "[#{postageapp_msg.arguments["recipients"]}] #{postageapp_msg.arguments["headers"][:subject]}"
     postageapp_msg.arguments["recipients"] = "test@example.com"
     # postageapp_msg.perform_deliveries = false
   end
