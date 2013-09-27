@@ -158,6 +158,20 @@ class Notifier < PostageApp::Mailer
 end
 ```
 
+#### Interceptors
+
+Here's an example of using an interceptor
+
+```ruby
+class DevelopmentPostageappInterceptor
+  def self.delivering_email(postageapp_msg)
+    postageapp_msg.arguments["headers"][:subject] = "[#{postageapp_msg.arguments["recipients"]}] #{postageapp_msg.arguments["headers"][:subject]}"
+    postageapp_msg.arguments["recipients"] = "test@example.com"
+    # postageapp_msg.perform_deliveries = false
+  end
+end
+```
+
 ### Rails 2
 
 Here's an example of a mailer you'd set in in a Rails 2 environment:
@@ -202,20 +216,6 @@ For projects other than Rails you'll need to tell where there project_root is at
 PostageApp.configure do |config|
   config.api_key      = 'PROJECT_API_KEY'
   config.project_root = "/path/to/your/project"
-end
-```
-
-Interceptors (Rails 3)
-----------------------
-Here's an example of using an interceptor
-
-```ruby
-class DevelopmentPostageappInterceptor
-  def self.delivering_email(postageapp_msg)
-    postageapp_msg.arguments["headers"][:subject] = "[#{postageapp_msg.arguments["recipients"]}] #{postageapp_msg.arguments["headers"][:subject]}"
-    postageapp_msg.arguments["recipients"] = "test@example.com"
-    # postageapp_msg.perform_deliveries = false
-  end
 end
 ```
 
