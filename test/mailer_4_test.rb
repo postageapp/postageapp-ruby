@@ -7,12 +7,12 @@ class Mailer4Test < Test::Unit::TestCase
 
     require File.expand_path('../mailer/action_mailer_3/notifier', __FILE__)
     puts "\e[0m\e[32mRunning #{File.basename(__FILE__)} for action_mailer #{ActionMailer::VERSION::STRING}\e[0m"
-    
+
     def test_create_with_no_content
       mail = Notifier.with_no_content
       assert_equal ({}), mail.arguments['content']
     end
-    
+
     def test_create_with_no_subject
       mail = Notifier.with_no_subject
       assert mail.arguments['headers'][:subject].nil?
@@ -90,6 +90,14 @@ class Mailer4Test < Test::Unit::TestCase
       mail.delivery_method(Mail::TestMailer)
       mail.deliver
       assert_equal [mail], ActionMailer::Base.deliveries
+    end
+
+    def test_deliver_for_not_performing_deliveries_with_test_mailer
+      mail = Notifier.with_simple_view
+      mail.perform_deliveries = false
+      mail.delivery_method(Mail::TestMailer)
+      mail.deliver
+      assert_equal [], ActionMailer::Base.deliveries
     end
 
   else

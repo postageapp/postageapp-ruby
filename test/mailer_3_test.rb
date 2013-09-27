@@ -92,6 +92,14 @@ class Mailer3Test < Test::Unit::TestCase
       assert_equal [mail], ActionMailer::Base.deliveries
     end
 
+    def test_deliver_for_not_performing_deliveries_with_test_mailer
+      mail = Notifier.with_simple_view
+      mail.perform_deliveries = false
+      mail.delivery_method(Mail::TestMailer)
+      mail.deliver
+      assert_equal [], ActionMailer::Base.deliveries
+    end
+
   else
     puts "\e[0m\e[31mSkipping #{File.basename(__FILE__)}\e[0m"
     def test_nothing ; end
