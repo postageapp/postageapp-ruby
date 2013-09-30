@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage      = "http://github.com/postageapp/postageapp-ruby"
   s.summary       = "Easier way to send email from web apps"
   s.description   = "Gem that interfaces with PostageApp.com service to send emails from web apps"
+  s.license       = 'MIT'
   
   s.files         = `git ls-files`.split("\n")
   s.platform      = Gem::Platform::RUBY
