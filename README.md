@@ -222,4 +222,4 @@ end
 
 Copyright
 ---------
-(C) 2011-13 Oleg Khabarov, [The Working Group, Inc](http://www.twg.ca/)
+(C) 2011-2014 Oleg Khabarov, [The Working Group, Inc](http://www.twg.ca/)
