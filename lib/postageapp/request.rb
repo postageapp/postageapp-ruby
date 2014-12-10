@@ -1,5 +1,4 @@
 class PostageApp::Request
-  
   API_VERSION = '1.0'
   
   HEADERS = {
@@ -67,7 +66,17 @@ class PostageApp::Request
     
     response
   end
+
+  # Emulates Mail::Message#html_part
+  def html_part
+    self.arguments && self.arguments['content'] && self.arguments['content']['text/html']
+  end
   
+  # Emulates Mail::Message#text_part
+  def text_part
+    self.arguments && self.arguments['content'] && self.arguments['content']['text/plain']
+  end
+
   # URL of the where PostageApp::Request will be directed at
   def url
     URI.parse("#{PostageApp.configuration.url}/v.#{API_VERSION}/#{self.method}.json")
@@ -91,5 +100,4 @@ class PostageApp::Request
     end
     hash
   end
-  
 end

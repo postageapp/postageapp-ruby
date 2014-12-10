@@ -2,7 +2,7 @@ require File.expand_path('../helper', __FILE__)
 
 require File.expand_path('../../lib/postageapp/rails/rails', __FILE__)
 
-class RailsInitializationTest < Test::Unit::TestCase
+class RailsInitializationTest < Minitest::Test
   
   include ConstantDefinitions
   

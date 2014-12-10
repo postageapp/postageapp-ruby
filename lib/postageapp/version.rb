@@ -1,3 +1,3 @@
 module PostageApp
-  VERSION = "1.0.23"
+  VERSION = "1.0.24"
 end

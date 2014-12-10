@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class MailerHelperMethodsTest < Test::Unit::TestCase
+class MailerHelperMethodsTest < Minitest::Test
   
   def test_mailer_helper_methods
     request = PostageApp::Request.new(:send_message, {

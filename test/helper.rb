@@ -1,5 +1,5 @@
 require 'rubygems'
-require 'test/unit'
+require 'minitest/autorun'
 require 'fileutils'
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
@@ -10,8 +10,7 @@ require 'postageapp/mailer'
 
 require 'mocha/setup'
 
-class Test::Unit::TestCase
-  
+class Minitest::Test
   def setup
     # resetting to default configuration
     PostageApp.configure do |config|
@@ -51,12 +50,10 @@ class Test::Unit::TestCase
   def mock_failed_send
     Net::HTTP.any_instance.stubs(:post).returns(nil)
   end
-  
 end
 
 # Setting up constants just for the duration of the test
 module ConstantDefinitions
-  
   def setup
     @defined_constants = []
   end
@@ -71,5 +68,4 @@ module ConstantDefinitions
     Object.const_set(name, value)
     @defined_constants << name
   end
-  
 end

@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class ConfigurationTest < Test::Unit::TestCase
+class ConfigurationTest < Minitest::Test
   
   def test_initialization_defaults
     config = PostageApp::Configuration.new

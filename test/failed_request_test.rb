@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class FailedRequestTest < Test::Unit::TestCase
+class FailedRequestTest < Minitest::Test
   
   def setup
     super

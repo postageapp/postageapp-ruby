@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class ResponseTest < Test::Unit::TestCase
+class ResponseTest < Minitest::Test
   
   def test_initialization
     object = stub(:body => {

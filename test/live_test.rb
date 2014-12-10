@@ -1,6 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
-class LiveTest < Test::Unit::TestCase
+class LiveTest < Minitest::Test
   
   # Note: Need access to a live PostageApp.com account
   # See helper.rb to set host / api key
