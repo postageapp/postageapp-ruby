@@ -1,5 +1,8 @@
 require 'rubygems'
+
+gem 'minitest'
 require 'minitest/autorun'
+
 require 'fileutils'
 
 $LOAD_PATH.unshift(File.dirname(__FILE__))
@@ -12,7 +15,8 @@ require 'mocha/setup'
 
 class Minitest::Test
   def setup
-    # resetting to default configuration
+    # Resetting to default configuration
+
     PostageApp.configure do |config|
       config.api_key            = '1234567890abcdef'
       config.secure             = true
@@ -32,6 +36,8 @@ class Minitest::Test
       config.logger             = nil
       config.framework          = 'undefined framework'
     end
+
+    ActionMailer::Base.deliveries.clear
   end
   
   def mock_successful_send(status = 'ok')
@@ -55,7 +61,7 @@ end
 # Setting up constants just for the duration of the test
 module ConstantDefinitions
   def setup
-    @defined_constants = []
+    @defined_constants = [ ]
   end
   
   def teardown

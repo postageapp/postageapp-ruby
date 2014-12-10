@@ -1,16 +1,13 @@
 require File.expand_path('../helper', __FILE__)
 
 class LiveTest < Minitest::Test
-  
   # Note: Need access to a live PostageApp.com account
   # See helper.rb to set host / api key
-  unless false # set to +true+ to run tests
-    puts "\e[0m\e[31mSkipping #{File.basename(__FILE__)}\e[0m"
-    def test_nothing ; end
-  else
-    
+
+  if (ENV['POSTAGEAPP_LIVE_TESTS'])
     def setup
       super
+      
       PostageApp.configure do |config|
         config.secure   = false
         config.host     = 'api.postageapp.local'
@@ -83,7 +80,11 @@ class LiveTest < Minitest::Test
         Notifier.with_custom_postage_variables.deliver
       end
       assert response.ok?
+    end 
+  else
+    puts "\e[0m\e[31mSkipping #{File.basename(__FILE__)}\e[0m"
+
+    def test_nothing
     end
-    
   end
 end

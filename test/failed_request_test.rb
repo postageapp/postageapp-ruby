@@ -1,7 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
 class FailedRequestTest < Minitest::Test
-  
   def setup
     super
     PostageApp.configuration.project_root = File.expand_path('../', __FILE__)

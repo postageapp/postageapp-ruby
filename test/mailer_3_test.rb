@@ -2,34 +2,39 @@ require File.expand_path('../helper', __FILE__)
 
 # tests for ActionMailer bundled with Rails 3
 class Mailer3Test < Minitest::Test
-
-  if ActionMailer::VERSION::MAJOR == 3
-
+  case (ActionMailer::VERSION::MAJOR)
+  when 3
     require File.expand_path('../mailer/action_mailer_3/notifier', __FILE__)
+
     puts "\e[0m\e[32mRunning #{File.basename(__FILE__)} for action_mailer #{ActionMailer::VERSION::STRING}\e[0m"
 
     def test_create_with_no_content
       mail = Notifier.with_no_content
-      assert_equal ({}), mail.arguments['content']
+
+      assert_equal({ }, mail.arguments['content'])
     end
 
     def test_create_with_no_subject
       mail = Notifier.with_no_subject
+
       assert mail.arguments['headers'][:subject].nil?
     end
 
     def test_create_with_simple_view
       mail = Notifier.with_simple_view
+
       assert_equal 'with layout simple view content', mail.arguments['content']['text/html']
     end
 
     def test_create_with_text_only_view
       mail = Notifier.with_text_only_view
+
       assert_equal 'text content', mail.arguments['content']['text/plain']
     end
 
     def test_create_with_html_and_text_views
       mail = Notifier.with_html_and_text_views
+
       assert_equal 'text content',              mail.arguments['content']['text/plain']
       assert_equal 'with layout html content',  mail.arguments['content']['text/html']
     end
@@ -44,6 +49,7 @@ class Mailer3Test < Minitest::Test
 
     def test_create_with_body_and_attachment_as_file
       mail = Notifier.with_body_and_attachment_as_file
+
       assert_equal 'manual body text', mail.arguments['content']['text/html']
       assert_equal 'text/plain', mail.arguments['attachments']['sample_file.txt']['content_type']
       assert_equal "RmlsZSBjb250ZW50\n", mail.arguments['attachments']['sample_file.txt']['content']
@@ -51,6 +57,7 @@ class Mailer3Test < Minitest::Test
 
     def test_create_with_body_and_attachment_as_hash
       mail = Notifier.with_body_and_attachment_as_hash
+
       assert_equal 'manual body text', mail.arguments['content']['text/html']
       assert_equal 'text/rich', mail.arguments['attachments']['sample_file.txt']['content_type']
       assert_equal "RmlsZSBjb250ZW50\n", mail.arguments['attachments']['sample_file.txt']['content']
@@ -58,10 +65,11 @@ class Mailer3Test < Minitest::Test
 
     def test_create_with_custom_postage_variables
       mail = Notifier.with_custom_postage_variables
+
       args = mail.arguments_to_send
 
-      assert_equal 'custom_uid',      args['uid']
-      assert_equal 'custom_api_key',  args['api_key']
+      assert_equal 'custom_uid', args['uid']
+      assert_equal 'custom_api_key', args['api_key']
 
       args = args['arguments']
 
@@ -80,28 +88,35 @@ class Mailer3Test < Minitest::Test
 
     def test_create_with_recipient_override
       PostageApp.configuration.recipient_override = 'oleg@test.test'
+
       assert mail = Notifier.with_html_and_text_views
+
       assert_equal 'test@test.test', mail.arguments['recipients']
       assert_equal 'oleg@test.test', mail.arguments_to_send['arguments']['recipient_override']
     end
 
     def test_deliver_for_test_mailer
       mail = Notifier.with_simple_view
+
       mail.delivery_method(Mail::TestMailer)
       mail.deliver
-      assert_equal [mail], ActionMailer::Base.deliveries
+
+      assert_equal [ mail ], ActionMailer::Base.deliveries
     end
 
     def test_deliver_for_not_performing_deliveries_with_test_mailer
       mail = Notifier.with_simple_view
+
       mail.perform_deliveries = false
       mail.delivery_method(Mail::TestMailer)
       mail.deliver
-      assert_equal [], ActionMailer::Base.deliveries
-    end
 
+      assert_equal [ ], ActionMailer::Base.deliveries
+    end
   else
     puts "\e[0m\e[31mSkipping #{File.basename(__FILE__)}\e[0m"
-    def test_nothing ; end
+
+    def test_nothing
+    end
   end
 end
