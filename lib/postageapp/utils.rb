@@ -1,5 +1,4 @@
 class Hash
-  
   # Example usage:
   #   @hash.dig(:k1)          # same as @hash[:k1]
   #   @hash.dig(:k1, :k2)     # same as @hash[:k1] && @hash[:k1][:k2]

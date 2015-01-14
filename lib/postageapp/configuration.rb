@@ -1,5 +1,4 @@
 class PostageApp::Configuration
-  
   # +true+ for https, +false+ for http connections (default: is +true+)
   attr_accessor :secure
   
@@ -92,5 +91,4 @@ class PostageApp::Configuration
   def url
     "#{self.protocol}://#{self.host}:#{self.port}"
   end
-  
 end

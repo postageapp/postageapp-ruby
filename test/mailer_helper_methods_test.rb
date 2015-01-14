@@ -1,7 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
 class MailerHelperMethodsTest < Minitest::Test
-  
   def test_mailer_helper_methods
     request = PostageApp::Request.new(:send_message, {
       :headers    => { 'from'     => 'sender@test.test',
@@ -18,5 +17,4 @@ class MailerHelperMethodsTest < Minitest::Test
     assert_match 'html content', request.body
     assert_match 'text content', request.body
   end
-  
 end

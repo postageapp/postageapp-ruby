@@ -19,7 +19,7 @@ class PostageApp::Request
   # Ability to set api_key with eash request
   attr_accessor :api_key
   
-  def initialize(method, arguments = {})
+  def initialize(method, arguments = { })
     @method     = method
     @uid        = arguments.delete('uid')
     @api_key    = arguments.delete('api_key') || PostageApp.configuration.api_key

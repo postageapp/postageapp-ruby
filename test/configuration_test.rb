@@ -1,7 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
 class ConfigurationTest < Minitest::Test
-  
   def test_initialization_defaults
     config = PostageApp::Configuration.new
     
@@ -74,5 +73,4 @@ class ConfigurationTest < Minitest::Test
     config.host = 'api.postageapp.com'
     assert_equal 'https://api.postageapp.com:443', config.url
   end
-  
 end

@@ -1,5 +1,4 @@
 module PostageApp::FailedRequest
-  
   # Stores request object into a file for future re-send
   # returns true if stored, false if not (due to undefined project path)
   def self.store(request)
@@ -60,7 +59,6 @@ module PostageApp::FailedRequest
   end
   
 protected
-  
   def self.store_path
     return if !PostageApp.configuration.project_root
     dir = File.join(File.expand_path(PostageApp.configuration.project_root), 'tmp/postageapp_failed_requests')
@@ -71,5 +69,4 @@ protected
   def self.file_path(uid)
     File.join(store_path, uid)
   end
-  
 end

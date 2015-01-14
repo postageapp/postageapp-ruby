@@ -1,5 +1,4 @@
 class PostageApp::Response
-  
   # The UID should match the Request's UID. If Request didn't provide with one
   # PostageApp service should generate it for the Response
   attr_reader :uid
@@ -35,5 +34,4 @@ class PostageApp::Response
   def method_missing(method)
     /.*?\?$/.match(method.to_s) ? "#{self.status}?" == method.to_s : super(method)
   end
-  
 end

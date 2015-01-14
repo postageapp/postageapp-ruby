@@ -1,7 +1,6 @@
 require File.expand_path('../helper', __FILE__)
 
 class ResponseTest < Minitest::Test
-  
   def test_initialization
     object = stub(:body => {
       'response' => {
@@ -36,5 +35,4 @@ class ResponseTest < Minitest::Test
       assert true
     end
   end
-  
 end

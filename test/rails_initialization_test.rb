@@ -3,7 +3,6 @@ require File.expand_path('../helper', __FILE__)
 require File.expand_path('../../lib/postageapp/rails/rails', __FILE__)
 
 class RailsInitializationTest < Minitest::Test
-  
   include ConstantDefinitions
   
   def test_initialization
@@ -25,5 +24,4 @@ class RailsInitializationTest < Minitest::Test
     assert_equal 'RAILS ROOT', PostageApp.configuration.project_root
     assert_equal 'RAILS ENV', PostageApp.configuration.environment
   end
-  
 end
