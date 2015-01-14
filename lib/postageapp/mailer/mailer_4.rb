@@ -27,7 +27,6 @@
 #   response = request.deliver # attempts to deliver the message and creates a PostageApp::Response
 #
 class PostageApp::Mailer < ActionMailer::Base
-
   # Wrapper for creating attachments
   # Attachments sent to PostageApp are in the following format:
   #  'filename.ext' => {
@@ -35,7 +34,6 @@ class PostageApp::Mailer < ActionMailer::Base
   #    'content'      => 'base64_encoded_content'
   #   }
   class Attachments < Hash
-
     def initialize(message)
       @_message = message
       message.arguments['attachments'] ||= { }
@@ -134,10 +132,10 @@ class PostageApp::Mailer < ActionMailer::Base
   end
 
 protected
-
   def each_template(paths, name, &block) #:nodoc:
     templates = lookup_context.find_all(name, paths)
-    if templates.present?
+
+    if (templates.present?)
       templates.uniq { |t| t.formats }.each(&block)
     end
   end
@@ -147,21 +145,21 @@ protected
       'html' => 'text/html',
       'text' => 'text/plain'
     }
-    content = m.arguments['content'] ||= {}
+
+    content = m.arguments['content'] ||= { }
+
     responses.each do |part|
       content_type = map[part[:content_type]] || part[:content_type]
       content[content_type] = part[:body]
     end
   end
-
 end
 
 # A set of methods that are useful when request needs to behave as Mail
 class PostageApp::Request
-
-  attr_accessor :delivery_handler,
-                :perform_deliveries,
-                :raise_delivery_errors
+  attr_accessor :delivery_handler
+  attr_accessor :perform_deliveries
+  attr_accessor :raise_delivery_errors
 
   def inform_interceptors
     Mail.inform_interceptors(self)
@@ -171,8 +169,9 @@ class PostageApp::Request
   # Probably not the best way as we're skipping way too many intermediate methods
   def deliver
     inform_interceptors
-    if perform_deliveries
-      if @delivery_method == Mail::TestMailer
+
+    if (perform_deliveries)
+      if (@delivery_method == Mail::TestMailer)
         @delivery_method.deliveries << self
       else
         self.send
@@ -184,5 +183,4 @@ class PostageApp::Request
   def delivery_method(method = nil, settings = {})
     @delivery_method = method
   end
-
 end

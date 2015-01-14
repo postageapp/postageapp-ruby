@@ -15,20 +15,34 @@ end
 # General helper methods for Request object to act more like TMail::Mail
 # of Mail for testing
 class PostageApp::Request
-
   # Getter and setter for headers. You can specify headers in the following
   # formats:
   #   headers['Custom-Header'] = 'Custom Value'
   #   headers 'Custom-Header-1' => 'Custom Value 1',
   #           'Custom-Header-2' => 'Custom Value 2'
   def headers(value = nil)
-    self.arguments['headers'] ||= { }
-    if value && value.is_a?(Hash)
+    _headers = self.arguments['headers'] ||= { }
+
+    case (value)
+    when Hash
       value.each do |k, v|
-        self.arguments['headers'][k.to_s] = v.to_s
+        _headers[k.to_s] = v.to_s
       end
     end
-    self.arguments['headers']
+
+    _headers
+  end
+
+  def [](key)
+    case (key)
+    when :to, 'to'
+      self.to
+    when :from, 'from'
+      self.from
+    when :bcc, 'bcc'
+      # Not supported via API at this time
+      [ ]
+    end
   end
 
   def to
@@ -36,17 +50,41 @@ class PostageApp::Request
     out.is_a?(Hash) ? out : [out].flatten
   end
 
+  def to=(list)
+    self.arguments['recipients'] = list
+  end
+
   def from
-    [self.arguments_to_send.dig('arguments', 'headers', 'from')].flatten
+    [ self.arguments_to_send.dig('arguments', 'headers', 'from') ].flatten
+  end
+
+  def from=(address)
+    _headers = self.arguments['headers'] ||= { }
+
+    _headers['from'] = address.to_s
+  end
+
+  def bcc
+    # Not supported via API at this time
+    [ ]
+  end
+
+  def bcc=(list)
+    # Not supported via API at this time
   end
 
   def subject
     self.arguments_to_send.dig('arguments', 'headers', 'subject')
   end
 
+  def subject=(subject)
+    _headers = self.arguments['headers'] ||= { }
+
+    _headers['subject'] = subject.to_s
+  end
+
   def body
     out = self.arguments_to_send.dig('arguments', 'content')
     out.is_a?(Hash) ? out.values.join("\n\n") : out.to_s
   end
-
 end

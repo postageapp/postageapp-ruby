@@ -13,8 +13,16 @@ class Hash
   def recursive_stringify_keys!
     keys.each do |key|
       value = delete(key)
-      self[key.to_s] = value.is_a?(Hash) ? value.recursive_stringify_keys! : value
+
+      self[key.to_s] =
+        case (value)
+        when Hash
+          value.recursive_stringify_keys!
+        else
+          value
+        end
     end
+
     self
   end
 end
@@ -24,6 +32,7 @@ class Net::HTTP
   alias_method :old_initialize, :initialize
   def initialize(*args)
     old_initialize(*args)
+
     @ssl_context = OpenSSL::SSL::SSLContext.new
     @ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
   end

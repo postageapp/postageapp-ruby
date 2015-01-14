@@ -18,12 +18,17 @@ class PostageApp::Response
   # If something goes wrong Response will be thought of as failed
   def initialize(http_response)
     hash = JSON::parse(http_response.body)
-    @status   = hash['response']['status']
-    @uid      = hash['response']['uid']
-    @message  = hash['response']['message']
-    @data     = hash['data']
+
+    _response = hash['response']
+
+    @status = _response['status']
+    @uid = _response['uid']
+    @message = _response['message']
+
+    @data = hash['data']
+
   rescue
-    @status   = 'fail'
+    @status = 'fail'
   end
   
   # Little helper that checks for the Response status

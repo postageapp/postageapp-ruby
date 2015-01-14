@@ -2,7 +2,6 @@ require 'rails/generators'
 
 # Rails 3 Generator
 class PostageappGenerator < Rails::Generators::Base
-  
   class_option :api_key, :aliases => ['-k=value', '--api-key=value'], :type => :string, :desc => 'Your PostageApp API key'
   
   def self.source_root
@@ -23,5 +22,4 @@ class PostageappGenerator < Rails::Generators::Base
   def api_key
     options[:api_key]
   end
-  
 end

@@ -27,7 +27,6 @@
 #   response = request.deliver # attempts to deliver the message and creates a PostageApp::Response
 #
 class PostageApp::Mailer < ActionMailer::Base
-
   # Wrapper for creating attachments
   # Attachments sent to PostageApp are in the following format:
   #  'filename.ext' => {
@@ -131,22 +130,20 @@ class PostageApp::Mailer < ActionMailer::Base
   end
 
 protected
-
   def create_parts_from_responses(m, responses) #:nodoc:
-    content = m.arguments['content'] ||= {}
+    content = m.arguments['content'] ||= { }
+
     responses.each do |part|
       content[part[:content_type]] = part[:body]
     end
   end
-
 end
 
 # A set of methods that are useful when request needs to behave as Mail
 class PostageApp::Request
-
-  attr_accessor :delivery_handler,
-                :perform_deliveries,
-                :raise_delivery_errors
+  attr_accessor :delivery_handler
+  attr_accessor :perform_deliveries
+  attr_accessor :raise_delivery_errors
 
   def inform_interceptors
     Mail.inform_interceptors(self)
@@ -156,8 +153,9 @@ class PostageApp::Request
   # Probably not the best way as we're skipping way too many intermediate methods
   def deliver
     inform_interceptors
-    if perform_deliveries
-      if @delivery_method == Mail::TestMailer
+
+    if (perform_deliveries)
+      if (@delivery_method == Mail::TestMailer)
         @delivery_method.deliveries << self
       else
         self.send
@@ -169,5 +167,4 @@ class PostageApp::Request
   def delivery_method(method = nil, settings = {})
     @delivery_method = method
   end
-
 end

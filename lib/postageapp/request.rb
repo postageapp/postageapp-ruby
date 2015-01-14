@@ -20,10 +20,11 @@ class PostageApp::Request
   attr_accessor :api_key
   
   def initialize(method, arguments = { })
-    @method     = method
-    @uid        = arguments.delete('uid')
-    @api_key    = arguments.delete('api_key') || PostageApp.configuration.api_key
-    @arguments  = arguments
+    @method = method
+    @arguments = arguments.dup
+
+    @uid = @arguments.delete('uid')
+    @api_key = @arguments.delete('api_key') || PostageApp.configuration.api_key
   end
   
   # Skipping resend doesn't trigger PostageApp::FailedRequest.resend_all
@@ -92,12 +93,14 @@ class PostageApp::Request
   def arguments_to_send
     hash = { 'uid' => self.uid, 'api_key' => self.api_key }
     
-    if !self.arguments.nil? && !self.arguments.empty?
-      if !PostageApp.configuration.recipient_override.nil? && self.method.to_sym == :send_message
+    if (!self.arguments.nil? && !self.arguments.empty?)
+      if (!PostageApp.configuration.recipient_override.nil? && self.method.to_sym == :send_message)
         self.arguments.merge!('recipient_override' => PostageApp.configuration.recipient_override)
       end
+
       hash.merge!('arguments' => self.arguments.recursive_stringify_keys!) 
     end
+    
     hash
   end
 end

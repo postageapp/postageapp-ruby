@@ -25,7 +25,6 @@
 #   request = Notifier.create_signup_notification(user) # creates PostageApp::Request object
 #
 class PostageApp::Mailer < ActionMailer::Base
-  
   # Using :test as a delivery method if set somewhere else
   self.delivery_method = :postage unless (self.delivery_method == :test)
   
@@ -93,5 +92,4 @@ class PostageApp::Mailer < ActionMailer::Base
   rescue ActionView::MissingTemplate
     # do nothing
   end
-  
 end
