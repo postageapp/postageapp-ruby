@@ -36,7 +36,7 @@ matrix:
       gemfile: test/gemfiles/Gemfile.rails-3.1.x
     - rvm: 1.8.7-p374
       gemfile: test/gemfiles/Gemfile.rails-3.2.x
-    - rvm: ree
+    - rvm: ree-1.8.7-2012.02
       gemfile: test/gemfiles/Gemfile.rails-3.2.x
     - rvm: 1.9.2-p330
       gemfile: test/gemfiles/Gemfile.rails-3.2.x
@@ -48,7 +48,7 @@ matrix:
       gemfile: test/gemfiles/Gemfile.rails-4.0.x
     - rvm: 1.8.7-p374
       gemfile: test/gemfiles/Gemfile.rails-4.1.x
-    - rvm: ree
+    - rvm: ree-1.8.7-2012.02
       gemfile: test/gemfiles/Gemfile.rails-4.1.x
     - rvm: 1.9.2-p330
       gemfile: test/gemfiles/Gemfile.rails-4.1.x
