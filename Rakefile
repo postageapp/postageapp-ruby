@@ -10,3 +10,11 @@ Rake::TestTask.new(:test) do |test|
 end
 
 task :default => :test
+
+namespace :travis do
+  task :test do
+    require File.expand_path('test/travis_test', File.dirname(__FILE__))
+
+    TravisTest.run!
+  end
+end

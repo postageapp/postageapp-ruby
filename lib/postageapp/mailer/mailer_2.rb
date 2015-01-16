@@ -56,8 +56,9 @@ class PostageApp::Mailer < ActionMailer::Base
       params['headers']['subject'] = self.subject
     end
 
-    unless (unless self.subject.blank?)
-    params['headers']['from'] = self.from
+    unless (self.subject.blank?)
+      params['headers']['from'] = self.from
+    end
 
     unless (self.headers.blank?)
       params['headers'].merge!(self.headers)
@@ -90,6 +91,7 @@ class PostageApp::Mailer < ActionMailer::Base
     
     unless (self.postageapp_template.blank?)
       params['template']  = self.postageapp_template
+    end
 
     unless (self.postageapp_variables.blank?)
       params['variables'] = self.postageapp_variables
