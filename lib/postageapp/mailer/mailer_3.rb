@@ -25,7 +25,7 @@
 #
 #   request = Notifier.signup_notification(user) # creates PostageApp::Request object
 #   response = request.deliver # attempts to deliver the message and creates a PostageApp::Response
-#
+
 class PostageApp::Mailer < ActionMailer::Base
   # Wrapper for creating attachments
   # Attachments sent to PostageApp are in the following format:
@@ -33,22 +33,26 @@ class PostageApp::Mailer < ActionMailer::Base
   #    'content_type' => 'content/type',
   #    'content'      => 'base64_encoded_content'
   #   }
-  class Attachments < Hash
 
+  class Attachments < Hash
     def initialize(message)
       @_message = message
+
       message.arguments['attachments'] ||= { }
     end
 
     def []=(filename, attachment)
       default_content_type = MIME::Types.type_for(filename).first.content_type rescue ''
-      if attachment.is_a?(Hash)
-        content_type  = attachment[:content_type] || default_content_type
-        content       = Base64.encode64(attachment[:body])
+
+      case (attachment)
+      when Hash
+        content_type = attachment[:content_type] || default_content_type
+        content = Base64.encode64(attachment[:body])
       else
-        content_type  = default_content_type
-        content       = Base64.encode64(attachment)
+        content_type = default_content_type
+        content = Base64.encode64(attachment)
       end
+
       @_message.arguments['attachments'][filename] = {
         'content_type'  => content_type,
         'content'       => content
@@ -59,8 +63,12 @@ class PostageApp::Mailer < ActionMailer::Base
   # Instead of initializing Mail object, we prepare PostageApp::Request
   def initialize(method_name = nil, *args)
     super()
+
     @_message = PostageApp::Request.new(:send_message)
-    process(method_name, *args) if method_name
+
+    if method_name
+      process(method_name, *args)
+    end
   end
 
   # Possible to define custom uid. Should be sufficiently unique
@@ -75,12 +83,20 @@ class PostageApp::Mailer < ActionMailer::Base
   # In API call we can specify PostageApp template that will be used
   # to generate content of the message
   def postageapp_template(value = nil)
-    value ? @_message.arguments['template'] = value : @_message.arguments['template']
+    if (value)
+      @_message.arguments['template'] = value
+    else
+      @_message.arguments['template']
+    end
   end
 
   # Hash of variables that will be used to inject into the content
   def postageapp_variables(value = nil)
-    value ? @_message.arguments['variables'] = value : @_message.arguments['variables']
+    if (value)
+      @_message.arguments['variables'] = value
+    else
+      @_message.arguments['variables']
+    end
   end
 
   def attachments
@@ -88,13 +104,13 @@ class PostageApp::Mailer < ActionMailer::Base
   end
 
   # Override for headers assignment
-  def headers(args=nil)
+  def headers(args = nil)
     @_message.headers(args)
   end
 
   # Overriding method that prepares Mail object. This time we'll be
   # contructing PostageApp::Request payload.
-  def mail(headers = {}, &block)
+  def mail(headers = { }, &block)
     # Guard flag to prevent both the old and the new API from firing
     # Should be removed when old API is removed
     @mail_was_called = true
@@ -102,11 +118,15 @@ class PostageApp::Mailer < ActionMailer::Base
 
     # At the beginning, do not consider class default for parts order neither content_type
     content_type = headers[:content_type]
-    parts_order  = headers[:parts_order]
+    parts_order = headers[:parts_order]
 
     # Call all the procs (if any)
     default_values = self.class.default.merge(self.class.default) do |k,v|
-      v.respond_to?(:call) ? v.bind(self).call : v
+      if (v.respond_to?(:call))
+        v.bind(self).call
+      else
+        v
+      end
     end
 
     # Handle defaults
@@ -164,7 +184,7 @@ class PostageApp::Request
   end
 
   # Not 100% on this, but I need to assign this so I can properly handle deliver method
-  def delivery_method(method = nil, settings = {})
+  def delivery_method(method = nil, settings = { })
     @delivery_method = method
   end
 end

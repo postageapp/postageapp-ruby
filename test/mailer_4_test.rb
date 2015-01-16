@@ -1,10 +1,9 @@
-require File.expand_path('../helper', __FILE__)
+require File.expand_path('helper', File.dirname(__FILE__))
 
 # tests for ActionMailer bundled with Rails 3
-class Mailer4Test < Minitest::Test
-  case (ActionMailer::VERSION::MAJOR)
-  when 4
-    require File.expand_path('../mailer/action_mailer_3/notifier', __FILE__)
+class Mailer4Test < MiniTest::Test
+  require_action_mailer(4) do
+    require File.expand_path('mailer/action_mailer_3/notifier', File.dirname(__FILE__))
     
     puts "\e[0m\e[32mRunning #{File.basename(__FILE__)} for action_mailer #{ActionMailer::VERSION::STRING}\e[0m"
 
@@ -100,11 +99,6 @@ class Mailer4Test < Minitest::Test
       mail.deliver
 
       assert_equal [ ], ActionMailer::Base.deliveries
-    end
-  else
-    puts "\e[0m\e[31mSkipping #{File.basename(__FILE__)}\e[0m"
-
-    def test_nothing
     end
   end
 end

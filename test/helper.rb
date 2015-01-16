@@ -13,7 +13,19 @@ require 'postageapp/mailer'
 
 require 'mocha/setup'
 
-class Minitest::Test
+class MiniTest::Test
+  def self.require_action_mailer(version)
+    if (defined?(ActionMailer))
+      if (ActionMailer::VERSION::MAJOR == version)
+        return yield
+      end
+    end
+
+    define_method(:test_skipped) do
+      skip("Not testing against ActionMailer #{version}.x")
+    end
+  end
+
   def setup
     # Resetting to default configuration
 
@@ -37,7 +49,9 @@ class Minitest::Test
       config.framework          = 'undefined framework'
     end
 
-    ActionMailer::Base.deliveries.clear
+    if (defined?(ActionMailer))
+      ActionMailer::Base.deliveries.clear
+    end
   end
   
   def mock_successful_send(status = 'ok')

@@ -1,6 +1,6 @@
-require File.expand_path('../helper', __FILE__)
+require File.expand_path('helper', File.dirname(__FILE__))
 
-class RequestTest < Minitest::Test
+class RequestTest < MiniTest::Test
   def test_method_uid
     request = PostageApp::Request.new('test_method')
 
@@ -105,17 +105,19 @@ class RequestTest < Minitest::Test
   def test_send_failure
     mock_failed_send
     
-    request = PostageApp::Request.new('send_message', {
-      'headers'     => {
-        'from'     => 'sender@test.test',
-        'subject'  => 'Test Message'
-      },
-      'recipients'  => 'test@test.test',
-      'content'     => {
-        'text/plain'  => 'text content',
-        'text/html'   => 'html content'
+    request = PostageApp::Request.new(
+      'send_message', {
+        'headers' => {
+          'from' => 'sender@test.test',
+          'subject' => 'Test Message'
+        },
+        'recipients' => 'test@test.test',
+        'content' => {
+          'text/plain' => 'text content',
+          'text/html' => 'html content'
+        }
       }
-    })
+    )
 
     response = request.send
 

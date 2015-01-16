@@ -45,43 +45,78 @@ class PostageApp::Mailer < ActionMailer::Base
   # Creating a Postage::Request object unlike TMail one in ActionMailer::Base
   def create_mail
     params = { }
-    params['recipients'] = self.recipients unless self.recipients.blank?
+
+    unless (self.recipients.blank?)
+      params['recipients'] = self.recipients
+    end
     
     params['headers'] = { }
-    params['headers']['subject']  = self.subject  unless self.subject.blank?
-    params['headers']['from']     = self.from     unless self.from.blank?
-    params['headers'].merge!(self.headers)        unless self.headers.blank?
+
+    unless (self.subject.blank?)
+      params['headers']['subject'] = self.subject
+    end
+
+    unless (unless self.subject.blank?)
+    params['headers']['from'] = self.from
+
+    unless (self.headers.blank?)
+      params['headers'].merge!(self.headers)
+    end
     
     params['content'] = { }
     params['attachments'] = { }
     
-    if @parts.empty?
-      params['content'][self.content_type] = self.body unless self.body.blank?
+    if (@parts.empty?)
+      unless (self.body.blank?)
+        params['content'][self.content_type] = self.body
+      end
     else
       self.parts.each do |part|
-        case part.content_disposition
+        case (part.content_disposition)
         when 'inline'
-          part.content_type = 'text/plain' if part.content_type.blank? && String === part.body
+          if (part.content_type.blank? && String === part.body)
+            part.content_type = 'text/plain'
+          end
+
           params['content'][part.content_type] = part.body
         when 'attachment'
           params['attachments'][part.filename] = {
             'content_type' => part.content_type,
-            'content'      => Base64.encode64(part.body)
+            'content' => Base64.encode64(part.body)
           }
         end
       end
     end
     
-    params['template']  = self.postageapp_template  unless self.postageapp_template.blank?
-    params['variables'] = self.postageapp_variables unless self.postageapp_variables.blank?
+    unless (self.postageapp_template.blank?)
+      params['template']  = self.postageapp_template
+
+    unless (self.postageapp_variables.blank?)
+      params['variables'] = self.postageapp_variables
+    end
     
-    params.delete('headers')     if params['headers'].blank?
-    params.delete('content')     if params['content'].blank?
-    params.delete('attachments') if params['attachments'].blank?
+    if (params['headers'].blank?)
+      params.delete('headers')
+    end
+
+    if (params['content'].blank?)
+      params.delete('content')
+    end
+
+    if (params['attachments'].blank?)
+      params.delete('attachments')
+    end
     
     @mail = PostageApp::Request.new('send_message', params)
-    @mail.uid     = self.postageapp_uid     unless self.postageapp_uid.blank?
-    @mail.api_key = self.postageapp_api_key unless self.postageapp_api_key.blank?
+
+    unless (self.postageapp_uid.blank?)
+      @mail.uid= self.postageapp_uid
+    end
+
+    unless (self.postageapp_api_key.blank?)
+      @mail.api_key = self.postageapp_api_key
+    end
+
     @mail
   end
   
@@ -89,6 +124,7 @@ class PostageApp::Mailer < ActionMailer::Base
   # provided that the template is defined.
   def render(opts)
     super(opts)
+
   rescue ActionView::MissingTemplate
     # do nothing
   end

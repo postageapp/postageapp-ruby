@@ -2,68 +2,95 @@ module PostageApp::FailedRequest
   # Stores request object into a file for future re-send
   # returns true if stored, false if not (due to undefined project path)
   def self.store(request)
-    return false if !store_path || !PostageApp.configuration.requests_to_resend.member?(request.method.to_s)
+    return false unless (self.store_path) 
+    return false unless (PostageApp.configuration.requests_to_resend.member?(request.method.to_s))
     
-    open(file_path(request.uid), 'wb') do |f|
-      f.write(Marshal.dump(request))
-    end unless File.exists?(file_path(request.uid))
+    unless (File.exists?(file_path(request.uid)))
+      open(file_path(request.uid), 'wb') do |f|
+        f.write(Marshal.dump(request))
+      end
+    end
     
-    PostageApp.logger.info "STORING FAILED REQUEST [#{request.uid}]"
+    PostageApp.logger.info("STORING FAILED REQUEST [#{request.uid}]")
     
     true
+  end
+
+  def self.force_delete!(path)
+    File.delete(path)
+
+  rescue
+    nil
   end
   
   # Attempting to resend failed requests
   def self.resend_all
-    return false if !store_path
+    return false unless (self.store_path)
     
     Dir.foreach(store_path) do |filename|
-      next if !filename.match /^\w{40}$/
+      next unless (filename.match(/^\w{40}$/))
       
       request = initialize_request(filename)
       
-      receipt_response = PostageApp::Request.new(:get_message_receipt, :uid => filename).send(true)
-      if receipt_response.fail?
+      receipt_response = PostageApp::Request.new(
+        :get_message_receipt,
+        :uid => filename
+      ).send(true)
+
+      if (receipt_response.fail?)
         return
-      elsif receipt_response.ok?
-        PostageApp.logger.info "NOT RESENDING FAILED REQUEST [#{filename}]"
-        File.delete(file_path(filename)) rescue nil
-        
-      elsif receipt_response.not_found?
-        PostageApp.logger.info "RESENDING FAILED REQUEST [#{filename}]"
+      elsif (receipt_response.ok?)
+        PostageApp.logger.info("Skipping failed request (already sent) [#{filename}]")
+
+        force_delete!(file_path(filename))
+      elsif (receipt_response.not_found?)
+        PostageApp.logger.info("Retrying failed request [#{filename}]")
+
         response = request.send(true)
         
         # Not a fail, so we can remove this file, if it was then
         # there will be another attempt to resend
-        File.delete(file_path(filename)) rescue nil if !response.fail?
+
+        unless (response.fail?)
+          force_delete!(file_path(filename))
+        end
       else
-        PostageApp.logger.info "NOT RESENDING FAILED REQUEST [#{filename}], RECEIPT CANNOT BE PROCESSED"
-        File.delete(file_path(filename)) rescue nil
+        PostageApp.logger.info("Skipping failed request (non-replayable request type) [#{filename}]")
+
+        force_delete!(file_path(filename))
       end
     end
+
     return
   end
   
   # Initializing PostageApp::Request object from the file
   def self.initialize_request(uid)
-    return false if !store_path
-    
-    if File.exists?(file_path(uid))
-      begin
-        Marshal.load(File.read(file_path(uid))) 
-      rescue
-        File.delete(file_path(uid))
-        return false
-      end
-    end
+    return false unless (self.store_path)
+    return false unless (File.exists?(file_path(uid)))
+
+    Marshal.load(File.read(file_path(uid))) 
+
+  rescue
+    force_delete!(file_path(uid))
+
+    false
   end
   
 protected
   def self.store_path
-    return if !PostageApp.configuration.project_root
-    dir = File.join(File.expand_path(PostageApp.configuration.project_root), 'tmp/postageapp_failed_requests')
-    FileUtils.mkdir_p(dir) unless File.exists?(dir)
-    return dir
+    return unless (PostageApp.configuration.project_root)
+
+    dir = File.join(
+      File.expand_path(PostageApp.configuration.project_root),
+      'tmp/postageapp_failed_requests'
+    )
+    
+    unless (File.exists?(dir))
+      FileUtils.mkdir_p(dir)
+    end
+    
+    dir
   end
   
   def self.file_path(uid)

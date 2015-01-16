@@ -1,15 +1,23 @@
-require 'action_mailer'
-require 'action_mailer/version'
+begin
+  require 'action_mailer'
+  require 'action_mailer/version'
 
-# Loading PostageApp::Mailer class depending on what action_mailer is
-# currently installed on the system. Assuming we're dealing only with
-# ones that come with Rails 2 and 3
-if ActionMailer::VERSION::MAJOR == 4
-  require File.expand_path('../mailer/mailer_4', __FILE__)
-elsif ActionMailer::VERSION::MAJOR == 3
-  require File.expand_path('../mailer/mailer_3', __FILE__)
-else
-  require File.expand_path('../mailer/mailer_2', __FILE__)
+rescue LoadError
+  # ActionMailer not available
+end
+
+if (defined?(ActionMailer))
+  # Loading PostageApp::Mailer class depending on what action_mailer is
+  # currently installed on the system. Assuming we're dealing only with
+  # ones that come with Rails 2 and 3
+  case (ActionMailer::VERSION::MAJOR)
+  when 4
+    require File.expand_path('mailer/mailer_4', File.dirname(__FILE__))
+  when 3
+    require File.expand_path('mailer/mailer_3', File.dirname(__FILE__))
+  else
+    require File.expand_path('mailer/mailer_2', File.dirname(__FILE__))
+  end
 end
 
 # General helper methods for Request object to act more like TMail::Mail
@@ -47,7 +55,13 @@ class PostageApp::Request
 
   def to
     out = self.arguments_to_send.dig('arguments', 'recipients')
-    out.is_a?(Hash) ? out : [out].flatten
+
+    case (out)
+    when Hash
+      out
+    else
+      [ out ].flatten
+    end
   end
 
   def to=(list)
@@ -65,12 +79,12 @@ class PostageApp::Request
   end
 
   def bcc
-    # Not supported via API at this time
+    # Not supported natively via API at this time
     [ ]
   end
 
   def bcc=(list)
-    # Not supported via API at this time
+    # Not supported natively via API at this time
   end
 
   def subject

@@ -1,10 +1,9 @@
-require File.expand_path('../helper', __FILE__)
+require File.expand_path('helper', File.dirname(__FILE__))
 
 # tests for ActionMailer bundled with Rails 2
-class Mailer2Test < Minitest::Test
-  case (ActionMailer::VERSION::MAJOR)
-  when 2
-    require File.expand_path('../mailer/action_mailer_2/notifier', __FILE__)
+class Mailer2Test < MiniTest::Test
+  require_action_mailer(2) do
+    require File.expand_path('mailer/action_mailer_2/notifier', File.dirname(__FILE__))
 
     puts "\e[0m\e[32mRunning #{File.basename(__FILE__)} for action_mailer #{ActionMailer::VERSION::STRING}\e[0m"
         
@@ -82,11 +81,6 @@ class Mailer2Test < Minitest::Test
       assert mail = Notifier.create_with_html_and_text_views
       assert_equal 'test@test.test', mail.arguments['recipients']
       assert_equal 'oleg@test.test', mail.arguments_to_send['arguments']['recipient_override']
-    end
-  else
-    puts "\e[0m\e[31mSkipping #{File.basename(__FILE__)}\e[0m"
-
-    def test_nothing
     end
   end
 end

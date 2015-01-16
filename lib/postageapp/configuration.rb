@@ -53,13 +53,13 @@ class PostageApp::Configuration
   attr_accessor :logger
   
   def initialize
-    @secure             = true
-    @host               = 'api.postageapp.com'
-    @http_open_timeout  = 5
-    @http_read_timeout  = 10
+    @secure = true
+    @host = 'api.postageapp.com'
+    @http_open_timeout = 5
+    @http_read_timeout = 10
     @requests_to_resend = %w( send_message )
-    @framework          = 'undefined framework'
-    @environment        = 'production'
+    @framework = 'undefined framework'
+    @environment = 'production'
   end
   
   alias_method :secure?, :secure
@@ -69,23 +69,15 @@ class PostageApp::Configuration
   end
   
   def api_key
-    @api_key || ENV['POSTAGEAPP_API_KEY']
+    @api_key ||= ENV['POSTAGEAPP_API_KEY']
   end
   
   def protocol
-    @protocol || if secure?
-      'https'
-    else
-      'http'
-    end
+    @protocol ||= (secure? ? 'https' : 'http')
   end
   
   def port
-    @port || if secure?
-      443
-    else
-      80
-    end
+    @port ||= (secure? ? 443 : 80)
   end
   
   def url

@@ -1,12 +1,12 @@
 # [PostageApp](http://postageapp.com) Ruby Gem [![Build Status](https://secure.travis-ci.org/postageapp/postageapp-ruby.png)](http://travis-ci.org/postageapp/postageapp-ruby)
 
 This is the gem used to integrate Ruby apps with PostageApp service.
-Personalized, mass email sending can be offloaded to PostageApp via JSON based API.
+Personalized high-volume email sending can be offloaded to PostageApp via a
+[JSON-based API](http://dev.postageapp.com/api.html).
 
-### [API Documentation](http://help.postageapp.com/kb/api/api-overview) &bull; [Knowledge Base](http://help.postageapp.com/kb) &bull; [Help Portal](http://help.postageapp.com)
+### [API Documentation](http://help.postageapp.com/kb/api/api-overview) &bull; [Knowledge Base](http://help.postageapp.com/kb) &bull; [Help Portal](http://help.postageapp.com/)
 
-Installation
-------------
+# Installation
 
 ### Rails 3 / 4
 Add postageapp gem to your Gemfile:
@@ -44,8 +44,8 @@ PostageApp.configure do |config|
 end
 ```
 
-Usage
------
+# Usage
+
 Here's an example of sending a message ([See full API documentation](http://help.postageapp.com/faqs/api/send_message)):
 
 ```ruby
@@ -94,8 +94,8 @@ PostageApp.configure do |config|
 end
 ```
 
-ActionMailer Integration
-------------------------
+# ActionMailer Integration
+
 You can quickly convert your existing mailers to use PostageApp service by simply changing `class MyMailer < ActionMailer::Base` to `class MyMailer < PostageApp::Mailer`.  If you using ActionMailer from outside of Rails make sure you have this line somewhere: `require 'postageapp/mailer'`
 
 There are custom methods that allow setting of `template` and `variables` parts of the API call. They are `postageapp_template` and `postageapp_variables`. Examples how they are used are below. For details what they do please see [documentation](http://help.postageapp.com/faqs)
@@ -207,11 +207,15 @@ class Notifier < PostageApp::Mailer
 end
 ```
 
-Automatic resending in case of failure
---------------------------------------
-For those ultra rare occasions when api.postageapp.com is not reachable this gem will temporarily store requests and then will attempt to resend them with the next successful connection. In Rails environment it will create a folder: `RAILS_ROOT/tmp/postageapp_failed_requests` and save all failed requests there. On successful resend file for that request will be deleted.
+# Automatic resending in case of failure
 
-For projects other than Rails you'll need to tell where there project_root is at:
+For those rare occasions when the API is not reachable or unresponsive,
+this gem will temporarily store requests and then will attempt to resend them
+with the next successful connection. In Rails environment it will create a
+folder: `RAILS_ROOT/tmp/postageapp_failed_requests` and save all failed
+requests there. On successful resend file for that request will be deleted.
+
+For projects other than Rails you'll need to tell where the `project_root` is:
 
 ```ruby
 PostageApp.configure do |config|
@@ -220,6 +224,6 @@ PostageApp.configure do |config|
 end
 ```
 
-Copyright
----------
-(C) 2011-2014 Oleg Khabarov, [The Working Group, Inc](http://www.twg.ca/)
+# Copyright
+
+(C) 2011-2015 Scott Tadman, Oleg Khabarov, [The Working Group, Inc](http://www.twg.ca/)

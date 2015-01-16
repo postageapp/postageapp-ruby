@@ -1,9 +1,9 @@
 class PostageApp::Request
   API_VERSION = '1.0'
   
-  HEADERS = {
-    'Content-type'  => 'application/json',
-    'Accept'        => 'text/json, application/json'
+  HEADERS_DEFAULT = {
+    'Content-type' => 'application/json',
+    'Accept' => 'text/json, application/json'
   }
   
   # Unique ID of the request
@@ -18,6 +18,15 @@ class PostageApp::Request
   
   # Ability to set api_key with eash request
   attr_accessor :api_key
+
+  def self.user_agent
+    @user_agent ||=
+    "PostageApp-RubyGem %s (Ruby %s, %s)" % [
+      PostageApp::VERSION,
+      RUBY_VERSION,
+      PostageApp.configuration.framework
+    ]
+  end
   
   def initialize(method, arguments = { })
     @method = method
@@ -39,7 +48,7 @@ class PostageApp::Request
     
     http.read_timeout = PostageApp.configuration.http_read_timeout
     http.open_timeout = PostageApp.configuration.http_open_timeout
-    http.use_ssl      = PostageApp.configuration.secure?
+    http.use_ssl = PostageApp.configuration.secure?
     
     PostageApp.logger.info(self)
     
@@ -47,8 +56,11 @@ class PostageApp::Request
       http.post(
         url.path, 
         self.arguments_to_send.to_json, 
-        HEADERS.merge('User-Agent' => "PostageApp-RubyGem #{PostageApp::VERSION} (Ruby #{RUBY_VERSION}, #{PostageApp.configuration.framework})")
+        HEADERS_DEFAULT.merge(
+          'User-Agent' => self.class.user_agent
+        )
       )
+
     rescue TimeoutError, Errno::ECONNREFUSED
       nil
     end
@@ -57,10 +69,10 @@ class PostageApp::Request
     
     PostageApp.logger.info(response)
     
-    unless skip_failed_requests_processing
-      if response.fail?
+    unless (skip_failed_requests_processing)
+      if (response.fail?)
         PostageApp::FailedRequest.store(self)
-      elsif response.ok?
+      elsif (response.ok?)
         PostageApp::FailedRequest.resend_all
       end
     end
@@ -70,12 +82,12 @@ class PostageApp::Request
 
   # Emulates Mail::Message#html_part
   def html_part
-    self.arguments && self.arguments['content'] && self.arguments['content']['text/html']
+    self.arguments and self.arguments['content'] and self.arguments['content']['text/html']
   end
   
   # Emulates Mail::Message#text_part
   def text_part
-    self.arguments && self.arguments['content'] && self.arguments['content']['text/plain']
+    self.arguments and self.arguments['content'] and self.arguments['content']['text/plain']
   end
 
   # URL of the where PostageApp::Request will be directed at
@@ -85,7 +97,8 @@ class PostageApp::Request
   
   # Unique ID of the request
   def uid(reload = false)
-    @uid = nil if reload
+    @uid = nil if (reload)
+
     @uid ||= Digest::SHA1.hexdigest("#{rand}#{Time.now.to_f}#{self.arguments}")
   end
   
@@ -95,10 +108,14 @@ class PostageApp::Request
     
     if (!self.arguments.nil? && !self.arguments.empty?)
       if (!PostageApp.configuration.recipient_override.nil? && self.method.to_sym == :send_message)
-        self.arguments.merge!('recipient_override' => PostageApp.configuration.recipient_override)
+        self.arguments.merge!(
+          'recipient_override' => PostageApp.configuration.recipient_override
+        )
       end
 
-      hash.merge!('arguments' => self.arguments.recursive_stringify_keys!) 
+      hash.merge!(
+        'arguments' => self.arguments.recursive_stringify_keys!
+      )
     end
     
     hash
