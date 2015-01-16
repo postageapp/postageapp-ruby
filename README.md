@@ -96,11 +96,18 @@ end
 
 # ActionMailer Integration
 
-You can quickly convert your existing mailers to use PostageApp service by simply changing `class MyMailer < ActionMailer::Base` to `class MyMailer < PostageApp::Mailer`.  If you using ActionMailer from outside of Rails make sure you have this line somewhere: `require 'postageapp/mailer'`
+You can quickly convert your existing mailers to use PostageApp service by
+simply changing `class MyMailer < ActionMailer::Base` to
+`class MyMailer < PostageApp::Mailer`.  If you using ActionMailer from outside
+of Rails make sure you have this line somewhere: `require 'postageapp/mailer'`
 
-There are custom methods that allow setting of `template` and `variables` parts of the API call. They are `postageapp_template` and `postageapp_variables`. Examples how they are used are below. For details what they do please see [documentation](http://help.postageapp.com/faqs)
+There are custom methods that allow setting of `template` and `variables` parts
+of the API call. They are `postageapp_template` and `postageapp_variables`.
+Examples how they are used are below. For details what they do please see
+[documentation](http://help.postageapp.com/faqs)
 
-Please note that `deliver` method will return `PostageApp::Response` object. This way you can immediately check the status of the delivery. For example:
+Please note that `deliver` method will return `PostageApp::Response` object.
+This way you can immediately check the status of the delivery. For example:
 
     >> response = UserMailer.welcome_email(@user).deliver
     >> response.ok?
@@ -143,7 +150,9 @@ class Notifier < PostageApp::Mailer
 end
 ```
 
-API of previous ActionMailer is partially supported under Rails 3 environment. Please note that it's not 100% integrated, some methods/syntax will not work. You may still define you mailers in this way (but really shouldn't):
+API of previous ActionMailer is partially supported under Rails 3 environment.
+Please note that it's not 100% integrated, some methods/syntax will not work.
+You may still define you mailers in this way (but really shouldn't):
 
 ```ruby
 require 'postageapp/mailer'
@@ -160,7 +169,7 @@ end
 
 #### Interceptors
 
-Here's an example of using an interceptor
+Here's an example of using an interceptor:
 
 ```ruby
 class DevelopmentPostageappInterceptor
