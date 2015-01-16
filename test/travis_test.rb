@@ -40,7 +40,7 @@ class TravisTest
 
     @travis_test.matrix.collect do |entry|
       {
-        rvm: entry[:rvm]
+        :rvm => entry[:rvm]
       }
     end.uniq.each do |entry|
       puts "Ruby %{rvm}" % entry
@@ -90,8 +90,8 @@ class TravisTest
   def matrix_exclusions
     travis_config['matrix']['exclude'].collect do |entry|
       {
-        rvm: entry['rvm'],
-        gemfile: entry['gemfile']
+        :rvm => entry['rvm'],
+        :gemfile => entry['gemfile']
       }
     end
   end
@@ -100,8 +100,8 @@ class TravisTest
     ruby_versions.flat_map do |version|
       gemfiles.collect do |gemfile|
         {
-          rvm: version,
-          gemfile: gemfile
+          :rvm => version,
+          :gemfile => gemfile
         }
       end
     end - matrix_exclusions
