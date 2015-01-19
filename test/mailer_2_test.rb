@@ -19,7 +19,7 @@ class Mailer2Test < MiniTest::Test
       assert mail = Notifier.create_with_no_content
 
       assert_equal 'recipient@example.net', mail.arguments['recipients']
-      assert_equal ({ 'from' => 'text@example.net', 'subject' => 'Test Email' }), mail.arguments['headers']
+      assert_equal ({ 'from' => 'sender@example.com', 'subject' => 'Test Email' }), mail.arguments['headers']
       assert mail.arguments['content'].blank?
     end
     
@@ -89,7 +89,7 @@ class Mailer2Test < MiniTest::Test
 
       assert mail = Notifier.create_with_html_and_text_views
 
-      assert_equal 'recpient@example.net', mail.arguments['recipients']
+      assert_equal 'recipient@example.net', mail.arguments['recipients']
       assert_equal 'override@example.net', mail.arguments_to_send['arguments']['recipient_override']
     end
   end
