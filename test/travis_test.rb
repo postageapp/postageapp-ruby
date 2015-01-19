@@ -2,7 +2,11 @@
 
 require 'yaml'
 
+require File.expand_path('with_environment', File.dirname(__FILE__))
+
 class TravisTest
+  extend WithEnvironment
+
   ENV_VARIABLE = {
     :rvm => "RBENV_VERSION",
     :gemfile => "BUNDLE_GEMFILE"
@@ -16,14 +20,6 @@ class TravisTest
     end.compact.join(' ')
   end
 
-  def self.merge_env!(env)
-    env.each do |key, value|
-      if (variable = ENV_VARIABLE[key])
-        ENV[variable] = value
-      end
-    end
-  end
-
   def self.shell_command!(args, env)
     commands = args.collect do |s|
       s % env
@@ -31,14 +27,19 @@ class TravisTest
 
     puts(commands.collect { |c| [ bash_env(env), c ].join(' ') }.join(' && '))
     
-    merge_env!(env)
-    system(commands.join(' && '))
+    with_environment(env) do
+      result = system(commands.join(' && '))
+
+      yield(result) if (block_given?)
+
+      result
+    end
   end
 
   def self.install_versions!
-    @travis_test = self.new
+    travis_test = self.new
 
-    @travis_test.matrix.collect do |entry|
+    travis_test.matrix.collect do |entry|
       {
         :rvm => entry[:rvm]
       }
@@ -56,18 +57,33 @@ class TravisTest
   end
 
   def self.run!
-    @travis_test = self.new
+    travis_test = self.new
 
-    @travis_test.matrix.each do |entry|
+    results = { }
+
+    travis_test.matrix.each do |entry|
       puts "RBENV_VERSION=%{rvm} BUNDLE_GEMFILE=%{gemfile}" % entry
 
       shell_command!(
         [
-          "bundle install",
+          "bundle install --quiet",
           "rake test"
         ],
         entry
-      )
+      ) do |code|
+        results[entry] = code
+      end
+    end
+
+    puts '%-20s %-24s %-6s' % [ 'Ruby', 'Gemfile', 'Status' ]
+    puts '-' * 78
+
+    results.each do |entry, code|
+      puts '%-20s %-24s %-6s' % [
+        entry[:rvm],
+        File.basename(entry[:gemfile]).sub(/\AGemfile\./,''),
+        code
+      ]
     end
   end
 

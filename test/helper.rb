@@ -12,8 +12,11 @@ require 'postageapp'
 require 'postageapp/mailer'
 
 require 'mocha/setup'
+require 'with_environment'
 
 class MiniTest::Test
+  include WithEnvironment
+
   def self.require_action_mailer(version)
     if (defined?(ActionMailer))
       if (ActionMailer::VERSION::MAJOR == version)
@@ -58,7 +61,7 @@ class MiniTest::Test
     Net::HTTP.any_instance.stubs(:post).returns(Net::HTTPResponse.new(nil, nil, nil))
     Net::HTTPResponse.any_instance.stubs(:body).returns({
       :response => { 
-        :uid    => 'sha1hashuid23456789012345678901234567890',
+        :uid => 'sha1hashuid23456789012345678901234567890',
         :status => status
       },
       :data => {

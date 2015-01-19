@@ -12,6 +12,7 @@ end
 task :default => :test
 
 namespace :travis do
+  desc "Run tests across different environments, simulating Travis"
   task :test do
     require File.expand_path('test/travis_test', File.dirname(__FILE__))
 
