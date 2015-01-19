@@ -29,7 +29,7 @@ module PostageApp
   # variable POSTAGEAPP_API_KEY to set up your key.
   
   def self.configure
-    yield configuration
+    yield(configuration)
   end
   
   # Accessor for the PostageApp::Configuration object
@@ -47,7 +47,7 @@ module PostageApp
   def self.logger
     @logger ||= begin
       configuration.logger || PostageApp::Logger.new(
-        if configuration.project_root
+        if (configuration.project_root)
           FileUtils.mkdir_p(File.join(File.expand_path(configuration.project_root), 'log'))
           File.join(configuration.project_root, "log/postageapp_#{configuration.environment}.log")
         else

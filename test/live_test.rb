@@ -18,6 +18,7 @@ class LiveTest < MiniTest::Test
     def test_request_get_method_list
       request = PostageApp::Request.new(:get_method_list)
       response = request.send
+      
       assert_equal 'PostageApp::Response', response.class.name
       assert_equal 'ok', response.status
       assert_match /^\w{40}$/, response.uid
@@ -29,12 +30,14 @@ class LiveTest < MiniTest::Test
     
     def test_request_send_message
       request = PostageApp::Request.new(:send_message, {
-        :headers    => { 'from'     => 'sender@test.test',
-                         'subject'  => 'Test Message'},
-        :recipients => 'test@test.test',
-        :content    => {
-          'text/plain'  => 'text content',
-          'text/html'   => 'html content'
+        :headers => {
+          'from' => 'sender@example.com',
+          'subject' => 'Test Message'
+        },
+        :recipients => 'recipient@example.net',
+        :content => {
+          'text/plain' => 'text content',
+          'text/html' => 'html content'
         }
       })
       response = request.send

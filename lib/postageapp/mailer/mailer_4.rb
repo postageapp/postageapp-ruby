@@ -9,9 +9,9 @@
 #   class Notifier < PostageApp::Mailer
 #     def signup_notification(recipient)
 #       mail(
-#         :to       => recipient.email,
-#         :from     => 'sender@test.test',
-#         :subject  => 'Test Message'
+#         to: recipient.email,
+#         from: 'sender@test.test',
+#         subject: 'Test Message'
 #       )
 #     end
 #   end
@@ -27,11 +27,16 @@
 #   response = request.deliver # attempts to deliver the message and creates a PostageApp::Response
 
 class PostageApp::Mailer < ActionMailer::Base
+  CONTENT_TYPE_MAP = {
+    'html' => 'text/html',
+    'text' => 'text/plain'
+  }
+
   # Wrapper for creating attachments
   # Attachments sent to PostageApp are in the following format:
   #  'filename.ext' => {
-  #    'content_type' => 'content/type',
-  #    'content'      => 'base64_encoded_content'
+  #    content_type: 'content/type',
+  #    content: 'base64_encoded_content'
   #   }
 
   class Attachments < Hash
@@ -53,8 +58,8 @@ class PostageApp::Mailer < ActionMailer::Base
       end
 
       @_message.arguments['attachments'][filename] = {
-        'content_type'  => content_type,
-        'content'       => content
+        'content_type' => content_type,
+        'content' => content
       }
     end
   end
@@ -175,15 +180,10 @@ protected
   end
 
   def create_parts_from_responses(m, responses) #:nodoc:
-    map = {
-      'html' => 'text/html',
-      'text' => 'text/plain'
-    }
-
     content = m.arguments['content'] ||= { }
 
     responses.each do |part|
-      content_type = map[part[:content_type]] || part[:content_type]
+      content_type = CONTENT_TYPE_MAP[part[:content_type]] || part[:content_type]
       content[content_type] = part[:body]
     end
   end

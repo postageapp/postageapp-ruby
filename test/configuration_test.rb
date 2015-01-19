@@ -56,15 +56,14 @@ class ConfigurationTest < MiniTest::Test
   end
   
   def test_initialization_with_env_api_key
-    ENV['POSTAGEAPP_API_KEY'] = 'env_api_key'
-    
-    config = PostageApp::Configuration.new
-    assert_equal 'env_api_key', config.api_key
-    
-    config.api_key = 'config_api_key'
-    assert_equal 'config_api_key', config.api_key
-    
-    ENV['POSTAGEAPP_API_KEY'] = nil # must unset for other methods to run properly
+    with_environment('POSTAGEAPP_API_KEY' => 'env_api_key') do
+      config = PostageApp::Configuration.new
+
+      assert_equal 'env_api_key', config.api_key
+      
+      config.api_key = 'config_api_key'
+      assert_equal 'config_api_key', config.api_key
+    end
   end
   
   def test_method_url

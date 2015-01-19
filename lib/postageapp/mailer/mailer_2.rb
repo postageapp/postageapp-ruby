@@ -26,7 +26,9 @@
 #
 class PostageApp::Mailer < ActionMailer::Base
   # Using :test as a delivery method if set somewhere else
-  self.delivery_method = :postage unless (self.delivery_method == :test)
+  unless (self.delivery_method == :test)
+    self.delivery_method = :postage
+  end
   
   adv_attr_accessor :postageapp_uid
   adv_attr_accessor :postageapp_api_key
@@ -38,8 +40,13 @@ class PostageApp::Mailer < ActionMailer::Base
   end
   
   def deliver!(mail = @mail)
-    raise 'PostageApp::Request object not present, cannot deliver' unless mail
-    __send__("perform_delivery_#{delivery_method}", mail) if perform_deliveries
+    unless (mail)
+      raise 'PostageApp::Request object not present, cannot deliver'
+    end
+
+    if (perform_deliveries)
+      __send__("perform_delivery_#{delivery_method}", mail)
+    end
   end
   
   # Creating a Postage::Request object unlike TMail one in ActionMailer::Base
@@ -112,7 +119,7 @@ class PostageApp::Mailer < ActionMailer::Base
     @mail = PostageApp::Request.new('send_message', params)
 
     unless (self.postageapp_uid.blank?)
-      @mail.uid= self.postageapp_uid
+      @mail.uid = self.postageapp_uid
     end
 
     unless (self.postageapp_api_key.blank?)

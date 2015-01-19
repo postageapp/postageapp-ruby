@@ -54,8 +54,8 @@ class PostageApp::Mailer < ActionMailer::Base
       end
 
       @_message.arguments['attachments'][filename] = {
-        'content_type'  => content_type,
-        'content'       => content
+        'content_type' => content_type,
+        'content' => content
       }
     end
   end

@@ -62,16 +62,20 @@ class FailedRequestTest < MiniTest::Test
     mock_failed_send
     
     request = PostageApp::Request.new(:send_message, {
-      :headers    => { 'from'     => 'sender@test.test',
-                       'subject'  => 'Test Message'},
+      :headers => {
+        'from' => 'sender@test.test',
+        'subject' => 'Test Message'
+      },
       :recipients => 'test@test.test',
-      :content    => {
-        'text/plain'  => 'text content',
-        'text/html'   => 'html content'
+      :content => {
+        'text/plain' => 'text content',
+        'text/html' => 'html content'
       }
     })
+
     response = request.send
     assert response.fail?
+
     file_path = File.join(PostageApp::FailedRequest.store_path, request.uid)
     assert File.exists?(file_path)
     
@@ -92,14 +96,17 @@ class FailedRequestTest < MiniTest::Test
   def test_resend_all_failure
     mock_failed_send
     request = PostageApp::Request.new(:send_message, {
-      :headers    => { 'from'     => 'sender@test.test',
-                       'subject'  => 'Test Message'},
+      :headers => {
+        'from' => 'sender@test.test',
+        'subject' => 'Test Message'
+      },
       :recipients => 'test@test.test',
-      :content    => {
-        'text/plain'  => 'text content',
-        'text/html'   => 'html content'
+      :content => {
+        'text/plain' => 'text content',
+        'text/html' => 'html content'
       }
     })
+    
     response = request.send
     assert response.fail?
     file_path = File.join(PostageApp::FailedRequest.store_path, request.uid)

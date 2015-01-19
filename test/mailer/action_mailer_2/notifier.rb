@@ -1,10 +1,9 @@
 # Test mailer for ActionMailer 2
 class Notifier < PostageApp::Mailer
-  
-  self.template_root = File.expand_path('../', __FILE__)
-  
+  self.template_root = File.dirname(__FILE__)
+
   def blank
-    # ... nothing to see here
+    # Empty method
   end
   
   def with_no_content
@@ -25,43 +24,53 @@ class Notifier < PostageApp::Mailer
   
   def with_manual_parts
     setup_headers
-    part  :content_type => 'text/html',
-          :body         => 'html content'
-    part  :content_type => 'text/plain',
-          :body         => 'text content'
-    attachment  :content_type => 'image/jpeg',
-                :filename     => 'foo.jpg',
-                :body         => '123456789'
+
+    part(
+      :content_type => 'text/html',
+      :body => 'html content'
+    )
+
+    part(
+      :content_type => 'text/plain',
+      :body => 'text content'
+    )
+
+    attachment(
+      :content_type => 'image/jpeg',
+      :filename => 'foo.jpg',
+      :body => '123456789'
+    )
   end
   
   def with_body_and_attachment
     setup_headers
-    attachment  :content_type => 'image/jpeg',
-                :filename     => 'foo.jpg',
-                :body         => '123456789'
+
+    attachment(
+      :content_type => 'image/jpeg',
+      :filename => 'foo.jpg',
+      :body => '123456789'
+    )
   end
   
   def with_custom_postage_variables
-    postageapp_template   'test-template'
-    postageapp_variables  'variable' => 'value'
-    postageapp_uid        'custom_uid'
-    postageapp_api_key    'custom_api_key'
+    postageapp_template 'test-template'
+    postageapp_variables 'variable' => 'value'
+    postageapp_uid 'custom_uid'
+    postageapp_api_key 'custom_api_key'
     
-    from    'test@test.test'
+    from 'sender@example.com'
     subject 'Test Email'
     
-    recipients ({
-      'test1@test.text' => { 'name' => 'Test 1' },
-      'test2@test.text' => { 'name' => 'Test 2' }
-    })
+    recipients(
+      'test1@example.net' => { 'name' => 'Test 1' },
+      'test2@example.net' => { 'name' => 'Test 2' }
+    )
   end
   
 private
-  
   def setup_headers
-    recipients 'test@test.test'
-    from       'text@test.test'
-    subject    'Test Email'
+    recipients 'recipient@example.net'
+    from 'sender@example.com'
+    subject 'Test Email'
   end
-  
 end

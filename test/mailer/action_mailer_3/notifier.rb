@@ -1,7 +1,6 @@
 # Test mailer for ActionMailer 3
 class Notifier < PostageApp::Mailer
-
-  self.append_view_path(File.expand_path('../', __FILE__))
+  self.append_view_path(File.dirname(__FILE__))
 
   def blank
     # ... nothing to see here
@@ -14,6 +13,7 @@ class Notifier < PostageApp::Mailer
   def with_no_subject
     hash_without_subject = headers_hash
     hash_without_subject.delete(:subject)
+
     mail(hash_without_subject)
   end
 
@@ -34,18 +34,24 @@ class Notifier < PostageApp::Mailer
 
   def with_body_and_attachment_as_file
     attachments['sample_file.txt'] = 'File content'
+
     mail(headers_hash) do |format|
-      format.html { render :text => 'manual body text'}
+      format.html do
+        render(:text => 'manual body text')
+      end
     end
   end
 
   def with_body_and_attachment_as_hash
     attachments['sample_file.txt'] = {
       :content_type => 'text/rich',
-      :body         => 'File content'
+      :body => 'File content'
     }
+
     mail(headers_hash) do |format|
-      format.html { render :text => 'manual body text'}
+      format.html do
+        render(:text => 'manual body text')
+      end
     end
   end
 
@@ -53,28 +59,27 @@ class Notifier < PostageApp::Mailer
     headers['CustomHeader1'] = 'CustomValue1'
     headers 'CustomHeader2' => 'CustomValue2'
 
-    postageapp_template   'test-template'
-    postageapp_variables  'variable' => 'value'
-    postageapp_api_key    'custom_api_key'
-    postageapp_uid        'custom_uid'
+    postageapp_template 'test-template'
+    postageapp_variables 'variable' => 'value'
+    postageapp_api_key 'custom_api_key'
+    postageapp_uid 'custom_uid'
 
     mail(
-      :from     => 'test@test.test',
-      :subject  => 'Test Message',
-      :to       => {
-        'test1@test.test' => { 'name' => 'Test 1' },
-        'test2@test.test' => { 'name' => 'Test 2' }
+      :from => 'sender@example.com',
+      :subject => 'Test Message',
+      :to => {
+        'test1@example.net' => { 'name' => 'Test 1' },
+        'test2@example.net' => { 'name' => 'Test 2' }
       }
     )
   end
 
 private
-
-  def headers_hash(options = {})
-    { :from     => 'sender@test.test',
-      :subject  => 'Test Message',
-      :to       => 'test@test.test'
+  def headers_hash(options = { })
+    {
+      :from => 'sender@example.com',
+      :to => 'recipient@example.net',
+      :subject => 'Test Message'
     }.merge(options)
   end
-
 end

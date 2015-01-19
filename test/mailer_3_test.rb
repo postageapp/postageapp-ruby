@@ -34,8 +34,8 @@ class Mailer3Test < MiniTest::Test
     def test_create_with_html_and_text_views
       mail = Notifier.with_html_and_text_views
 
-      assert_equal 'text content',              mail.arguments['content']['text/plain']
-      assert_equal 'with layout html content',  mail.arguments['content']['text/html']
+      assert_equal 'text content', mail.arguments['content']['text/plain']
+      assert_equal 'with layout html content', mail.arguments['content']['text/html']
     end
 
     def test_deliver_with_html_and_text_views
@@ -73,25 +73,25 @@ class Mailer3Test < MiniTest::Test
       args = args['arguments']
 
       assert_equal ({
-        'test1@test.test' => { 'name' => 'Test 1'},
-        'test2@test.test' => { 'name' => 'Test 2'}
+        'test1@example.net' => { 'name' => 'Test 1'},
+        'test2@example.net' => { 'name' => 'Test 2'}
       }), args['recipients']
 
-      assert_equal 'test-template',             args['template']
+      assert_equal 'test-template', args['template']
       assert_equal ({ 'variable' => 'value' }), args['variables']
-      assert_equal 'CustomValue1',              args['headers']['CustomHeader1']
-      assert_equal 'CustomValue2',              args['headers']['CustomHeader2']
-      assert_equal 'text content',              args['content']['text/plain']
-      assert_equal 'with layout html content',  args['content']['text/html']
+      assert_equal 'CustomValue1', args['headers']['CustomHeader1']
+      assert_equal 'CustomValue2', args['headers']['CustomHeader2']
+      assert_equal 'text content', args['content']['text/plain']
+      assert_equal 'with layout html content', args['content']['text/html']
     end
 
     def test_create_with_recipient_override
-      PostageApp.configuration.recipient_override = 'oleg@test.test'
+      PostageApp.configuration.recipient_override = 'override@example.net'
 
       assert mail = Notifier.with_html_and_text_views
 
-      assert_equal 'test@test.test', mail.arguments['recipients']
-      assert_equal 'oleg@test.test', mail.arguments_to_send['arguments']['recipient_override']
+      assert_equal 'recipient@example.net', mail.arguments['recipients']
+      assert_equal 'override@example.net', mail.arguments_to_send['arguments']['recipient_override']
     end
 
     def test_deliver_for_test_mailer
