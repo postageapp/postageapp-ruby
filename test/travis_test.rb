@@ -20,14 +20,25 @@ class TravisTest
     end.compact.join(' ')
   end
 
+  def self.env_expanded(env)
+    Hash[
+      env.collect do |key, value|
+        [ ENV_VARIABLE[key], value ]
+      end
+    ]
+  end
+
   def self.shell_command!(args, env)
     commands = args.collect do |s|
       s % env
     end
 
-    puts(commands.collect { |c| [ bash_env(env), c ].join(' ') }.join(' && '))
+    env_expanded(env).each do |key, value|
+      puts 'export %s=%s' % [ key, value ]
+    end
+    puts(commands.join(' && '))
     
-    with_environment(env) do
+    with_environment(env_expanded(env)) do
       result = system(commands.join(' && '))
 
       yield(result) if (block_given?)
@@ -56,6 +67,36 @@ class TravisTest
     end
   end
 
+  def self.validate_ruby_versions!
+    travis_test = self.new
+
+    versions = { }
+
+    travis_test.matrix.each do |entry|
+      next if (versions[entry[:rvm]])
+
+      versions[entry[:rvm]] = true
+
+      shell_command!(
+        [
+          "ruby -e 'puts RUBY_VERSION'"
+        ],
+        entry
+      )
+    end
+  end
+
+  def self.gemfile_lock_remove!(path)
+    path = path + '.lock'
+
+    if (File.exist?(path))
+      File.unlink(path)
+    end
+
+  rescue Errno::ENOENT
+    # Already removed for some reason? Ignore.
+  end
+
   def self.run!
     travis_test = self.new
 
@@ -63,6 +104,8 @@ class TravisTest
 
     travis_test.matrix.each do |entry|
       puts "RBENV_VERSION=%{rvm} BUNDLE_GEMFILE=%{gemfile}" % entry
+
+      gemfile_lock_remove!(entry[:gemfile])
 
       shell_command!(
         [
