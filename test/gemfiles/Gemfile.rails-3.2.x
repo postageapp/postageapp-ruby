@@ -5,6 +5,7 @@ gem 'rake'
 
 group :test do
   gem 'minitest'
+  gem 'minitest-reporters'
   gem 'rails', '~> 3.2.0'
   gem 'mocha'
 end
