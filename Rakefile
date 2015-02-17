@@ -1,15 +1,12 @@
-require 'bundler'
-require 'rake/testtask'
+require 'bundler/setup'
 
-Bundler.require
+require 'rake/testtask'
 
 Rake::TestTask.new(:test) do |test|
   test.libs << 'lib' << 'test'
   test.pattern = 'test/**/*_test.rb'
   test.verbose = true
 end
-
-task :default => :test
 
 namespace :travis do
   desc "Run tests across different environments, simulating Travis"
@@ -26,3 +23,5 @@ namespace :travis do
     TravisTest.validate_ruby_versions!
   end
 end
+
+task :default => :test
