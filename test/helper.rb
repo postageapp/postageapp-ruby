@@ -2,6 +2,8 @@ require 'rubygems'
 
 gem 'minitest'
 require 'minitest/autorun'
+
+gem 'minitest-reporters'
 require 'minitest/reporters'
 
 Minitest::Reporters.use!(Minitest::Reporters::SpecReporter.new)
