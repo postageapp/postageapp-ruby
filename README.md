@@ -8,7 +8,18 @@ via a simple [JSON-based API](http://dev.postageapp.com/api.html).
 
 # Installation
 
-### Rails 3 / 4
+### Rails 4.x
+
+Add the `postageapp` gem to your Gemfile:
+
+    gem 'postageapp'
+
+Then from the Rails project's root run:
+
+    bundle install
+    bin/rails generate postageapp --api-key PROJECT_API_KEY
+
+### Rails 3.x
 
 Add the `postageapp` gem to your Gemfile:
 
@@ -19,7 +30,7 @@ Then from the Rails project's root run:
     bundle install
     script/rails generate postageapp --api-key PROJECT_API_KEY
 
-### Rails 2
+### Rails 2.x
 
 In `config/environment.rb` add the following:
 
