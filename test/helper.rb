@@ -78,22 +78,17 @@ class MiniTest::Test
   def mock_failed_send
     Net::HTTP.any_instance.stubs(:post).returns(nil)
   end
-end
 
-# Setting up constants just for the duration of the test
-module ConstantDefinitions
-  def setup
-    @defined_constants = [ ]
-  end
-  
-  def teardown
-    @defined_constants.each do |constant|
-      Object.__send__(:remove_const, constant)
-    end
-  end
-  
-  def define_constant(name, value)
-    Object.const_set(name, value)
-    @defined_constants << name
+  # Briefly substitutes a new object in place of an existing constant.
+  def const_replace(name, object)
+    original = Object.const_get(name)
+    Object.send(:remove_const, name)
+    Object.const_set(name, object)
+
+    yield
+
+  ensure
+    Object.send(:remove_const, name)
+    Object.const_set(name, original)
   end
 end

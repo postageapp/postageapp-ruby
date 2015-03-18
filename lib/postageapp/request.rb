@@ -6,7 +6,7 @@ class PostageApp::Request
     'Accept' => 'text/json, application/json'
   }
   
-  # Unique ID of the request
+  # Unique ID (UID) for the request
   attr_accessor :uid
   
   # The API method being called (example: send_message)
@@ -16,18 +16,20 @@ class PostageApp::Request
   # A list of arguments in a Hash format passed along with the request
   attr_accessor :arguments
   
-  # Ability to set api_key with eash request
+  # Assigns the API key to be used for the request
   attr_accessor :api_key
 
+  # Returns a user-agent string used for identification when making API calls.
   def self.user_agent
     @user_agent ||=
-    "PostageApp-RubyGem %s (Ruby %s, %s)" % [
-      PostageApp::VERSION,
-      RUBY_VERSION,
-      PostageApp.configuration.framework
-    ]
+      "PostageApp (Gem %s, Ruby %s, %s)" % [
+        PostageApp::VERSION,
+        RUBY_VERSION,
+        PostageApp.configuration.framework
+      ]
   end
   
+  # Creates a new Request with the given API call method and arguments.
   def initialize(method, arguments = { })
     @method = method
     @arguments = arguments.dup
@@ -80,16 +82,6 @@ class PostageApp::Request
     response
   end
 
-  # Emulates Mail::Message#html_part
-  def html_part
-    self.arguments and self.arguments['content'] and self.arguments['content']['text/html']
-  end
-  
-  # Emulates Mail::Message#text_part
-  def text_part
-    self.arguments and self.arguments['content'] and self.arguments['content']['text/plain']
-  end
-
   # URL of the where PostageApp::Request will be directed at
   def url
     URI.parse("#{PostageApp.configuration.url}/v.#{API_VERSION}/#{self.method}.json")
@@ -119,5 +111,15 @@ class PostageApp::Request
     end
     
     hash
+  end
+
+  # Emulates Mail::Message#html_part
+  def html_part
+    self.arguments and self.arguments['content'] and self.arguments['content']['text/html']
+  end
+  
+  # Emulates Mail::Message#text_part
+  def text_part
+    self.arguments and self.arguments['content'] and self.arguments['content']['text/plain']
   end
 end
