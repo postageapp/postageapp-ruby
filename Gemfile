@@ -2,6 +2,8 @@ source 'http://rubygems.org'
 
 gemspec
 
+gem 'mail', '>= 2.4.0'
+
 group :development do
   gem 'jeweler'
   gem 'minitest'

@@ -13,6 +13,8 @@ require 'fileutils'
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
+require 'mail'
+
 require 'postageapp'
 require 'postageapp/mailer'
 
@@ -81,8 +83,8 @@ class MiniTest::Test
 
   # Briefly substitutes a new object in place of an existing constant.
   def const_replace(name, object)
-    original = Object.const_get(name)
-    Object.send(:remove_const, name)
+    original = Object.const_defined?(name) && Object.const_get(name)
+    Object.send(:remove_const, name) if (original)
     Object.const_set(name, object)
 
     yield

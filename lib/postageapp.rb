@@ -14,6 +14,8 @@ require 'postageapp/request'
 require 'postageapp/failed_request'
 require 'postageapp/response'
 require 'postageapp/rails/railtie' if (defined?(Rails::Railtie))
+require 'postageapp/mail'
+require 'postageapp/mail/delivery_method'
 
 module PostageApp
   class Error < StandardError ; end
@@ -56,4 +58,10 @@ module PostageApp
       )
     end
   end
+end
+
+if (defined?(::Mail))
+  require 'postageapp/mail/extensions'
+
+  PostageApp::Mail::Extensions.install!
 end

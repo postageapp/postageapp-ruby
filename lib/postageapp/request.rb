@@ -1,4 +1,8 @@
+require 'forwardable'
+
 class PostageApp::Request
+  extend Forwardable
+
   API_VERSION = '1.0'
   
   HEADERS_DEFAULT = {
@@ -36,6 +40,13 @@ class PostageApp::Request
 
     @uid = @arguments.delete('uid')
     @api_key = @arguments.delete('api_key') || PostageApp.configuration.api_key
+
+    case (method)
+    when :send_message
+      if (defined?(Mail))
+        @message = Mail::Message.new
+      end
+    end
   end
   
   # Skipping resend doesn't trigger PostageApp::FailedRequest.resend_all
@@ -94,9 +105,12 @@ class PostageApp::Request
     @uid ||= Digest::SHA1.hexdigest("#{rand}#{Time.now.to_f}#{self.arguments}")
   end
   
-  # Arguments need to be appended with some some stuff before it's ready to be send out
+  # Returns the arguments that will be used to send this request.
   def arguments_to_send
-    hash = { 'uid' => self.uid, 'api_key' => self.api_key }
+    hash = {
+      'uid' => self.uid,
+      'api_key' => self.api_key
+    }
     
     if (!self.arguments.nil? && !self.arguments.empty?)
       if (!PostageApp.configuration.recipient_override.nil? && self.method.to_sym == :send_message)
@@ -109,17 +123,16 @@ class PostageApp::Request
         'arguments' => self.arguments.recursive_stringify_keys!
       )
     end
+
+    if (@message)
+      hash['arguments']['content']['text/html'] = @message.html_part.body.to_s
+      hash['arguments']['content']['text/plain'] = @message.text_part.body.to_s
+
+      hash['arguments'][]
+    end
     
     hash
   end
 
-  # Emulates Mail::Message#html_part
-  def html_part
-    self.arguments and self.arguments['content'] and self.arguments['content']['text/html']
-  end
-  
-  # Emulates Mail::Message#text_part
-  def text_part
-    self.arguments and self.arguments['content'] and self.arguments['content']['text/plain']
-  end
+  def_delegators :@message, :body, :header, :attachments, :html_part, :text_part
 end

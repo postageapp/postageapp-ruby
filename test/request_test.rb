@@ -14,26 +14,23 @@ class RequestTest < MiniTest::Test
   def test_method_url
     request = PostageApp::Request.new('test_method')
 
-    assert_equal 'api.postageapp.com',      request.url.host
-    assert_equal 443,                       request.url.port
+    assert_equal 'api.postageapp.com', request.url.host
+    assert_equal 443, request.url.port
     assert_equal '/v.1.0/test_method.json', request.url.path
   end
   
   def test_method_arguments_to_send
-    request = PostageApp::Request.new('send_message', {
-      'headers'     => {
-        'from'      => 'sender@test.test',
-        'subject'   => 'Test Message'
+    request = PostageApp::Request.new('send_message',
+      'headers' => {
+        'from' => 'sender@test.test',
+        'subject' => 'Test Message'
       },
-      'recipients'  => 'test@test.test',
-      'content'     => {
-        'text/plain'  => 'text content',
-        'text/html'   => 'html content'
+      'recipients' => 'test@test.test',
+      'content' => {
+        'text/plain' => 'text content',
+        'text/html' => 'html content'
       }
-    })
-
-    assert_equal 'text content', request.text_part
-    assert_equal 'html content', request.html_part
+    )
 
     args = request.arguments_to_send
 
@@ -85,37 +82,38 @@ class RequestTest < MiniTest::Test
   def test_send
     mock_successful_send
     
-    request = PostageApp::Request.new('send_message', {
-      'headers'     => {
-        'from'     => 'sender@test.test',
-        'subject'  => 'Test Message'
+    request = PostageApp::Request.new('send_message',
+      'headers' => {
+        'from' => 'sender@test.test',
+        'subject' => 'Test Message'
       },
-      'recipients'  => 'test@test.test',
-      'content'     => {
-        'text/plain'  => 'text content',
-        'text/html'   => 'html content'
+      'recipients' => 'test@test.test',
+      'content' => {
+        'text/plain' => 'text content',
+        'text/html' => 'html content'
       }
-    })
+    )
+
     response = request.send
+
     assert_equal 'ok', response.status
     assert_equal 'sha1hashuid23456789012345678901234567890', response.uid
-    assert_equal({'message' => { 'id' => 999 }}, response.data)
+    assert_equal({ 'message' => { 'id' => 999 } }, response.data)
   end
   
   def test_send_failure
     mock_failed_send
     
     request = PostageApp::Request.new(
-      'send_message', {
-        'headers' => {
-          'from' => 'sender@test.test',
-          'subject' => 'Test Message'
-        },
-        'recipients' => 'test@test.test',
-        'content' => {
-          'text/plain' => 'text content',
-          'text/html' => 'html content'
-        }
+      'send_message',
+      'headers' => {
+        'from' => 'sender@test.test',
+        'subject' => 'Test Message'
+      },
+      'recipients' => 'test@test.test',
+      'content' => {
+        'text/plain' => 'text content',
+        'text/html' => 'html content'
       }
     )
 
