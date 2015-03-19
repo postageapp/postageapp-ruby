@@ -1,4 +1,5 @@
-# Test mailer for ActionMailer 3
+# Test mailer for ActionMailer 3 and 4
+
 class Notifier < PostageApp::Mailer
   self.append_view_path(File.dirname(__FILE__))
 

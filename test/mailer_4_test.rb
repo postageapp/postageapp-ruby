@@ -59,20 +59,21 @@ class Mailer4Test < MiniTest::Test
       mail = Notifier.with_custom_postage_variables
       args = mail.arguments_to_send
 
-      assert_equal 'custom_uid',      args['uid']
-      assert_equal 'custom_api_key',  args['api_key']
+      assert_equal 'custom_uid', args['uid']
+      assert_equal 'custom_api_key', args['api_key']
 
       args = args['arguments']
 
-      assert_equal ({
+      assert_equal({
         'test1@example.net' => { 'name' => 'Test 1' },
         'test2@example.net' => { 'name' => 'Test 2' }
-      }), args['recipients']
+      }, args['recipients'])
 
       assert_equal 'test-template', args['template']
       assert_equal ({ 'variable' => 'value' }), args['variables']
       assert_equal 'CustomValue1', args['headers']['CustomHeader1']
       assert_equal 'CustomValue2', args['headers']['CustomHeader2']
+
       assert_equal 'text content', args['content']['text/plain']
       assert_equal 'with layout html content', args['content']['text/html']
     end
@@ -96,6 +97,7 @@ class Mailer4Test < MiniTest::Test
 
     def test_deliver_for_not_performing_deliveries_with_test_mailer
       mail = Notifier.with_simple_view
+
       mail.perform_deliveries = false
       mail.delivery_method(Mail::TestMailer)
       mail.deliver_now

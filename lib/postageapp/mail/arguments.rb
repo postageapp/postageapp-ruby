@@ -9,11 +9,10 @@ class PostageApp::Mail::Arguments
     @mail = mail
   end
 
-  def extract
-    arguments = {
-      'content' => { },
-      'headers' => { }
-    }
+  def extract(arguments = nil)
+    arguments ||= { }
+    arguments['content'] ||= { }
+    arguments['headers'] ||= { }
 
     if (@mail.multipart?)
       @mail.parts.each do |part|

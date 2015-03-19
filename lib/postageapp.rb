@@ -60,8 +60,6 @@ module PostageApp
   end
 end
 
-if (defined?(::Mail))
-  require 'postageapp/mail/extensions'
+require 'postageapp/mail/extensions'
 
-  PostageApp::Mail::Extensions.install!
-end
+PostageApp::Mail::Extensions.install!
