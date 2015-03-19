@@ -16,7 +16,11 @@ class PostageApp::Mail::Arguments
 
     if (@mail.multipart?)
       @mail.parts.each do |part|
-        add_part(arguments, part)
+        if (part.content_disposition)
+          add_attachment(arguments, part)
+        else
+          add_part(arguments, part)
+        end
       end
     else
       add_part(arguments, @mail)
@@ -31,7 +35,7 @@ class PostageApp::Mail::Arguments
 
     if (@mail.has_attachments?)
       @mail.attachments.each do |attachment|
-        # ...
+        add_attachment(arguments, attachment)
       end
     end
 
@@ -46,7 +50,16 @@ protected
     when 'text/plain', nil
       arguments['content']['text/plain'] = part.body.to_s
     else
-      # ...
+      # Unknown type.
     end
+  end
+
+  def add_attachment(arguments, part)
+    arguments['attachments'] ||= { }
+
+    arguments['attachments'][part.filename] = {
+      'content' => Base64.encode64(part.body.to_s),
+      'content_type' => part.content_type
+    }
   end
 end

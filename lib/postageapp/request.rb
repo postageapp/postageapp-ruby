@@ -41,17 +41,8 @@ class PostageApp::Request
   # Skipping resend doesn't trigger PostageApp::FailedRequest.resend_all
   # it's needed so the request being resend doesn't create duplicate queue
   def send(skip_failed_requests_processing = false)
-    http = Net::HTTP::Proxy(
-      PostageApp.configuration.proxy_host,
-      PostageApp.configuration.proxy_port,
-      PostageApp.configuration.proxy_user,
-      PostageApp.configuration.proxy_pass
-    ).new(url.host, url.port)
-    
-    http.read_timeout = PostageApp.configuration.http_read_timeout
-    http.open_timeout = PostageApp.configuration.http_open_timeout
-    http.use_ssl = PostageApp.configuration.secure?
-    
+    http = PostageApp.configuration.http
+
     PostageApp.logger.info(self)
     
     http_response = begin

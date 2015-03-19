@@ -14,7 +14,7 @@ class PostageApp::Mail::DeliveryMethod
     when false
       self.class.deliveries << arguments
     else
-      # ... Send, perhaps?
+      PostageApp::Request.new(*arguments).send
     end
   end
 end
