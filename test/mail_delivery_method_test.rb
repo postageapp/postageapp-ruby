@@ -125,6 +125,9 @@ class MailerDeliveryTest < MiniTest::Test
       end
 
       html_part do
+        # Mail 2.2.20 requires a manual declaration of MIME type. Newer
+        # versions handle this correctly.
+        content_type 'text/html'
         body "<p>HTML text</p>"
       end
     end
