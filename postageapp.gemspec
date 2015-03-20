@@ -16,6 +16,8 @@ Gem::Specification.new do |s|
   s.files = `git ls-files`.split("\n")
   s.platform = Gem::Platform::RUBY
   s.require_paths = [ 'lib' ]
+
+  s.required_ruby_version = '>= 1.9.3'
   
   s.add_dependency 'json'
 end
