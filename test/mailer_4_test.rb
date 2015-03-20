@@ -36,7 +36,7 @@ class Mailer4Test < MiniTest::Test
     def test_deliver_with_html_and_text_views
       mock_successful_send
 
-      assert response = Notifier.with_html_and_text_views.deliver_now
+      assert response = Notifier.with_html_and_text_views.deliver
       assert response.is_a?(PostageApp::Response)
       assert response.ok?
     end
@@ -90,7 +90,7 @@ class Mailer4Test < MiniTest::Test
     def test_deliver_for_test_mailer
       mail = Notifier.with_simple_view
       mail.delivery_method(Mail::TestMailer)
-      mail.deliver_now
+      mail.deliver
 
       assert_equal [ mail ], ActionMailer::Base.deliveries
     end
@@ -100,7 +100,7 @@ class Mailer4Test < MiniTest::Test
 
       mail.perform_deliveries = false
       mail.delivery_method(Mail::TestMailer)
-      mail.deliver_now
+      mail.deliver
 
       assert_equal [ ], ActionMailer::Base.deliveries
     end
