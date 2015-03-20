@@ -1,15 +1,22 @@
 require 'set'
 
+# This class decomposes a Mail::Message into a PostageApp API call that
+# produces the same result when sent.
+
 class PostageApp::Mail::Arguments
+  # Certain headers need to be ignored since they are generated internally.
   HEADERS_IGNORED = Set.new(%w[
     Content-Type
     To
   ]).freeze
 
+  # Creates a new instance with the given Mail::Message binding.
   def initialize(mail)
     @mail = mail
   end
 
+  # Returns the extracted arguments. If a pre-existing arguments has is
+  # supplied, arguments are injected into that.
   def extract(arguments = nil)
     arguments ||= { }
     arguments['content'] ||= { }

@@ -2,6 +2,12 @@ require 'postageapp'
 
 if (defined?(ActionMailer))
   require 'postageapp/mailer'
+
+  # Register as a delivery method with ActionMailer
+  ActionMailer::Base.add_delivery_method(
+    :postageapp,
+    PostageApp::Mail::DeliveryMethod
+  )
 end
 
 class PostageApp::Railtie < Rails::Railtie
