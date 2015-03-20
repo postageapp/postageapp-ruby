@@ -29,9 +29,9 @@ class MailerDeliveryTest < MiniTest::Test
         },
         'headers' => {
           'From' => 'test@example.com',
-          'To' => 'recipient@example.net',
           'Subject' => 'Example message being sent through Mail'
-        }
+        },
+        'recipients' => [ 'recipient@example.net' ]
       }
     ]
 
@@ -62,9 +62,9 @@ class MailerDeliveryTest < MiniTest::Test
         },
         'headers' => {
           'From' => 'test@example.com',
-          'To' => 'recipient@example.net',
           'Subject' => 'Example message being sent through Mail'
-        }
+        },
+        'recipients' => [ 'recipient@example.net' ]
       }
     ]
 
@@ -96,7 +96,6 @@ class MailerDeliveryTest < MiniTest::Test
         },
         'headers' => {
           'From' => 'test@example.com',
-          'To' => 'recipient@example.net',
           'Subject' => 'Example message being sent through Mail'
         },
         'attachments' => {
@@ -104,7 +103,8 @@ class MailerDeliveryTest < MiniTest::Test
             'content' => Base64.encode64('Test text file.'),
             'content_type' => 'text/plain; filename=test.txt'
           }
-        }
+        },
+        'recipients' => [ 'recipient@example.net' ]
       }
     ]
 
@@ -144,9 +144,9 @@ class MailerDeliveryTest < MiniTest::Test
         },
         'headers' => {
           'From' => 'test@example.com',
-          'To' => 'recipient@example.net',
           'Subject' => 'Example message being sent through Mail'
-        }
+        },
+        'recipients' => [ 'recipient@example.net' ]
       }
     ]
 

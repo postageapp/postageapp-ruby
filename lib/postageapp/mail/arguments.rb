@@ -3,6 +3,7 @@ require 'set'
 class PostageApp::Mail::Arguments
   HEADERS_IGNORED = Set.new(%w[
     Content-Type
+    To
   ]).freeze
 
   def initialize(mail)
@@ -13,6 +14,8 @@ class PostageApp::Mail::Arguments
     arguments ||= { }
     arguments['content'] ||= { }
     arguments['headers'] ||= { }
+
+    arguments['recipients'] = @mail.to
 
     if (@mail.multipart?)
       @mail.parts.each do |part|

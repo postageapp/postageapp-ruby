@@ -8,13 +8,15 @@ class PostageApp::Mail::DeliveryMethod
   end
 
   def deliver!(mail)
-    arguments = PostageApp::Mail::Arguments.new(mail).extract
+    api_method, arguments = PostageApp::Mail::Arguments.new(mail).extract
 
     case (@options[:api_key])
     when false
-      self.class.deliveries << arguments
+      self.class.deliveries << [ api_method, arguments ]
     else
-      PostageApp::Request.new(*arguments).send
+      arguments['api_key'] ||= @options[:api_key]
+
+      PostageApp::Request.new(api_method, arguments).send
     end
   end
 end
