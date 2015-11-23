@@ -12,7 +12,7 @@ class PostageApp::Request
   # The API method being called (example: send_message)
   # This controls the url of the request (example: https://api.postageapp.com/v.1.0/send_message.json)
   attr_accessor :method
-  
+
   # A list of arguments in a Hash format passed along with the request
   attr_accessor :arguments
   
@@ -30,9 +30,9 @@ class PostageApp::Request
   end
   
   # Creates a new Request with the given API call method and arguments.
-  def initialize(method, arguments = { })
+  def initialize(method, arguments = nil)
     @method = method
-    @arguments = arguments.dup
+    @arguments = arguments ? arguments.dup : { }
 
     @uid = @arguments.delete('uid')
     @api_key = @arguments.delete('api_key') || PostageApp.configuration.api_key
@@ -112,16 +112,50 @@ class PostageApp::Request
 
   # Emulation of Mail::Message interface
   def body
-    self.arguments and self.arguments['content'] and (self.arguments['content']['text/html'] or self.arguments['content']['text/plain'])
+    _content = self.arguments && self.arguments['content']
+
+    _content and (_content['text/html'] or _content['text/plain'])
   end
 
-  # Emulates Mail::Message#html_part
+  def content
+    self.arguments['content'] ||= { }
+  end
+
+  # -- Mail::Message Emulation ----------------------------------------------
+
   def html_part
-    self.arguments and self.arguments['content'] and self.arguments['content']['text/html']
+    self.content['text/html']
   end
   
-  # Emulates Mail::Message#text_part
   def text_part
-    self.arguments and self.arguments['content'] and self.arguments['content']['text/plain']
+    self.content['text/plain']
+  end
+
+  def find_first_mime_type(type)
+    self.content[type]
+  end
+
+  def mime_type
+    self.content.keys.first
+  end
+
+  def header
+    self.arguments['headers'] ||= { }
+  end
+
+  def reply_to
+    self.header['reply-to']
+  end
+
+  def cc
+    self.header['cc']
+  end
+
+  def attachments
+    self.arguments['attachments']
+  end
+
+  def multipart?
+    self.content.keys.length > 1
   end
 end
