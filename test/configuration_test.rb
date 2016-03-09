@@ -20,7 +20,7 @@ class ConfigurationTest < MiniTest::Test
     assert_equal nil, config.project_root
     assert_equal 'production', config.environment
     assert_equal nil, config.logger
-    assert_equal 'undefined framework', config.framework
+    assert_equal 'Ruby', config.framework
   end
   
   def test_initialization_overrides

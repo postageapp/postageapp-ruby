@@ -18,13 +18,15 @@
 #
 # Postage::Mailer introduces a few mailer methods specific to Postage:
 #
-# * postageapp_template  - template name that is defined in your PostageApp project
+# * postageapp_template - template name that is defined in your PostageApp project
 # * postageapp_variables - extra variables you want to send along with the message
 #
 # Sending email
 #
-#   request = Notifier.signup_notification(user) # creates PostageApp::Request object
-#   response = request.deliver # attempts to deliver the message and creates a PostageApp::Response
+#   # Create a PostageApp::Request object
+#   request = Notifier.signup_notification(user) 
+#   # Deliver the message and return a PostageApp::Response
+#   response = request.deliver 
 
 class PostageApp::Mailer < ActionMailer::Base
   CONTENT_TYPE_MAP = {
@@ -201,7 +203,7 @@ class PostageApp::Request
 
   # Either doing an actual send, or passing it along to Mail::TestMailer
   # Probably not the best way as we're skipping way too many intermediate methods
-  def deliver
+  def deliver_now
     inform_interceptors
 
     if (perform_deliveries)
@@ -212,6 +214,7 @@ class PostageApp::Request
       end
     end
   end
+  alias_method :deliver, :deliver_now
 
   # Not 100% on this, but I need to assign this so I can properly handle deliver method
   def delivery_method(method = nil, settings = nil)

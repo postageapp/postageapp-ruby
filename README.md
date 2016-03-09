@@ -274,4 +274,4 @@ end
 
 # Copyright
 
-(C) 2011-2015 Scott Tadman, Oleg Khabarov, [The Working Group, Inc](http://www.twg.ca/)
+(C) 2011-2016 Scott Tadman, Oleg Khabarov, [PostageApp](http://www.postageapp.com/)

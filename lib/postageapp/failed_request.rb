@@ -5,7 +5,7 @@ module PostageApp::FailedRequest
     return false unless (self.store_path) 
     return false unless (PostageApp.configuration.requests_to_resend.member?(request.method.to_s))
     
-    unless (File.exists?(file_path(request.uid)))
+    unless (File.exist?(file_path(request.uid)))
       open(file_path(request.uid), 'wb') do |f|
         f.write(Marshal.dump(request))
       end
@@ -67,7 +67,7 @@ module PostageApp::FailedRequest
   # Initializing PostageApp::Request object from the file
   def self.initialize_request(uid)
     return false unless (self.store_path)
-    return false unless (File.exists?(file_path(uid)))
+    return false unless (File.exist?(file_path(uid)))
 
     Marshal.load(File.read(file_path(uid))) 
 
@@ -86,7 +86,7 @@ protected
       'tmp/postageapp_failed_requests'
     )
     
-    unless (File.exists?(dir))
+    unless (File.exist?(dir))
       FileUtils.mkdir_p(dir)
     end
     

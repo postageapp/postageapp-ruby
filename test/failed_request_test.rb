@@ -24,7 +24,7 @@ class FailedRequestTest < MiniTest::Test
 
     assert PostageApp::FailedRequest.store(request)
     file_path = File.join(PostageApp::FailedRequest.store_path, request.uid)
-    assert File.exists?(file_path)
+    assert File.exist?(file_path)
     
     stored_request = PostageApp::FailedRequest.initialize_request(request.uid)
 
@@ -77,7 +77,7 @@ class FailedRequestTest < MiniTest::Test
     assert response.fail?
 
     file_path = File.join(PostageApp::FailedRequest.store_path, request.uid)
-    assert File.exists?(file_path)
+    assert File.exist?(file_path)
     
     mock_successful_send
     
@@ -90,7 +90,7 @@ class FailedRequestTest < MiniTest::Test
     response = request.send
     assert response.ok?
     
-    assert !File.exists?(file_path)
+    assert !File.exist?(file_path)
   end
   
   def test_resend_all_failure
@@ -110,11 +110,11 @@ class FailedRequestTest < MiniTest::Test
     response = request.send
     assert response.fail?
     file_path = File.join(PostageApp::FailedRequest.store_path, request.uid)
-    assert File.exists?(file_path)
+    assert File.exist?(file_path)
     
     # Forcing to resend. Should quit right away as we can't connect
     PostageApp::FailedRequest.resend_all
     
-    assert File.exists?(file_path)
+    assert File.exist?(file_path)
   end
 end
