@@ -63,4 +63,6 @@ end
 
 require 'postageapp/mail/extensions'
 
-PostageApp::Mail::Extensions.install!
+if (defined?(::Mail))
+  PostageApp::Mail::Extensions.install!
+end
