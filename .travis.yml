@@ -5,6 +5,7 @@ rvm:
   - 2.0.0-p598
   - 2.1.5
   - 2.2.0
+  - 2.3.0
 gemfile:
   - test/gemfiles/Gemfile.ruby
   - test/gemfiles/Gemfile.rails-2.3.x
@@ -21,4 +22,6 @@ matrix:
     - rvm: 2.1.5
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
     - rvm: 2.2.0
+      gemfile: test/gemfiles/Gemfile.rails-2.3.x
+    - rvm: 2.3.0
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
