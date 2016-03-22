@@ -7,7 +7,7 @@ class PostageApp::Request
   }
   
   # Unique ID (UID) for the request
-  attr_accessor :uid
+  attr_writer :uid
   
   # The API method being called (example: send_message)
   # This controls the url of the request (example: https://api.postageapp.com/v.1.0/send_message.json)

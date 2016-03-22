@@ -8,7 +8,7 @@ class FailedRequestTest < MiniTest::Test
   end
   
   def test_store_and_initialize
-    assert_match /.*?\/tmp\/postageapp_failed_requests/, PostageApp::FailedRequest.store_path
+    assert_match(/.*?\/tmp\/postageapp_failed_requests/, PostageApp::FailedRequest.store_path)
     
     request = PostageApp::Request.new(:send_message, {
       :headers => {

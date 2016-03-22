@@ -6,7 +6,7 @@ class RequestTest < MiniTest::Test
 
     uid = request.uid
 
-    assert_match /\A\w{40}\z/, uid
+    assert_match(/\A\w{40}\z/, uid)
     assert_equal uid, request.uid
     assert uid != request.uid(true)
   end
@@ -35,7 +35,7 @@ class RequestTest < MiniTest::Test
     args = request.arguments_to_send
 
     assert_equal '1234567890abcdef', args['api_key']
-    assert_match /^\w{40}$/, args['uid']
+    assert_match(/^\w{40}$/, args['uid'])
     
     payload = args['arguments']
 
@@ -50,14 +50,14 @@ class RequestTest < MiniTest::Test
     args = request.arguments_to_send
 
     assert_equal '1234567890abcdef', args['api_key']
-    assert_match /^\w{40}$/, args['uid']
+    assert_match(/^\w{40}$/, args['uid'])
     assert_equal 'content', args['arguments']['data']
   end
   
   def test_uid_is_enforceable
     request = PostageApp::Request.new('test_method')
 
-    assert_match /^\w{40}$/, request.arguments_to_send['uid']
+    assert_match(/^\w{40}$/, request.arguments_to_send['uid'])
     
     request.uid = 'my_uid'
 
@@ -66,7 +66,7 @@ class RequestTest < MiniTest::Test
     request = PostageApp::Request.new('test_method', 'uid' => 'new_uid', 'data' => 'value')
 
     assert_equal 'new_uid', request.uid
-    assert_equal ({'data' => 'value'}), request.arguments
+    assert_equal({ 'data' => 'value' }, request.arguments)
   end
   
   def test_api_key
@@ -74,7 +74,9 @@ class RequestTest < MiniTest::Test
 
     assert_equal PostageApp.configuration.api_key, request.api_key
     
-    request = PostageApp::Request.new('test_method', {'api_key' => 'custom_api_key'})
+    request = PostageApp::Request.new('test_method', {
+      'api_key' => 'custom_api_key'
+    })
 
     assert_equal 'custom_api_key', request.api_key
   end
