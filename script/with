@@ -1,0 +1,54 @@
+#!/usr/bin/env ruby
+
+# == Constants ==============================================================
+
+GEMFILE_DIR = File.expand_path('../test/gemfiles', File.dirname(__FILE__))
+
+# == Support Methods ========================================================
+
+def gemfile_list
+  Dir.entries(GEMFILE_DIR).reject do |name|
+    name[/\A\./] or name[/\.lock\z/]
+  end.collect do |name|
+    name.sub(/\AGemfile\./, '')
+  end
+end
+
+def with_variant(variant, &block)
+  case (variant)
+  when 'each', 'all'
+    gemfile_list.each do |_variant|
+      with_variant(_variant, &block)
+    end
+  else
+    ENV['BUNDLE_GEMFILE'] = File.expand_path('Gemfile.%s' % variant, GEMFILE_DIR)
+
+    yield
+  end
+end
+
+# == Main ===================================================================
+
+variant = ARGV[0]
+
+unless (variant)
+  puts "Usage: with <gemspec variant> <bundle|rake> ..."
+
+
+  puts
+  puts "Available variants:"
+  gemfile_list.each do |name|
+    puts name
+  end
+
+  exit(-1)
+end
+
+with_variant(variant) do
+  case (ARGV[1])
+  when 'bundle'
+    system("bundle", *ARGV.to_a[2, ARGV.length])
+  when 'rake'
+    system("bundle", "exec", "rake", *ARGV.to_a[2, ARGV.length])
+  end
+end
