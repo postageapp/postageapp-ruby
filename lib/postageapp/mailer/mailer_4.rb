@@ -26,7 +26,7 @@
 #   # Create a PostageApp::Request object
 #   request = Notifier.signup_notification(user) 
 #   # Deliver the message and return a PostageApp::Response
-#   response = request.deliver 
+#   response = request.deliver_now
 
 class PostageApp::Mailer < ActionMailer::Base
   CONTENT_TYPE_MAP = {
@@ -130,9 +130,6 @@ class PostageApp::Mailer < ActionMailer::Base
     @_mail_was_called = true
     m = @_message
 
-    # At the beginning, do not consider class default for parts order neither content_type
-    content_type = headers[:content_type]
-
     # Call all the procs (if any)
     class_default = self.class.default
     default_values = class_default.merge(self.class.default) do |k,v|
@@ -141,9 +138,6 @@ class PostageApp::Mailer < ActionMailer::Base
 
     # Handle defaults
     headers = headers.reverse_merge(default_values)
-
-    # Apply charset at the beginning so all fields are properly quoted
-    charset = headers[:charset]
 
     # Set configure delivery behavior
     wrap_delivery_behavior!(
