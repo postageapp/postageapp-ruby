@@ -21,6 +21,12 @@ require 'postageapp/mailer'
 require 'mocha/setup'
 require 'with_environment'
 
+# This fixes an issue in Rails 3.2.22.2 where HashWithIndifferentAccess isn't
+# being loaded properly during testing.
+if (defined?(ActiveSupport) and !defined?(ActiveSupport::HashWithIndifferentAccess))
+  require 'active_support/hash_With_indifferent_access'
+end
+
 class MiniTest::Test
   include WithEnvironment
 
