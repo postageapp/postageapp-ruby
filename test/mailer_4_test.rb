@@ -1,6 +1,5 @@
 require File.expand_path('helper', File.dirname(__FILE__))
 
-# tests for ActionMailer bundled with Rails 3
 class Mailer4Test < MiniTest::Test
   require_action_mailer(4) do
     require File.expand_path('mailer/action_mailer_3/notifier', File.dirname(__FILE__))
@@ -9,26 +8,31 @@ class Mailer4Test < MiniTest::Test
 
     def test_create_with_no_content
       mail = Notifier.with_no_content
-      assert_equal ({ }), mail.arguments['content']
+
+      assert_equal({ }, mail.arguments['content'])
     end
 
     def test_create_with_no_subject
       mail = Notifier.with_no_subject
+
       assert mail.arguments['headers'][:subject].nil?
     end
 
     def test_create_with_simple_view
       mail = Notifier.with_simple_view
+
       assert_equal 'with layout simple view content', mail.arguments['content']['text/html']
     end
 
     def test_create_with_text_only_view
       mail = Notifier.with_text_only_view
+
       assert_equal 'text content', mail.arguments['content']['text/plain']
     end
 
     def test_create_with_html_and_text_views
       mail = Notifier.with_html_and_text_views
+
       assert_equal 'text content', mail.arguments['content']['text/plain']
       assert_equal 'with layout html content', mail.arguments['content']['text/html']
     end
@@ -36,13 +40,15 @@ class Mailer4Test < MiniTest::Test
     def test_deliver_with_html_and_text_views
       mock_successful_send
 
-      assert response = Notifier.with_html_and_text_views.deliver
+      response = Notifier.with_html_and_text_views.deliver_now
+
       assert response.is_a?(PostageApp::Response)
       assert response.ok?
     end
 
     def test_create_with_body_and_attachment_as_file
       mail = Notifier.with_body_and_attachment_as_file
+
       assert_equal 'manual body text', mail.arguments['content']['text/html']
       assert_equal 'text/plain', mail.arguments['attachments']['sample_file.txt']['content_type']
       assert_equal "RmlsZSBjb250ZW50\n", mail.arguments['attachments']['sample_file.txt']['content']
@@ -50,6 +56,7 @@ class Mailer4Test < MiniTest::Test
 
     def test_create_with_body_and_attachment_as_hash
       mail = Notifier.with_body_and_attachment_as_hash
+
       assert_equal 'manual body text', mail.arguments['content']['text/html']
       assert_equal 'text/rich', mail.arguments['attachments']['sample_file.txt']['content_type']
       assert_equal "RmlsZSBjb250ZW50\n", mail.arguments['attachments']['sample_file.txt']['content']
@@ -70,7 +77,7 @@ class Mailer4Test < MiniTest::Test
       }, args['recipients'])
 
       assert_equal 'test-template', args['template']
-      assert_equal ({ 'variable' => 'value' }), args['variables']
+      assert_equal({ 'variable' => 'value' }, args['variables'])
       assert_equal 'CustomValue1', args['headers']['CustomHeader1']
       assert_equal 'CustomValue2', args['headers']['CustomHeader2']
 
@@ -89,8 +96,9 @@ class Mailer4Test < MiniTest::Test
 
     def test_deliver_for_test_mailer
       mail = Notifier.with_simple_view
+
       mail.delivery_method(Mail::TestMailer)
-      mail.deliver
+      mail.deliver_now
 
       assert_equal [ mail ], ActionMailer::Base.deliveries
     end
@@ -100,7 +108,7 @@ class Mailer4Test < MiniTest::Test
 
       mail.perform_deliveries = false
       mail.delivery_method(Mail::TestMailer)
-      mail.deliver
+      mail.deliver_now
 
       assert_equal [ ], ActionMailer::Base.deliveries
     end

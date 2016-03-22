@@ -1,6 +1,5 @@
 require File.expand_path('helper', File.dirname(__FILE__))
 
-# tests for ActionMailer bundled with Rails 2
 class Mailer2Test < MiniTest::Test
   require_action_mailer(2) do
     require File.expand_path('mailer/action_mailer_2/notifier', File.dirname(__FILE__))
@@ -19,7 +18,7 @@ class Mailer2Test < MiniTest::Test
       assert mail = Notifier.create_with_no_content
 
       assert_equal 'recipient@example.net', mail.arguments['recipients']
-      assert_equal ({ 'from' => 'sender@example.com', 'subject' => 'Test Email' }), mail.arguments['headers']
+      assert_equal({ 'from' => 'sender@example.com', 'subject' => 'Test Email' }, mail.arguments['headers'])
       assert mail.arguments['content'].blank?
     end
     
@@ -77,9 +76,9 @@ class Mailer2Test < MiniTest::Test
       assert_equal 'custom_uid', mail.uid
       assert_equal 'custom_api_key', mail.api_key
       assert_equal 'test-template', mail.arguments['template']
-      assert_equal ({ 'variable' => 'value' }), mail.arguments['variables']
-      assert_equal ({ 'test2@example.net' => { 'name' => 'Test 2'}, 
-                      'test1@example.net' => { 'name' => 'Test 1'}}), mail.arguments['recipients']
+      assert_equal({ 'variable' => 'value' }, mail.arguments['variables'])
+      assert_equal({ 'test2@example.net' => { 'name' => 'Test 2'}, 
+                      'test1@example.net' => { 'name' => 'Test 1'}}, mail.arguments['recipients'])
       assert_equal 'text content', mail.arguments['content']['text/plain']
       assert_equal 'html content', mail.arguments['content']['text/html']
     end

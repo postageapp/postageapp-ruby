@@ -16,10 +16,11 @@ class ResponseTest < MiniTest::Test
     )
     
     response = PostageApp::Response.new(object)
+
     assert_equal 'md5_hash_uid', response.uid
     assert_equal 'ok', response.status
     assert_equal 'api reply message', response.message
-    assert_equal ({'key' => 'value'}), response.data
+    assert_equal({ 'key' => 'value' }, response.data)
     
     assert response.ok?
   end

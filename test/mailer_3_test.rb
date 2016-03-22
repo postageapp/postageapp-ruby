@@ -1,6 +1,5 @@
 require File.expand_path('helper', File.dirname(__FILE__))
 
-# tests for ActionMailer bundled with Rails 3
 class Mailer3Test < MiniTest::Test
   require_action_mailer(3) do
     require File.expand_path('mailer/action_mailer_3/notifier', File.dirname(__FILE__))
@@ -72,13 +71,16 @@ class Mailer3Test < MiniTest::Test
 
       args = args['arguments']
 
-      assert_equal ({
-        'test1@example.net' => { 'name' => 'Test 1'},
-        'test2@example.net' => { 'name' => 'Test 2'}
-      }), args['recipients']
+      assert_equal(
+        {
+          'test1@example.net' => { 'name' => 'Test 1' },
+          'test2@example.net' => { 'name' => 'Test 2' }
+        },
+        args['recipients']
+      )
 
       assert_equal 'test-template', args['template']
-      assert_equal ({ 'variable' => 'value' }), args['variables']
+      assert_equal({ 'variable' => 'value' }, args['variables'])
       assert_equal 'CustomValue1', args['headers']['CustomHeader1']
       assert_equal 'CustomValue2', args['headers']['CustomHeader2']
       assert_equal 'text content', args['content']['text/plain']
