@@ -25,3 +25,11 @@ matrix:
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
     - rvm: 2.3.0
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
+    - rvm: 1.9.3-p551
+      gemfile: test/gemfiles/Gemfile.rails-2.3.x
+    - rvm: 1.9.3-p551
+      gemfile: test/gemfiles/Gemfile.rails-4.0.x
+    - rvm: 1.9.3-p551
+      gemfile: test/gemfiles/Gemfile.rails-4.1.x
+    - rvm: 1.9.3-p551
+      gemfile: test/gemfiles/Gemfile.rails-4.2.x
