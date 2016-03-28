@@ -41,7 +41,7 @@ def with_variant(variant, &block)
   end
 end
 
-def run(*args)
+def shell(*args)
   if (ENV['WITH_VERBOSE'])
     puts args.join(' ')
   end
@@ -54,7 +54,7 @@ end
 variant = ARGV[0]
 
 unless (variant)
-  puts "Usage: with <gemspec variant> <bundle|rake> ..."
+  puts "Usage: with <gemspec variant> <env|bootstrap|bundle|rake> ..."
 
 
   puts
@@ -66,6 +66,8 @@ unless (variant)
   exit(-1)
 end
 
+rv = 0
+
 with_variant(variant) do |bundle_version|
   bundle_version_args = bundle_version ? [ '_%s_' % bundle_version ] : [ ]
 
@@ -74,11 +76,13 @@ with_variant(variant) do |bundle_version|
     puts 'BUNDLE_GEMFILE=%s' % ENV['BUNDLE_GEMFILE']
   when 'bootstrap'
     if (bundle_version)
-      run('gem', 'install', 'bundler', '-v', bundle_version)
+      rv = shell('gem', 'install', 'bundler', '-v', bundle_version)
     end
   when 'bundle'
-    run("bundle", *bundle_version_args, *ARGV.to_a[2, ARGV.length])
+    rv = shell("bundle", *bundle_version_args, *ARGV.to_a[2, ARGV.length])
   when 'rake'
-    run("bundle", *bundle_version_args, "exec", "rake", *ARGV.to_a[2, ARGV.length])
+    rv = shell("bundle", *bundle_version_args, "exec", "rake", *ARGV.to_a[2, ARGV.length])
   end
 end
+
+exit(rv)
