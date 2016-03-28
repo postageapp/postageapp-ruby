@@ -1,5 +1,7 @@
 source 'http://rubygems.org'
 
+# rubygems 1.8.30
+
 gem 'rails', '~> 2.3.0'
 
 gem 'json'

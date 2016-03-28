@@ -7,16 +7,20 @@ GEMFILE_ROOT = File.expand_path('../Gemfile', File.dirname(__FILE__))
 
 # == Support Methods ========================================================
 
-def bundle_version(gemfile)
+def dependencies(gemfile)
+  dependencies = { }
+
   File.open(gemfile) do |f|
     f.each do |line|
       if (line.match(/\Agem\s+['"]bundler['"]\s*,\s*['"]([^'"]+)['"]/))
-        return $1
+        dependencies[:bundler] = $1
+      elsif (line.match(/\A\#\s*rubygems\s+(\S+)/))
+        dependencies[:rubygems] = $1
       end
     end
   end
 
-  nil
+  dependencies
 end
 
 def gemfile_list
@@ -31,9 +35,9 @@ def with_variant(variant, &block)
   case (variant)
   when 'current'
     if (ENV['BUNDLE_GEMFILE'])
-      yield(bundle_version(ENV['BUNDLE_GEMFILE']))
+      yield(dependencies(ENV['BUNDLE_GEMFILE']))
     else
-      yield(bundle_version(GEMFILE_ROOT))
+      yield(dependencies(GEMFILE_ROOT))
     end
   when 'each', 'all'
     gemfile_list.each do |_variant|
@@ -42,7 +46,7 @@ def with_variant(variant, &block)
   else
     ENV['BUNDLE_GEMFILE'] = File.expand_path('Gemfile.%s' % variant, GEMFILE_DIR)
 
-    yield(bundle_version(ENV['BUNDLE_GEMFILE']))
+    yield(dependencies(ENV['BUNDLE_GEMFILE']))
   end
 end
 
@@ -51,7 +55,9 @@ def shell(*args)
     puts args.join(' ')
   end
 
-  system(*args)
+  unless (system(*args))
+    exit($?)
+  end
 end
 
 # == Main ===================================================================
@@ -71,23 +77,22 @@ unless (variant)
   exit(-1)
 end
 
-rv = 0
-
-with_variant(variant) do |bundle_version|
-  bundle_version_args = bundle_version ? [ '_%s_' % bundle_version ] : [ ]
+with_variant(variant) do |dependencies|
+  bundle_version_args = dependencies[:bundler] ? [ '_%s_' % dependencies[:bundler] ] : [ ]
 
   case (ARGV[1])
   when 'env'
     puts 'BUNDLE_GEMFILE=%s' % ENV['BUNDLE_GEMFILE']
   when 'bootstrap'
-    if (bundle_version)
-      rv = shell('gem', 'install', 'bundler', '-v', bundle_version)
+    if (dependencies[:rubygems])
+      shell('gem', 'update', '--system', dependencies[:rubygems])
+    end
+    if (dependencies[:bundler])
+      shell('gem', 'install', 'bundler', '-v', dependencies[:bundler])
     end
   when 'bundle'
-    rv = shell("bundle", *bundle_version_args, *ARGV.to_a[2, ARGV.length])
+    shell("bundle", *bundle_version_args, *ARGV.to_a[2, ARGV.length])
   when 'rake'
-    rv = shell("bundle", *bundle_version_args, "exec", "rake", *ARGV.to_a[2, ARGV.length])
+    shell("bundle", *bundle_version_args, "exec", "rake", *ARGV.to_a[2, ARGV.length])
   end
 end
-
-exit(rv)
