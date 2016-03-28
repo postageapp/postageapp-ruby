@@ -1,6 +1,6 @@
 language: ruby
 before_install: "WITH_VERBOSE=1 script/with current bootstrap"
-install: "WITH_VERBOSE=1 script/with current bundle install --jobs=3 --retry=3"
+install: "WITH_VERBOSE=1 script/with current bundle install"
 script: "WITH_VERBOSE=1 script/with current bundle exec rake test"
 rvm:
   - 1.9.3-p551

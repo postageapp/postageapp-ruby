@@ -3,6 +3,7 @@
 # == Constants ==============================================================
 
 GEMFILE_DIR = File.expand_path('../test/gemfiles', File.dirname(__FILE__))
+GEMFILE_ROOT = File.expand_path('../Gemfile', File.dirname(__FILE__))
 
 # == Support Methods ========================================================
 
@@ -29,7 +30,11 @@ end
 def with_variant(variant, &block)
   case (variant)
   when 'current'
-    yield(bundle_version(ENV['BUNDLE_GEMFILE']))
+    if (ENV['BUNDLE_GEMFILE'])
+      yield(bundle_version(GEMFILE_ROOT))
+    else
+      yield(bundle_version(ENV['BUNDLE_GEMFILE']))
+    end
   when 'each', 'all'
     gemfile_list.each do |_variant|
       with_variant(_variant, &block)
