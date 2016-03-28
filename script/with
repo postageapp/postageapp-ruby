@@ -41,6 +41,14 @@ def with_variant(variant, &block)
   end
 end
 
+def run(*args)
+  if (ENV['WITH_VERBOSE'])
+    puts args.join(' ')
+  end
+
+  system(*args)
+end
+
 # == Main ===================================================================
 
 variant = ARGV[0]
@@ -66,11 +74,11 @@ with_variant(variant) do |bundle_version|
     puts 'BUNDLE_GEMFILE=%s' % ENV['BUNDLE_GEMFILE']
   when 'bootstrap'
     if (bundle_version)
-      puts 'gem install bundler -v %s' % bundle_version
+      run('gem', 'install', 'bundler', '-v', bundle_version)
     end
   when 'bundle'
-    system("bundle", *bundle_version_args, *ARGV.to_a[2, ARGV.length])
+    run("bundle", *bundle_version_args, *ARGV.to_a[2, ARGV.length])
   when 'rake'
-    system("bundle", *bundle_version_args, "exec", "rake", *ARGV.to_a[2, ARGV.length])
+    run("bundle", *bundle_version_args, "exec", "rake", *ARGV.to_a[2, ARGV.length])
   end
 end
