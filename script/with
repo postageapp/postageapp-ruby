@@ -1,5 +1,23 @@
 #!/usr/bin/env ruby
 
+# This script can be used to engage a particular Gemfile for the purposes of
+# continuous integration testing.
+#
+# Usage: script/with <variant> <env|bootstrap|bundle|rake>
+#
+# Here <variant> refers to a pre-defined Gemfile located in test/gemfiles
+# and the commands include:
+#
+#  * env - Display the current BUNDLE_GEMFILE environment
+#  * bootstrap - Install the necessary hard dependencies (rubygems, bundler)
+#  * bundle - Execute arbitrary Bundler command
+#  * rake - Execute arbitrary rake command via `bundle exec`
+#
+# Examples:
+#  * script/with rails-3.0.x bootstrap
+#  * script/with rails-3.0.x bundle install
+#  * script/with rails-3.0.x rake test
+
 # == Constants ==============================================================
 
 GEMFILE_DIR = File.expand_path('../test/gemfiles', File.dirname(__FILE__))
