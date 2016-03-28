@@ -1,5 +1,5 @@
 language: ruby
-before_install: gem install bundler
+before_install: `script/with current bootstrap`
 rvm:
   - 1.9.3-p551
   - 2.0.0-p598

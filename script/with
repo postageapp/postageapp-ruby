@@ -6,6 +6,18 @@ GEMFILE_DIR = File.expand_path('../test/gemfiles', File.dirname(__FILE__))
 
 # == Support Methods ========================================================
 
+def bundle_version(gemfile)
+  File.open(gemfile) do |f|
+    f.each do |line|
+      if (line.match(/\Agem\s+['"]bundler['"]\s*,\s*['"]([^'"]+)['"]/))
+        return $1
+      end
+    end
+  end
+
+  nil
+end
+
 def gemfile_list
   Dir.entries(GEMFILE_DIR).reject do |name|
     name[/\A\./] or name[/\.lock\z/]
@@ -16,6 +28,8 @@ end
 
 def with_variant(variant, &block)
   case (variant)
+  when 'current'
+    yield(bundle_version(ENV['BUNDLE_GEMFILE']))
   when 'each', 'all'
     gemfile_list.each do |_variant|
       with_variant(_variant, &block)
@@ -23,7 +37,7 @@ def with_variant(variant, &block)
   else
     ENV['BUNDLE_GEMFILE'] = File.expand_path('Gemfile.%s' % variant, GEMFILE_DIR)
 
-    yield
+    yield(bundle_version(ENV['BUNDLE_GEMFILE']))
   end
 end
 
@@ -44,11 +58,19 @@ unless (variant)
   exit(-1)
 end
 
-with_variant(variant) do
+with_variant(variant) do |bundle_version|
+  bundle_version_args = bundle_version ? [ '_%s_' % bundle_version ] : [ ]
+
   case (ARGV[1])
+  when 'env'
+    puts 'BUNDLE_GEMFILE=%s' % ENV['BUNDLE_GEMFILE']
+  when 'bootstrap'
+    if (bundle_version)
+      puts 'gem install bundler -v %s' % bundle_version
+    end
   when 'bundle'
-    system("bundle", *ARGV.to_a[2, ARGV.length])
+    system("bundle", *bundle_version_args, *ARGV.to_a[2, ARGV.length])
   when 'rake'
-    system("bundle", "exec", "rake", *ARGV.to_a[2, ARGV.length])
+    system("bundle", *bundle_version_args, "exec", "rake", *ARGV.to_a[2, ARGV.length])
   end
 end
