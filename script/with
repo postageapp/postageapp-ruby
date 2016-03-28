@@ -31,9 +31,9 @@ def with_variant(variant, &block)
   case (variant)
   when 'current'
     if (ENV['BUNDLE_GEMFILE'])
-      yield(bundle_version(GEMFILE_ROOT))
-    else
       yield(bundle_version(ENV['BUNDLE_GEMFILE']))
+    else
+      yield(bundle_version(GEMFILE_ROOT))
     end
   when 'each', 'all'
     gemfile_list.each do |_variant|
