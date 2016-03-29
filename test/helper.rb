@@ -73,12 +73,12 @@ class MiniTest::Test
   def mock_successful_send(status = 'ok')
     Net::HTTP.any_instance.stubs(:post).returns(Net::HTTPResponse.new(nil, nil, nil))
     Net::HTTPResponse.any_instance.stubs(:body).returns({
-      :response => { 
-        :uid => 'sha1hashuid23456789012345678901234567890',
-        :status => status
+      response: { 
+        uid: 'sha1hashuid23456789012345678901234567890',
+        status: status
       },
-      :data => {
-        :message => { :id => 999 }
+      data: {
+        message: { id: 999 }
       }
     }.to_json)
   end
@@ -90,6 +90,7 @@ class MiniTest::Test
   # Briefly substitutes a new object in place of an existing constant.
   def const_replace(name, object)
     original = Object.const_defined?(name) && Object.const_get(name)
+    
     Object.send(:remove_const, name) if (original)
     Object.const_set(name, object)
 

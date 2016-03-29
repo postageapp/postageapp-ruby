@@ -9,9 +9,9 @@ class LiveTest < MiniTest::Test
       super
       
       PostageApp.configure do |config|
-        config.secure   = false
-        config.host     = 'api.postageapp.local'
-        config.api_key  = 'PROJECT_API_KEY'
+        config.secure = false
+        config.host = 'api.postageapp.local'
+        config.api_key = 'PROJECT_API_KEY'
       end
     end
     
@@ -33,16 +33,17 @@ class LiveTest < MiniTest::Test
     
     def test_request_send_message
       request = PostageApp::Request.new(:send_message, {
-        :headers => {
+        headers: {
           'from' => 'sender@example.com',
           'subject' => 'Test Message'
         },
-        :recipients => 'recipient@example.net',
-        :content => {
+        recipients: 'recipient@example.net',
+        content: {
           'text/plain' => 'text content',
           'text/html' => 'html content'
         }
       })
+
       response = request.send
 
       assert_equal 'PostageApp::Response', response.class.name
@@ -52,29 +53,42 @@ class LiveTest < MiniTest::Test
       assert_equal nil, response.message
       assert_match(/\d+/, response.data['message']['id'].to_s)
       
-      receipt = PostageApp::Request.new(:get_message_receipt, :uid => response.uid).send
+      receipt = PostageApp::Request.new(
+        :get_message_receipt,
+        uid: response.uid
+      ).send
+      
       assert receipt.ok?
       
-      receipt = PostageApp::Request.new(:get_message_receipt, :uid => 'bogus').send
+      receipt = PostageApp::Request.new(
+        :get_message_receipt,
+        uid: 'bogus'
+      ).send
+
       assert receipt.not_found?
     end
     
     def test_request_non_existant_method
       request = PostageApp::Request.new(:non_existant)
+
       response = request.send
+
       assert_equal 'PostageApp::Response', response.class.name
       assert_equal 'internal_server_error', response.status
-      assert_match(/^\w{40}$/, response.uid)
-      assert_equal 'No action responded to non_existant. Actions: get_account_info, get_message_receipt, get_method_list, get_project_info, and send_message', response.message
+      assert_match(/\A\w{40}$/, response.uid)
+      assert_match(/\ANo action responded to non_existant/, response.message)
       assert_equal nil, response.data
     end
     
     # Testable under ruby 1.9.2 Probably OK in production too... Probably
     # Lunchtime reading: http://ph7spot.com/musings/system-timer
     def test_request_timeout
-      PostageApp.configuration.host = 'dead.postageapp.local'
+      PostageApp.configuration.host = '127.0.0.254'
+
       request = PostageApp::Request.new(:get_method_list)
+
       response = request.send
+
       assert_equal 'PostageApp::Response', response.class.name
       assert_equal 'fail', response.status
     end

@@ -12,29 +12,31 @@ class Hash
     end
   end
   
-  # Destructively convert all keys to strings.
-  def recursive_stringify_keys!
-    keys.each do |key|
-      value = delete(key)
+  unless ((instance_methods & [ :recursive_stringify_keys! ]).any?)
+    # Destructively convert all keys to strings.
+    def recursive_stringify_keys!
+      keys.each do |key|
+        value = delete(key)
 
-      self[key.to_s] =
-        case (value)
-        when Hash
-          value.recursive_stringify_keys!
-        else
-          value
-        end
+        self[key.to_s] =
+          case (value)
+          when Hash
+            value.recursive_stringify_keys!
+          else
+            value
+          end
+      end
+
+      self
     end
-
-    self
   end
 end
 
 class Net::HTTP
   # Getting rid of the 'warning: peer certificate won't be verified in this SSL session'
-  alias_method :old_initialize, :initialize
+  alias_method :__initialize, :initialize
   def initialize(*args)
-    old_initialize(*args)
+    __initialize(*args)
 
     @ssl_context = OpenSSL::SSL::SSLContext.new
     @ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE

@@ -34,7 +34,7 @@ module PostageApp::FailedRequest
       
       receipt_response = PostageApp::Request.new(
         :get_message_receipt,
-        :uid => filename
+        uid: filename
       ).send(true)
 
       if (receipt_response.fail?)

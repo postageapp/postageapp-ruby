@@ -11,19 +11,21 @@ class FailedRequestTest < MiniTest::Test
     assert_match(/.*?\/tmp\/postageapp_failed_requests/, PostageApp::FailedRequest.store_path)
     
     request = PostageApp::Request.new(:send_message, {
-      :headers => {
+      headers: {
         'from' => 'sender@test.test',
         'subject' => 'Test Message'
       },
-      :recipients => 'test@test.test',
-      :content => {
+      recipients: 'test@test.test',
+      content: {
         'text/plain' => 'text content',
         'text/html' => 'html content'
       }
     })
 
     assert PostageApp::FailedRequest.store(request)
+
     file_path = File.join(PostageApp::FailedRequest.store_path, request.uid)
+
     assert File.exist?(file_path)
     
     stored_request = PostageApp::FailedRequest.initialize_request(request.uid)
@@ -54,6 +56,7 @@ class FailedRequestTest < MiniTest::Test
   
   def test_store_with_no_file_path_defined
     PostageApp.configuration.project_root = nil
+
     assert !PostageApp::FailedRequest.store_path
     assert !PostageApp::FailedRequest.store('something')
   end
@@ -62,12 +65,12 @@ class FailedRequestTest < MiniTest::Test
     mock_failed_send
     
     request = PostageApp::Request.new(:send_message, {
-      :headers => {
+      headers: {
         'from' => 'sender@test.test',
         'subject' => 'Test Message'
       },
-      :recipients => 'test@test.test',
-      :content => {
+      recipients: 'test@test.test',
+      content: {
         'text/plain' => 'text content',
         'text/html' => 'html content'
       }
@@ -83,11 +86,20 @@ class FailedRequestTest < MiniTest::Test
     
     request = PostageApp::Request.new(:get_project_info)
     
-    message_receipt_response = stub(:fail? => false, :ok? => false, :not_found? => true)
+    message_receipt_response = stub(
+      :fail? => false,
+      :ok? => false,
+      :not_found? => true
+    )
+
     message_receipt_request = stub(:send => message_receipt_response)
-    PostageApp::Request.stubs(:new).with{|a,b| a == :get_message_receipt}.returns(message_receipt_request)
+
+    PostageApp::Request.stubs(:new).with do |a,b|
+      a == :get_message_receipt
+    end.returns(message_receipt_request)
     
     response = request.send
+
     assert response.ok?
     
     assert !File.exist?(file_path)
@@ -96,20 +108,23 @@ class FailedRequestTest < MiniTest::Test
   def test_resend_all_failure
     mock_failed_send
     request = PostageApp::Request.new(:send_message, {
-      :headers => {
+      headers: {
         'from' => 'sender@test.test',
         'subject' => 'Test Message'
       },
-      :recipients => 'test@test.test',
-      :content => {
+      recipients: 'test@test.test',
+      content: {
         'text/plain' => 'text content',
         'text/html' => 'html content'
       }
     })
     
     response = request.send
+
     assert response.fail?
+
     file_path = File.join(PostageApp::FailedRequest.store_path, request.uid)
+
     assert File.exist?(file_path)
     
     # Forcing to resend. Should quit right away as we can't connect

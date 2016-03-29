@@ -21,11 +21,11 @@ class PostageappGenerator < Rails::Generator::Base
     
     record do |m|
       m.template 'initializer.rb', 'config/initializers/postageapp.rb', 
-        :assigns => { :api_key => options[:api_key] },
-        :collision => :force
+        assigns: { api_key: options[:api_key] },
+        collision: :force
       m.directory 'lib/tasks'
       m.file 'postageapp_tasks.rake', 'lib/tasks/postageapp_tasks.rake',
-        :collision => :force
+        collision: :force
       m.rake 'postageapp:test'
     end
   end

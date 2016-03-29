@@ -105,12 +105,12 @@ def send_test_message(recipients)
   
   PostageApp::Request.new(
     :send_message,
-    :message => {
+    message: {
       'text/html' => HTML_MESSAGE,
       'text/plain' => TEXT_MESSAGE
     },
-    :recipients => recipients_with_variables,
-    :headers => {
+    recipients: recipients_with_variables,
+    headers: {
       'Subject' => '[PostageApp] Test Message',
       'From' => 'no-return@postageapp.com'
     }
