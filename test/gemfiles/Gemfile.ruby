@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'json'
+gem 'json', '~> 1.8.3'
 gem 'mail'
 gem 'mime-types', '2.99.1' # Locked for 1.9 compatibility
 
