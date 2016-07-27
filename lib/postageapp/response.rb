@@ -13,6 +13,8 @@ class PostageApp::Response
   # The data payload of the response. This is usually the return value of the
   # request we're looking for
   attr_reader :data
+
+  attr_reader :exception
   
   # Takes in Net::HTTPResponse object as the attribute.
   # If something goes wrong Response will be thought of as failed
@@ -27,8 +29,9 @@ class PostageApp::Response
 
     @data = hash['data']
 
-  rescue
+  rescue => e
     @status = 'fail'
+    @exception = '[%s] %s' % [ e.class, e ]
   end
   
   # Little helper that checks for the Response status
