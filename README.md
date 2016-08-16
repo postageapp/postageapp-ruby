@@ -177,7 +177,8 @@ class Notifier < PostageApp::Mailer
   def signup_notification
     from 'sender@example.com'
     subject 'Test Email'
-    recipients 'recipient@example.com'
+
+    mail(to: 'recipient@example.com')
   end
 end
 ```
