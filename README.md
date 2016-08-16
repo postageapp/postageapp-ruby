@@ -8,7 +8,7 @@ via a simple [JSON-based API](http://dev.postageapp.com/api.html).
 
 # Installation
 
-### Rails 4.x
+## Rails 4.x and newer
 
 Add the `postageapp` gem to your Gemfile:
 
@@ -19,30 +19,12 @@ Then from the Rails project's root run:
     bundle install
     bin/rails generate postageapp --api-key PROJECT_API_KEY
 
-### Rails 3.x
+## Legacy Versions of Rails
 
-Add the `postageapp` gem to your Gemfile:
+* [Rails 3.x](doc/RAILS3.md)
+* [Rails 2.3.x](doc/RAILS2.md)
 
-    gem 'postageapp'
-
-Then from the Rails project's root run:
-
-    bundle install
-    script/rails generate postageapp --api-key PROJECT_API_KEY
-
-### Rails 2.x
-
-In `config/environment.rb` add the following:
-
-    config.gem 'postageapp'
-
-Then from the Rails project's root run:
-
-    rake gems:install
-    rake gems:unpack GEM=postageapp
-    script/generate postageapp --api-key PROJECT_API_KEY
-
-### Sinatra / Rack / Others
+## Sinatra / Rack / Others
 
 You'll need to install the gem first:
 
@@ -63,7 +45,8 @@ with the appropriate API key will also work.
 
 # Usage
 
-Here's an example of sending a message ([See full API documentation](http://help.postageapp.com/faqs/api/send_message)):
+Here's an example of sending a message using the
+[`send_message`](http://help.postageapp.com/faqs/api/send_message) API call:
 
 ```ruby
 request = PostageApp::Request.new(
@@ -107,7 +90,7 @@ Response usually comes back with data:
     >> response.data
     => { 'message' => { 'id' => '12345' }}
 
-### Recipient Override
+# Recipient Override
 
 Sometimes you don't want to send emails to real people in your application. For
 that there's an ability to override to what address all emails will be
@@ -147,9 +130,9 @@ This way you can immediately check the status of the delivery. For example:
     response.ok?
     # => true
 
-### Rails 3 / 4
+## Mailer Base Class
 
-Here's an example of a mailer in Rails 3 environment:
+Here's an example of a mailer using the `PostageApp::Mailer` base class:
 
 ```ruby
 require 'postageapp/mailer'
@@ -213,44 +196,6 @@ class DevelopmentPostageappInterceptor
 
     # Deliveries can be disabled if required
     # postageapp_msg.perform_deliveries = false
-  end
-end
-```
-
-### Rails 2
-
-Here's an example of a mailer you'd set in in a Rails 2 environment:
-
-```ruby
-require 'postageapp/mailer'
-
-class Notifier < PostageApp::Mailer
-  def signup_notification
-    from 'system@example.com'
-    subject 'New Account Information'
-
-    # Recipients can be in any format API allows.
-    # Here's an example of a hash format
-    recipients(
-      'recipient_1@example.com' => {
-        'variable_name_1' => 'value',
-        'variable_name_2' => 'value'
-      },
-      'recipient_2@example.com' => {
-        'variable_name_1' => 'value',
-        'variable_name_2' => 'value'
-      },
-    )
-
-    attachment(
-      :content_type => 'application/zip',
-      :filename => 'example.zip',
-      :body => File.read('/path/to/example.zip'
-    )
-
-    # PostageApp specific elements:
-    postageapp_template 'example_template'
-    postageapp_variables 'global_variable' => 'value'
   end
 end
 ```
