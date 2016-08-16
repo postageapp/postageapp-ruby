@@ -41,7 +41,7 @@ matrix:
       gemfile: test/gemfiles/Gemfile.rails-4.2.x
     - rvm: 1.9.3-p551
       gemfile: test/gemfiles/Gemfile.rails-5.0.x
-    - rvm: 2.0.0-p598
+    - rvm: 2.0.0-p648
       gemfile: test/gemfiles/Gemfile.rails-5.0.x
     - rvm: 2.1.10
       gemfile: test/gemfiles/Gemfile.rails-5.0.x
