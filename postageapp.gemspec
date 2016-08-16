@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.description = 'Official client for the PostageApp email service'
   s.license = 'MIT'
   
-  s.files = `git ls-files`.split('\n')
+  s.files = `git ls-files`.split("\n")
   s.platform = Gem::Platform::RUBY
   s.require_paths = [ 'lib' ]
 
