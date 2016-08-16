@@ -74,7 +74,7 @@ def shell(*args)
   end
 
   unless (system(*args))
-    exit($?)
+    exit($?.to_i)
   end
 end
 
