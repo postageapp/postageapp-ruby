@@ -4,9 +4,9 @@ install: "WITH_VERBOSE=1 script/with current bundle install"
 script: "WITH_VERBOSE=1 script/with current bundle exec rake test"
 rvm:
   - 1.9.3-p551
-  - 2.0.0-p598
-  - 2.1.5
-  - 2.2.10
+  - 2.0.0-p648
+  - 2.1.10
+  - 2.2.5
   - 2.3.1
   - jruby-9.1.2.0
 gemfile:
@@ -23,13 +23,13 @@ matrix:
   exclude:
     - rvm: 1.9.3-p551
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
-    - rvm: 2.0.0-p598
+    - rvm: 2.0.0-p648
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
-    - rvm: 2.1.5
+    - rvm: 2.1.10
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
-    - rvm: 2.2.10
+    - rvm: 2.2.5
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
-    - rvm: 2.3.0
+    - rvm: 2.3.1
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
     - rvm: jruby-9.1.2.0
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
@@ -43,5 +43,5 @@ matrix:
       gemfile: test/gemfiles/Gemfile.rails-5.0.x
     - rvm: 2.0.0-p598
       gemfile: test/gemfiles/Gemfile.rails-5.0.x
-    - rvm: 2.1.5
+    - rvm: 2.1.10
       gemfile: test/gemfiles/Gemfile.rails-5.0.x
