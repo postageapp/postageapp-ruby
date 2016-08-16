@@ -27,7 +27,7 @@ matrix:
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
     - rvm: 2.1.5
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
-    - rvm: 2.2.0
+    - rvm: 2.2.10
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
     - rvm: 2.3.0
       gemfile: test/gemfiles/Gemfile.rails-2.3.x
