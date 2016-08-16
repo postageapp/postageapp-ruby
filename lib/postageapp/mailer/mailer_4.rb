@@ -168,11 +168,9 @@ class PostageApp::Mailer < ActionMailer::Base
 
 protected
   def each_template(paths, name, &block) #:nodoc:
-    templates = lookup_context.find_all(name, paths)
-
-    if (templates.present?)
-      templates.uniq { |t| t.formats }.each(&block)
-    end
+    (lookup_context.find_all(name, paths) || [ ]).uniq do |t|
+      t.formats
+    end.each(&block)
   end
 
   def create_parts_from_responses(m, responses) #:nodoc:
