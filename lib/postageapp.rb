@@ -2,6 +2,7 @@ require 'net/http'
 require 'net/https'
 require 'digest'
 require 'logger'
+require 'fileutils'
 
 require 'json'
 require 'base64'
