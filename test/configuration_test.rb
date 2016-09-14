@@ -5,9 +5,9 @@ class ConfigurationTest < MiniTest::Test
     config = PostageApp::Configuration.new
     
     assert_equal true, config.secure
-    assert_equal nil,config.api_key
+    assert_equal ENV['POSTAGEAPP_API_KEY'], config.api_key
     assert_equal 'https', config.scheme
-    assert_equal 'api.postageapp.com', config.host
+    assert_equal ENV['POSTAGEAPP_API_HOST'] || 'api.postageapp.com', config.host
     assert_equal 443, config.port
 
     assert_equal nil, config.proxy_host

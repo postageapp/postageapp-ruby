@@ -1,4 +1,5 @@
-# Test mailer for ActionMailer 2
+# Test mailer for ActionMailer 2.x
+
 class Notifier < PostageApp::Mailer
   self.template_root = File.dirname(__FILE__)
 
@@ -31,14 +32,14 @@ class Notifier < PostageApp::Mailer
     )
 
     part(
-      :content_type => 'text/plain',
-      :body => 'text content'
+      content_type: 'text/plain',
+      body: 'text content'
     )
 
     attachment(
-      :content_type => 'image/jpeg',
-      :filename => 'foo.jpg',
-      :body => '123456789'
+      content_type: 'image/jpeg',
+      filename: 'foo.jpg',
+      body: '123456789'
     )
   end
   
@@ -46,9 +47,9 @@ class Notifier < PostageApp::Mailer
     setup_headers
 
     attachment(
-      :content_type => 'image/jpeg',
-      :filename => 'foo.jpg',
-      :body => '123456789'
+      content_type: 'image/jpeg',
+      filename: 'foo.jpg',
+      body: '123456789'
     )
   end
   

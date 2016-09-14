@@ -1,4 +1,9 @@
 class PostageApp::Response
+  # == Constants ============================================================
+
+  STATUS_TIMEOUT = 'timeout'.freeze
+  STATUS_FAIL = 'fail'.freeze
+
   # == Properties ===========================================================
 
   # The UID should match the Request's UID. If Request didn't provide with one
@@ -25,7 +30,7 @@ class PostageApp::Response
   def initialize(http_response)
     case (http_response)
     when Exception
-      @status = :timeout
+      @status = STATUS_TIMEOUT
       @message = '[%s] %s' % [ http_response.class, http_response.to_s ]
     else
       hash = JSON::parse(http_response.body)
@@ -39,7 +44,7 @@ class PostageApp::Response
     end
 
   rescue => e
-    @status = 'fail'
+    @status = STATUS_FAIL
     @exception = '[%s] %s' % [ e.class, e ]
   end
   

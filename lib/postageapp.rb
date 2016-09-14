@@ -20,8 +20,12 @@ module PostageApp
   # If you do not want/need to initialize the gem in this way, you can use the environment
   # variable POSTAGEAPP_API_KEY to set up your key.
   
-  def self.configure
-    yield(configuration)
+  def self.configure(reset = false)
+    if (reset)
+      self.configuration_reset!
+    end
+
+    yield(self.configuration)
   end
   
   # Accessor for the PostageApp::Configuration object
@@ -29,6 +33,10 @@ module PostageApp
   #   PostageApp.configuration.api_key = '1234567890abcdef'
   def self.configuration
     @configuration ||= Configuration.new
+  end
+
+  def self.configuration_reset!
+    @configuration = nil
   end
 
   class << self

@@ -1,4 +1,4 @@
-# Test mailer for ActionMailer 3 and 4
+# Test mailer for ActionMailer 3.x+
 
 class Notifier < PostageApp::Mailer
   self.append_view_path(File.dirname(__FILE__))
@@ -66,9 +66,9 @@ class Notifier < PostageApp::Mailer
     postageapp_uid 'custom_uid'
 
     mail(
-      :from => 'sender@example.com',
-      :subject => 'Test Message',
-      :to => {
+      from: 'sender@example.com',
+      subject: 'Test Message',
+      to: {
         'test1@example.net' => { 'name' => 'Test 1' },
         'test2@example.net' => { 'name' => 'Test 2' }
       }
@@ -76,11 +76,11 @@ class Notifier < PostageApp::Mailer
   end
 
 private
-  def headers_hash(options = { })
+  def headers_hash(options = nil)
     {
-      :from => 'sender@example.com',
-      :to => 'recipient@example.net',
-      :subject => 'Test Message'
-    }.merge(options)
+      from: 'sender@example.com',
+      to: 'recipient@example.net',
+      subject: 'Test Message'
+    }.merge(options || { })
   end
 end

@@ -34,22 +34,22 @@ class RequestTest < MiniTest::Test
 
     args = request.arguments_to_send
 
-    assert_equal '1234567890abcdef', args['api_key']
+    assert !args['api_key'].empty?
     assert_match(/^\w{40}$/, args['uid'])
     
     payload = args['arguments']
 
     assert_equal 'sender@test.test', payload['headers']['from']
-    assert_equal 'Test Message',     payload['headers']['subject']
-    assert_equal 'test@test.test',   payload['recipients']
-    assert_equal 'text content',     payload['content']['text/plain']
-    assert_equal 'html content',     payload['content']['text/html']
+    assert_equal 'Test Message', payload['headers']['subject']
+    assert_equal 'test@test.test', payload['recipients']
+    assert_equal 'text content', payload['content']['text/plain']
+    assert_equal 'html content', payload['content']['text/html']
     
     request.arguments = { 'data' => 'content' }
 
     args = request.arguments_to_send
 
-    assert_equal '1234567890abcdef', args['api_key']
+    assert !args['api_key'].empty?
     assert_match(/^\w{40}$/, args['uid'])
     assert_equal 'content', args['arguments']['data']
   end

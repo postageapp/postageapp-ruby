@@ -4,17 +4,14 @@ class LiveTest < MiniTest::Test
   # Note: Need access to a live PostageApp.com account
   # See helper.rb to set host / api key
 
-  if (ENV['POSTAGEAPP_LIVE_TESTS'])
-    def setup
-      super
-      
-      PostageApp.configure do |config|
-        config.secure = false
-        config.host = 'api.postageapp.local'
-        config.api_key = 'PROJECT_API_KEY'
-      end
+  if (ENV['POSTAGEAPP_API_KEY'])
+    def test_configuration
+      config = PostageApp.config
+
+      assert config
+      assert_equal ENV['POSTAGEAPP_API_KEY'], config.api_key
     end
-    
+
     def test_request_get_method_list
       request = PostageApp::Request.new(:get_method_list)
       response = request.send
@@ -25,14 +22,34 @@ class LiveTest < MiniTest::Test
       assert_equal nil, response.message
       assert_equal(
         {
-          'methods' => 'get_account_info, get_message_receipt, get_method_list, get_project_info, send_message'
+          'methods' => %w[
+            get_account_info
+            get_message_receipt
+            get_message_transmissions
+            get_messages
+            get_method_list
+            get_metrics
+            get_project_info
+            get_recipients_list
+            get_suppression_list
+            message_delivery_status
+            message_status
+            messages_history
+            project_create
+            project_destroy
+            project_info
+            send_message
+            test_mail_server
+            test_recipient
+          ].join(', ')
         },
         response.data
       )
     end
     
     def test_request_send_message
-      request = PostageApp::Request.new(:send_message, {
+      request = PostageApp::Request.new(
+        :send_message,
         headers: {
           'from' => 'sender@example.com',
           'subject' => 'Test Message'
@@ -42,7 +59,7 @@ class LiveTest < MiniTest::Test
           'text/plain' => 'text content',
           'text/html' => 'html content'
         }
-      })
+      )
 
       response = request.send
 
@@ -74,35 +91,43 @@ class LiveTest < MiniTest::Test
       response = request.send
 
       assert_equal 'PostageApp::Response', response.class.name
-      assert_equal 'internal_server_error', response.status
+      assert_equal 'call_error', response.status
+
       assert_match(/\A\w{40}$/, response.uid)
-      assert_match(/\ANo action responded to non_existant/, response.message)
+      assert_match(/\ARequest could not be processed/, response.message)
       assert_equal nil, response.data
     end
     
     # Testable under ruby 1.9.2 Probably OK in production too... Probably
     # Lunchtime reading: http://ph7spot.com/musings/system-timer
     def test_request_timeout
-      PostageApp.configuration.host = '127.0.0.254'
+      PostageApp.configuration.host = '127.0.0.255'
 
       request = PostageApp::Request.new(:get_method_list)
 
       response = request.send
 
       assert_equal 'PostageApp::Response', response.class.name
-      assert_equal 'fail', response.status
+      assert_equal 'timeout', response.status
     end
     
-    def test_deliver_with_custom_postage_variables
-      response = if ActionMailer::VERSION::MAJOR < 3
-        require File.expand_path('../mailer/action_mailer_2/notifier', __FILE__)
-        Notifier.deliver_with_custom_postage_variables
-      else
-        require File.expand_path('../mailer/action_mailer_3/notifier', __FILE__)
-        Notifier.with_custom_postage_variables.deliver
+    if (defined?(Rails))
+      def test_deliver_with_custom_postage_variables
+        response =
+          if (ActionMailer::VERSION::MAJOR < 3)
+            require File.expand_path('../mailer/action_mailer_2/notifier', __FILE__)
+
+            Notifier.deliver_with_custom_postage_variables
+          else
+            require File.expand_path('../mailer/action_mailer_3/notifier', __FILE__)
+
+            Notifier.with_custom_postage_variables.deliver
+          end
+
+        assert_equal 'ok', response.status
+        assert_equal true, response.ok?
       end
-      assert response.ok?
-    end 
+    end
   else
     puts "\e[0m\e[31mSkipping #{File.basename(__FILE__)}\e[0m"
 

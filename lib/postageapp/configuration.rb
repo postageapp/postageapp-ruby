@@ -45,6 +45,8 @@
 class PostageApp::Configuration
   # == Constants ============================================================
 
+  HOST_DEFAULT = 'api.postageapp.com'.freeze
+
   SOCKS5_PORT_DEFAULT = 1080
   HTTP_PORT_DEFAULT = 80
   HTTPS_PORT_DEFAULT = 443
@@ -55,6 +57,9 @@ class PostageApp::Configuration
   }.freeze
 
   PATH_DEFAULT = '/'.freeze
+
+  FRAMEWORK_DEFAULT = 'Ruby'.freeze
+  ENVIRONMENT_DEFAULT = 'production'.freeze
 
   # == Properties ===========================================================
 
@@ -83,7 +88,7 @@ class PostageApp::Configuration
     @secure = true
     @verify_certificate = true
 
-    @host = 'api.postageapp.com'
+    @host = ENV['POSTAGEAPP_HOST'] || HOST_DEFAULT
 
     @proxy_port = SOCKS5_PORT_DEFAULT
 
@@ -92,9 +97,8 @@ class PostageApp::Configuration
 
     @requests_to_resend = %w[ send_message ]
 
-    @framework = 'Ruby'
-
-    @environment = 'production'
+    @framework = FRAMEWORK_DEFAULT
+    @environment = ENVIRONMENT_DEFAULT
   end
   
   alias_method :secure?, :secure

@@ -9,6 +9,9 @@ class PostageAppTest < MiniTest::Test
 
     assert_equal 'abcdefg12345', PostageApp.configuration.api_key
     assert_equal 'test.test', PostageApp.configuration.host
+
+  ensure
+    PostageApp.configuration_reset!
   end
   
   def test_logger
