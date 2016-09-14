@@ -1,4 +1,4 @@
-require File.expand_path('helper', File.dirname(__FILE__))
+require_relative './helper'
 
 class LiveTest < MiniTest::Test
   # Note: Need access to a live PostageApp.com account

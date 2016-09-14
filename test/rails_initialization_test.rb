@@ -1,4 +1,4 @@
-require File.expand_path('helper', File.dirname(__FILE__))
+require_relative './helper'
 
 require File.expand_path('../lib/postageapp/rails/rails', File.dirname(__FILE__))
 

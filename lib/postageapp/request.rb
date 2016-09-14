@@ -1,10 +1,16 @@
 class PostageApp::Request
+  # == Constants ============================================================
+
   API_VERSION = '1.0'
   
   HEADERS_DEFAULT = {
     'Content-type' => 'application/json',
     'Accept' => 'text/json, application/json'
   }
+
+  TimeoutError = defined?(::Timeout) ? ::Timeout::Error : ::TimeoutError
+
+  # == Properties ===========================================================
   
   # Unique ID (UID) for the request
   attr_writer :uid
@@ -19,6 +25,8 @@ class PostageApp::Request
   # Assigns the API key to be used for the request
   attr_accessor :api_key
 
+  # == Class Methods ========================================================
+
   # Returns a user-agent string used for identification when making API calls.
   def self.user_agent
     @user_agent ||=
@@ -28,6 +36,8 @@ class PostageApp::Request
         PostageApp.configuration.framework
       ]
   end
+
+  # == Instance Methods =====================================================
   
   # Creates a new Request with the given API call method and arguments.
   def initialize(method, arguments = nil)
@@ -45,18 +55,19 @@ class PostageApp::Request
 
     PostageApp.logger.info(self)
     
-    http_response = begin
-      http.post(
-        url.path, 
-        self.arguments_to_send.to_json, 
-        HEADERS_DEFAULT.merge(
-          'User-Agent' => self.class.user_agent
+    http_response =
+      begin
+        http.post(
+          url.path, 
+          self.arguments_to_send.to_json, 
+          HEADERS_DEFAULT.merge(
+            'User-Agent' => self.class.user_agent
+          )
         )
-      )
 
-    rescue TimeoutError, Errno::ECONNREFUSED
-      nil
-    end
+      rescue TimeoutError, Errno::ECONNREFUSED => e
+        e
+      end
     
     response = PostageApp::Response.new(http_response)
     

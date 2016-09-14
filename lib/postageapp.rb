@@ -6,18 +6,6 @@ require 'logger'
 require 'json'
 require 'base64'
 
-require 'postageapp/utils'
-require 'postageapp/version'
-require 'postageapp/configuration'
-require 'postageapp/logger'
-require 'postageapp/request'
-require 'postageapp/failed_request'
-require 'postageapp/response'
-require 'postageapp/mail'
-require 'postageapp/mail/delivery_method'
-
-require 'postageapp/rails/railtie' if (defined?(Rails::Railtie))
-
 module PostageApp
   class Error < StandardError ; end
   
@@ -60,6 +48,20 @@ module PostageApp
     end
   end
 end
+
+require 'postageapp/configuration'
+require 'postageapp/diagnostics'
+require 'postageapp/failed_request'
+require 'postageapp/http'
+require 'postageapp/logger'
+require 'postageapp/request'
+require 'postageapp/response'
+require 'postageapp/mail'
+require 'postageapp/mail/delivery_method'
+require 'postageapp/utils'
+require 'postageapp/version'
+
+require 'postageapp/rails/railtie' if (defined?(Rails::Railtie))
 
 require 'postageapp/mail/extensions'
 

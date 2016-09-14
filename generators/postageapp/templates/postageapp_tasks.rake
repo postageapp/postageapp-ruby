@@ -1,6 +1,6 @@
 namespace :postageapp do
   desc 'Show the current PostageApp configuration'
-  task :config => :environment do
+  task config: :environment do
     puts "PostageApp Configuration"
     puts "------------------------"
     puts
@@ -30,12 +30,29 @@ namespace :postageapp do
   end
 
   desc 'Verify the PostageApp gem installation by requesting project info from the API'
-  task :test => :environment do 
-    
-    puts "Attempting to contact #{PostageApp.configuration.host} ..."
+  task test: :environment do
+    diag = PostageApp::Diagnostics.new(PostageApp.config)
+
+    puts "Resolving #{PostageApp.config.host.inspect}"
+    if (resolved = diag.host_resolved)
+      puts "\t#{resolved.join(',')}"
+    else
+      puts "\tCouldn't be resolved. [ERROR]"
+    end
+
+    if (PostageApp.config.proxy?)
+      puts "Resolving #{PostageApp.config.proxy_host.inspect}"
+      if (resolved = diag.proxy_host_resolved)
+        puts "\t#{resolved.join(',')}"
+      else
+        puts "\tCouldn't be resolved. [ERROR]"
+      end
+    end
+
+    puts "Trying to contact #{PostageApp.configuration.url}..."
     response = PostageApp::Request.new(:get_project_info).send
     
-    if response.ok?
+    if (response.ok?)
       project_name = response.data['project']['name']
       project_url = response.data['project']['url']
       user_emails = response.data['project']['users']
@@ -52,7 +69,8 @@ END
       # Most likely a single user if it's a new project
       puts 'Sending test message to users in the project...'
       r = send_test_message(user_emails)
-      if r.ok?
+
+      if (r.ok?)
         puts "Message was successfully sent!\n\n"
         puts 'Your application is ready to use PostageApp!'
       else
@@ -60,7 +78,6 @@ END
         puts 'This was the response:'
         puts r.to_yaml
       end
-      
     else
       puts 'Failed to fetch information about your project. This was the response:'
       puts response.to_yaml
@@ -68,7 +85,7 @@ END
   end
   
   desc 'Manually trigger resend of all failed emails'
-  task :resend_failed_emails => :environment do
+  task resend_failed_emails: :environment do
     puts 'Attempting to resend failed emails...'
     PostageApp::FailedRequest.resend_all
     puts 'Done!'

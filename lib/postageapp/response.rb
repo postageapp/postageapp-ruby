@@ -1,4 +1,6 @@
 class PostageApp::Response
+  # == Properties ===========================================================
+
   # The UID should match the Request's UID. If Request didn't provide with one
   # PostageApp service should generate it for the Response
   attr_reader :uid
@@ -15,19 +17,26 @@ class PostageApp::Response
   attr_reader :data
 
   attr_reader :exception
+
+  # == Instance Methods =====================================================
   
   # Takes in Net::HTTPResponse object as the attribute.
   # If something goes wrong Response will be thought of as failed
   def initialize(http_response)
-    hash = JSON::parse(http_response.body)
+    case (http_response)
+    when Exception
+      @status = :timeout
+      @message = '[%s] %s' % [ http_response.class, http_response.to_s ]
+    else
+      hash = JSON::parse(http_response.body)
+      _response = hash['response']
 
-    _response = hash['response']
+      @status = _response['status']
+      @uid = _response['uid']
+      @message = _response['message']
 
-    @status = _response['status']
-    @uid = _response['uid']
-    @message = _response['message']
-
-    @data = hash['data']
+      @data = hash['data']
+    end
 
   rescue => e
     @status = 'fail'

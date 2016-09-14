@@ -31,14 +31,3 @@ class Hash
     end
   end
 end
-
-class Net::HTTP
-  # Getting rid of the 'warning: peer certificate won't be verified in this SSL session'
-  alias_method :__initialize, :initialize
-  def initialize(*args)
-    __initialize(*args)
-
-    @ssl_context = OpenSSL::SSL::SSLContext.new
-    @ssl_context.verify_mode = OpenSSL::SSL::VERIFY_NONE
-  end
-end

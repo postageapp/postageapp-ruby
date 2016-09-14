@@ -1,4 +1,6 @@
 class PostageApp::Logger < ::Logger
+  # == Instance Methods =====================================================
+  
   def format_message(severity, datetime, progname, msg)
     "[%s] %s\n" % [
       datetime.strftime('%m/%d/%Y %H:%M:%S %Z'),

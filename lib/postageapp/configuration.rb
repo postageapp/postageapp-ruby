@@ -38,19 +38,36 @@
 # Advanced Options
 # ----------------
 # :port - The port to make HTTP/HTTPS requests (default based on secure option)
-# :protocol - Set to either `http` or `https` (default based on secure option)
+# :scheme - Set to either `http` or `https` (default based on secure option)
 # :requests_to_resend - List of API calls that should be replayed if they fail.
 #                       (default: send_message)
 
 class PostageApp::Configuration
+  # == Constants ============================================================
+
+  SOCKS5_PORT_DEFAULT = 1080
+  HTTP_PORT_DEFAULT = 80
+  HTTPS_PORT_DEFAULT = 443
+
+  SCHEME_FOR_SECURE = {
+    true => 'https'.freeze,
+    false => 'http'.freeze
+  }.freeze
+
+  PATH_DEFAULT = '/'.freeze
+
+  # == Properties ===========================================================
+
   attr_accessor :secure
-  attr_writer :protocol
+  attr_writer :scheme
   attr_accessor :host
   attr_writer :port
   attr_accessor :proxy_host
-  attr_accessor :proxy_port
+  attr_writer :proxy_port
   attr_accessor :proxy_user
   attr_accessor :proxy_pass
+
+  attr_accessor :verify_certificate
   attr_accessor :http_open_timeout
   attr_accessor :http_read_timeout
   attr_accessor :recipient_override
@@ -59,10 +76,16 @@ class PostageApp::Configuration
   attr_accessor :framework
   attr_accessor :environment
   attr_accessor :logger
+
+  # == Instance Methods =====================================================
   
   def initialize
     @secure = true
+    @verify_certificate = true
+
     @host = 'api.postageapp.com'
+
+    @proxy_port = SOCKS5_PORT_DEFAULT
 
     @http_open_timeout = 5
     @http_read_timeout = 10
@@ -75,7 +98,20 @@ class PostageApp::Configuration
   end
   
   alias_method :secure?, :secure
-  
+  alias_method :verify_certificate?, :verify_certificate
+
+  def port_default?
+    if (self.secure?)
+      self.port == HTTPS_PORT_DEFAULT
+    else
+      self.port == HTTP_PORT_DEFAULT
+    end
+  end
+
+  def proxy?
+    self.proxy_host and self.proxy_host.match(/\A\S+\z/)
+  end
+
   # Assign which API key is used to make API calls. Can also be specified
   # using the `POSTAGEAPP_API_KEY` environment variable.
   def api_key=(key)
@@ -88,34 +124,35 @@ class PostageApp::Configuration
     @api_key ||= ENV['POSTAGEAPP_API_KEY']
   end
   
-  # Returns the HTTP protocol used to make API calls
-  def protocol
-    @protocol ||= (secure? ? 'https' : 'http')
+  # Returns the HTTP scheme used to make API calls
+  def scheme
+    @scheme ||= SCHEME_FOR_SECURE[self.secure?]
   end
+
+  alias_method :protocol=, :scheme=
+  alias_method :protocol, :scheme
   
   # Returns the port used to make API calls
   def port
-    @port ||= (secure? ? 443 : 80)
+    @port ||= (self.secure? ? HTTPS_PORT_DEFAULT : HTTP_PORT_DEFAULT)
+  end
+
+  # Returns the port used to connect via SOCKS5
+  def proxy_port
+    @proxy_port ||= SOCKS5_PORT_DEFAULT
   end
   
   # Returns the endpoint URL to make API calls
   def url
-    "#{self.protocol}://#{self.host}:#{self.port}"
+    '%s://%s%s' % [
+      self.scheme,
+      self.host,
+      self.port_default? ? '' : (':%d' % self.port)
+    ]
   end
 
-  # Returns a properly configured Net::HTTP connection
+  # Returns a connection aimed at the API endpoint
   def http
-    http = Net::HTTP::Proxy(
-      self.proxy_host,
-      self.proxy_port,
-      self.proxy_user,
-      self.proxy_pass
-    ).new(self.host, self.port)
-    
-    http.read_timeout = self.http_read_timeout
-    http.open_timeout = self.http_open_timeout
-    http.use_ssl = self.secure?
-
-    http
+    PostageApp::HTTP.connect(self)
   end
 end

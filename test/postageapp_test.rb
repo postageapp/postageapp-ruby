@@ -1,4 +1,4 @@
-require File.expand_path('helper', File.dirname(__FILE__))
+require_relative './helper'
 
 class PostageAppTest < MiniTest::Test
   def test_method_configure

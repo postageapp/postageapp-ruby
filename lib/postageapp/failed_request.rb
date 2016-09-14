@@ -1,4 +1,6 @@
 module PostageApp::FailedRequest
+  # == Module Methods =======================================================
+  
   # Stores request object into a file for future re-send
   # returns true if stored, false if not (due to undefined project path)
   def self.store(request)
