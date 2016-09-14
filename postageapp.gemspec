@@ -29,6 +29,6 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = '>= 1.9.3'
   
-  s.add_dependency 'json'
-  s.add_dependency 'mail'
+  s.add_dependency 'json', '~> 1.8'
+  s.add_dependency 'mail', '~> 2.4'
 end
