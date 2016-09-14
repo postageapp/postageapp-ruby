@@ -8,19 +8,19 @@ Gem::Specification.new do |s|
   s.name = 'postageapp'
   s.version = PostageApp::VERSION
   s.authors = [
-    'Oleg Khabarov',
     'Scott Tadman',
+    'Oleg Khabarov',
     'The Working Group Inc.'
   ]
   s.email = [
-    'oleg@khabarov.ca',
-    'tadman@postageapp.com'
+    'tadman@postageapp.com',
+    'oleg@khabarov.ca'
   ]
 
   s.homepage = 'http://github.com/postageapp/postageapp-ruby'
 
-  s.summary = 'Client for PostageApp Email API'
-  s.description = 'Official client for the PostageApp email service'
+  s.summary = 'Client library for PostageApp Email API'
+  s.description = 'PostageApp Library for Ruby and Ruby on Rails applications'
   s.license = 'MIT'
   
   s.files = `git ls-files`.split("\n")
