@@ -220,4 +220,4 @@ end
 
 # Copyright
 
-(C) 2011-2016 Scott Tadman, Oleg Khabarov, [PostageApp](http://www.postageapp.com/)
+(C) 2011-2017 Scott Tadman, Oleg Khabarov, [PostageApp](http://www.postageapp.com/)
