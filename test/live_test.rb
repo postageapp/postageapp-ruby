@@ -4,7 +4,7 @@ class LiveTest < MiniTest::Test
   # Note: Need access to a live PostageApp.com account
   # See helper.rb to set host / api key
 
-  if (ENV['POSTAGEAPP_API_KEY'])
+  if (ENV['POSTAGEAPP_API_KEY'] and ENV['POSTAGEAPP_API_KEY'] != '__TEST_API_KEY__')
     def test_configuration
       config = PostageApp.config
 
@@ -19,7 +19,7 @@ class LiveTest < MiniTest::Test
       assert_equal 'PostageApp::Response', response.class.name
       assert_equal 'ok', response.status
       assert_match(/^\w{40}$/, response.uid)
-      assert_equal nil, response.message
+      assert_nil response.message
       assert_equal(
         {
           'methods' => %w[
@@ -67,7 +67,7 @@ class LiveTest < MiniTest::Test
       assert_equal 'ok', response.status
 
       assert_match(/^\w{40}$/, response.uid)
-      assert_equal nil, response.message
+      assert_nil response.message
       assert_match(/\d+/, response.data['message']['id'].to_s)
       
       receipt = PostageApp::Request.new(
@@ -95,7 +95,7 @@ class LiveTest < MiniTest::Test
 
       assert_match(/\A\w{40}$/, response.uid)
       assert_match(/\ARequest could not be processed/, response.message)
-      assert_equal nil, response.data
+      assert_nil response.data
     end
     
     # Testable under ruby 1.9.2 Probably OK in production too... Probably

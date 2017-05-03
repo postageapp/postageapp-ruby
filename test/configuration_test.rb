@@ -3,25 +3,29 @@ require_relative './helper'
 class ConfigurationTest < MiniTest::Test
   def test_initialization_defaults
     config = PostageApp::Configuration.new
-    
+
     assert_equal true, config.secure
-    assert_equal ENV['POSTAGEAPP_API_KEY'], config.api_key
+
+    if (ENV['POSTAGEAPP_API_KEY'])
+      assert_equal ENV['POSTAGEAPP_API_KEY'], config.api_key
+    end
+
     assert_equal 'https', config.scheme
     assert_equal ENV['POSTAGEAPP_API_HOST'] || 'api.postageapp.com', config.host
     assert_equal 443, config.port
 
-    assert_equal nil, config.proxy_host
+    assert_nil config.proxy_host
     assert_equal 1080, config.proxy_port
-    assert_equal nil, config.proxy_user
-    assert_equal nil, config.proxy_pass
+    assert_nil config.proxy_user
+    assert_nil config.proxy_pass
 
-    assert_equal 5,   config.http_open_timeout
-    assert_equal 10,  config.http_read_timeout
-    assert_equal nil, config.recipient_override
+    assert_equal 5, config.http_open_timeout
+    assert_equal 10, config.http_read_timeout
+    assert_nil config.recipient_override
     assert_equal %w( send_message ), config.requests_to_resend
-    assert_equal nil, config.project_root
+    assert_nil config.project_root
     assert_equal 'production', config.environment
-    assert_equal nil, config.logger
+    assert_nil config.logger
     assert_equal 'Ruby', config.framework
   end
   

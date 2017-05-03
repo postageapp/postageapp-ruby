@@ -13,6 +13,8 @@ require 'fileutils'
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
+ENV['POSTAGEAPP_API_KEY'] ||= '__TEST_API_KEY__'
+
 require 'mail'
 
 require 'postageapp'

@@ -34,6 +34,7 @@ class RequestTest < MiniTest::Test
 
     args = request.arguments_to_send
 
+    assert args['api_key']
     assert !args['api_key'].empty?
     assert_match(/^\w{40}$/, args['uid'])
     
@@ -122,7 +123,7 @@ class RequestTest < MiniTest::Test
     response = request.send
 
     assert_equal 'fail', response.status
-    assert_equal nil, response.uid
-    assert_equal nil, response.data
+    assert_nil response.uid
+    assert_nil response.data
   end
 end
