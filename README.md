@@ -1,10 +1,10 @@
-# [PostageApp](http://postageapp.com) Ruby Gem [![Build Status](https://secure.travis-ci.org/postageapp/postageapp-ruby.png)](http://travis-ci.org/postageapp/postageapp-ruby)
+# [PostageApp](https://postageapp.com/) Ruby Gem [![Build Status](https://secure.travis-ci.org/postageapp/postageapp-ruby.png)](http://travis-ci.org/postageapp/postageapp-ruby)
 
-This gem is used to integrate Ruby apps with [PostageApp](http://postageapp.com/)
+This gem is used to integrate Ruby apps with [PostageApp](https://postageapp.com/)
 service. Personalized high-volume email sending can be offloaded to PostageApp
-via a simple [JSON-based API](http://dev.postageapp.com/api.html).
+via a simple [JSON-based API](http://dev.postageapp.com/api).
 
-### [API Documentation](http://help.postageapp.com/kb/api/api-overview) &bull; [Knowledge Base](http://help.postageapp.com/kb) &bull; [Help Portal](http://help.postageapp.com/)
+### [API Documentation](https://dev.postageapp.com/api/)
 
 # Installation
 
@@ -46,7 +46,7 @@ with the appropriate API key will also work.
 # Usage
 
 Here's an example of sending a message using the
-[`send_message`](http://help.postageapp.com/faqs/api/send_message) API call:
+[`send_message`](https://dev.postageapp.com/api/send_message) API call:
 
 ```ruby
 request = PostageApp::Request.new(
@@ -121,7 +121,7 @@ require 'postageapp/mailer'
 There are custom methods that allow setting of `template` and `variables` parts
 of the API call. They are `postageapp_template` and `postageapp_variables`.
 Examples how they are used are below. For details what they do please see
-[documentation](http://help.postageapp.com/faqs)
+[documentation](https://dev.postageapp.com/api/)
 
 Please note that `deliver` method will return `PostageApp::Response` object.
 This way you can immediately check the status of the delivery. For example:
@@ -220,4 +220,4 @@ end
 
 # Copyright
 
-(C) 2011-2017 Scott Tadman, Oleg Khabarov, [PostageApp](http://www.postageapp.com/)
+(C) 2011-2019 Scott Tadman, Oleg Khabarov, [PostageApp](http://www.postageapp.com/)
