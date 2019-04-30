@@ -1,6 +1,6 @@
 require_relative './helper'
 
-require File.expand_path('../lib/postageapp/rails/rails', File.dirname(__FILE__))
+require File.expand_path('../lib/postageapp/rails/rails', __dir__)
 
 class RailsInitializationTest < MiniTest::Test
   def test_initialization

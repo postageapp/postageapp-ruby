@@ -20,8 +20,8 @@
 
 # == Constants ==============================================================
 
-GEMFILE_DIR = File.expand_path('../test/gemfiles', File.dirname(__FILE__))
-GEMFILE_ROOT = File.expand_path('../Gemfile', File.dirname(__FILE__))
+GEMFILE_DIR = File.expand_path('../test/gemfiles', __dir__)
+GEMFILE_ROOT = File.expand_path('../Gemfile', __dir__)
 
 # == Support Methods ========================================================
 

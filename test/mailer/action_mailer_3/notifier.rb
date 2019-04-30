@@ -1,7 +1,7 @@
 # Test mailer for ActionMailer 3.x+
 
 class Notifier < PostageApp::Mailer
-  self.append_view_path(File.dirname(__FILE__))
+  self.append_view_path(__dir__)
 
   def blank
     # ... nothing to see here

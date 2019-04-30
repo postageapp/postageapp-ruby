@@ -4,7 +4,7 @@ class FailedRequestTest < MiniTest::Test
   def setup
     super
   
-    PostageApp.configuration.project_root = File.dirname(__FILE__)
+    PostageApp.configuration.project_root = __dir__
   end
   
   def test_store_and_initialize

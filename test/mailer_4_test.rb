@@ -2,7 +2,7 @@ require_relative './helper'
 
 class Mailer4Test < MiniTest::Test
   require_action_mailer(4) do
-    require File.expand_path('mailer/action_mailer_3/notifier', File.dirname(__FILE__))
+    require File.expand_path('mailer/action_mailer_3/notifier', __dir__)
     
     puts "\e[0m\e[32mRunning #{File.basename(__FILE__)} for action_mailer #{ActionMailer::VERSION::STRING}\e[0m"
 

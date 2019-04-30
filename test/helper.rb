@@ -10,8 +10,8 @@ Minitest::Reporters.use!(Minitest::Reporters::SpecReporter.new)
 
 require 'fileutils'
 
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH.unshift(__dir__)
+$LOAD_PATH.unshift(File.join(__dir__, '..', 'lib'))
 
 ENV['POSTAGEAPP_API_KEY'] ||= '__TEST_API_KEY__'
 

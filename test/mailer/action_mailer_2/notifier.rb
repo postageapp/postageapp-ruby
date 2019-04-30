@@ -1,7 +1,7 @@
 # Test mailer for ActionMailer 2.x
 
 class Notifier < PostageApp::Mailer
-  self.template_root = File.dirname(__FILE__)
+  self.template_root = __dir__
 
   def blank
     # Empty method

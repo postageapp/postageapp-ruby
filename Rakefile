@@ -11,17 +11,17 @@ end
 namespace :travis do
   desc "Run tests across different environments, simulating Travis"
   task :test do
-    require File.expand_path('test/travis_test', File.dirname(__FILE__))
+    require File.expand_path('test/travis_test', __dir__)
 
     TravisTest.run!
   end
 
   desc "Report on which versions of Ruby are installed"
   task :versions do
-    require File.expand_path('test/travis_test', File.dirname(__FILE__))
+    require File.expand_path('test/travis_test', __dir__)
 
     TravisTest.validate_ruby_versions!
   end
 end
 
-task :default => :test
+task default: :test

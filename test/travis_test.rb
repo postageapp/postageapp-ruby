@@ -2,7 +2,7 @@
 
 require 'yaml'
 
-require File.expand_path('with_environment', File.dirname(__FILE__))
+require File.expand_path('with_environment', __dir__)
 
 class TravisTest
   extend WithEnvironment
@@ -131,7 +131,7 @@ class TravisTest
   end
 
   def travis_config_path
-    @travis_config_path ||= File.expand_path('../.travis.yml', File.dirname(__FILE__))
+    @travis_config_path ||= File.expand_path('../.travis.yml', __dir__)
   end
 
   def travis_config

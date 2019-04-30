@@ -13,16 +13,16 @@ if (defined?(ActionMailer))
   # ones that come with Rails 2 and 3
   case (ActionMailer::VERSION::MAJOR)
   when 3
-    require File.expand_path('mailer/mailer_3', File.dirname(__FILE__))
+    require File.expand_path('mailer/mailer_3', __dir__)
   when 2
-    require File.expand_path('mailer/mailer_2', File.dirname(__FILE__))
+    require File.expand_path('mailer/mailer_2', __dir__)
   else
-    require File.expand_path('mailer/mailer_4', File.dirname(__FILE__))
+    require File.expand_path('mailer/mailer_4', __dir__)
   end
 
   def find_first_mime_type(mt)
     part = arguments['content'].detect{|mime_type, body| mime_type == mt}
-    OpenStruct.new(:mime_type => part[0], :decoded => part[1]) if part
+    OpenStruct.new(mime_type: part[0], decoded: part[1]) if part
   end
 
   def header
