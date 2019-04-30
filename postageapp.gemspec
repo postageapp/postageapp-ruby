@@ -10,11 +10,12 @@ Gem::Specification.new do |s|
   s.authors = [
     'Scott Tadman',
     'Oleg Khabarov',
-    'The Working Group Inc.'
+    'PostageApp Ltd.'
   ]
   s.email = [
     'tadman@postageapp.com',
-    'oleg@khabarov.ca'
+    'oleg@khabarov.ca',
+    'info@postageapp.com'
   ]
 
   s.homepage = 'http://github.com/postageapp/postageapp-ruby'

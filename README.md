@@ -2,11 +2,33 @@
 
 This gem is used to integrate Ruby apps with [PostageApp](https://postageapp.com/)
 service. Personalized high-volume email sending can be offloaded to PostageApp
-via a simple [JSON-based API](http://dev.postageapp.com/api).
+via a simple [JSON-based API](https://dev.postageapp.com/api).
 
 ### [API Documentation](https://dev.postageapp.com/api/)
 
 # Installation
+
+## Rails 5.2 and newer
+
+Add the `postageapp` gem to your Gemfile:
+
+    gem 'postageapp'
+
+Then from the Rails project's root run:
+
+    bundle install
+
+For authentication, add your project's PostageApp credentials to the
+Rails Encrypted Credentials:
+
+    rails credentials:edit
+
+The format of this entry should be:
+
+    postageapp:
+      api_key: __PROJECT_API_KEY__
+
+Where that will be picked up by the plugin when Rails starts.
 
 ## Rails 4.x and newer
 
@@ -26,9 +48,13 @@ Then from the Rails project's root run:
 
 ## Sinatra / Rack / Others
 
-You'll need to install the gem first:
+Add the `postageapp` gem to your Gemfile:
 
-    $ sudo gem install postageapp
+    gem 'postageapp'
+
+Then from the project's root run:
+
+    bundle install
 
 The configuration will need to be loaded before executing any API calls:
 
@@ -220,4 +246,4 @@ end
 
 # Copyright
 
-(C) 2011-2019 Scott Tadman, Oleg Khabarov, [PostageApp](http://www.postageapp.com/)
+(C) 2011-2019 Scott Tadman, Oleg Khabarov, [PostageApp](https://postageapp.com/)
