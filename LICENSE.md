@@ -1,4 +1,4 @@
-Copyright (c) 2011-2016 Scott Tadman, Oleg Khabarov, PostageApp
+Copyright (c) 2011-2019 Scott Tadman, Oleg Khabarov, PostageApp Ltd.
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
