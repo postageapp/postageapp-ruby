@@ -19,4 +19,29 @@ if (defined?(ActionMailer))
   else
     require File.expand_path('mailer/mailer_4', File.dirname(__FILE__))
   end
+
+  def find_first_mime_type(mt)
+    part = arguments['content'].detect{|mime_type, body| mime_type == mt}
+    OpenStruct.new(:mime_type => part[0], :decoded => part[1]) if part
+  end
+
+  def header
+    arguments['headers']
+  end
+
+  def reply_to
+    arguments['headers']['reply_to']
+  end
+
+  def cc
+    arguments['headers']['cc']
+  end
+
+  def attachments
+    arguments['attachments']
+  end
+
+  def multipart?
+    ['text/plain', 'text/html'].all? {|mt| arguments['content'].key?(mt)}
+  end
 end
