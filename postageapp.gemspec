@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.require_paths = [ 'lib' ]
 
-  s.required_ruby_version = '>= 1.9.3'
+  s.required_ruby_version = '>= 2.0.0'
   
   s.add_dependency 'json', '>= 1.8'
   s.add_dependency 'mail', '~> 2.4'
