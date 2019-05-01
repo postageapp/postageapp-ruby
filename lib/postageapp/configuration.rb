@@ -76,7 +76,20 @@ class PostageApp::Configuration
     },
     secure: {
       default: true,
-      interrogator: true
+      interrogator: true,
+      after_set: -> (config) {
+        if (config.secure?)
+          config.protocol = 'https'
+          if (config.port == 80)
+            config.port = 443
+          end
+        else
+          config.protocol = 'http'
+          if (config.port == 443)
+            config.port = 80
+          end
+        end
+      }
     },
     verify_tls: {
       default: true,
@@ -114,7 +127,7 @@ class PostageApp::Configuration
       parse: -> (v) { v.to_i }
     },
     read_timeout: {
-      default: 5,
+      default: 10,
       aliases: [ :http_read_timeout ],
       parse: -> (v) { v.to_i }
     },
@@ -155,6 +168,7 @@ class PostageApp::Configuration
     ivar = config[:ivar] ||= :"@#{param}"
     mutator_method = :"#{param}="
     config[:sources] = [ param ]
+    after_set = config[:after_set]
 
     if (parser = config[:parse])
       define_method(mutator_method) do |v|
@@ -163,6 +177,8 @@ class PostageApp::Configuration
     else
       define_method(mutator_method) do |v|
         instance_variable_set(ivar, v)
+
+        after_set and after_set[self]
       end
     end
 

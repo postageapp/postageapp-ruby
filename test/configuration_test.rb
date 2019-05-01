@@ -21,12 +21,13 @@ class ConfigurationTest < MiniTest::Test
 
     assert_equal 5, config.http_open_timeout
     assert_equal 10, config.http_read_timeout
+
     assert_nil config.recipient_override
     assert_equal %w( send_message ), config.requests_to_resend
-    assert_nil config.project_root
+    refute_nil config.project_root
     assert_equal 'production', config.environment
     assert_nil config.logger
-    assert_equal 'Ruby', config.framework
+    assert_match 'Ruby', config.framework
   end
   
   def test_initialization_overrides
@@ -56,6 +57,7 @@ class ConfigurationTest < MiniTest::Test
     config = PostageApp::Configuration.new
     
     config.secure = false
+
     assert_equal false, config.secure
     assert_equal 'http', config.scheme
     assert_equal 80, config.port
