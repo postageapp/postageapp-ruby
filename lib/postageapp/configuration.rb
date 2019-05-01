@@ -32,8 +32,8 @@
 # -------------
 # :proxy_host - Proxy server hostname
 # :proxy_port - Proxy server port
-# :proxy_user - Proxy server username
-# :proxy_pass - Proxy server password
+# :proxy_username - Proxy server username
+# :proxy_password - Proxy server password
 
 # Advanced Options
 # ----------------
@@ -45,8 +45,6 @@
 class PostageApp::Configuration
   # == Constants ============================================================
 
-  HOST_DEFAULT = 'api.postageapp.com'.freeze
-
   SOCKS5_PORT_DEFAULT = 1080
   HTTP_PORT_DEFAULT = 80
   HTTPS_PORT_DEFAULT = 443
@@ -56,62 +54,189 @@ class PostageApp::Configuration
     false => 'http'.freeze
   }.freeze
 
-  PATH_DEFAULT = '/'.freeze
-
-  FRAMEWORK_DEFAULT = 'Ruby'.freeze
-  ENVIRONMENT_DEFAULT = 'production'.freeze
+  CONFIG_PARAMS = {
+    api_key: {
+      default: nil
+    },
+    project_root: {
+      default: -> {
+        if (defined?(Rails) and Rails.respond_to?(:root))
+          Rails.root
+        else
+          Dir.pwd
+        end
+      }
+    },
+    recipient_override: {
+      default: nil,
+      interrogator: true
+    },
+    logger: {
+      default: nil
+    },
+    secure: {
+      default: true,
+      interrogator: true
+    },
+    verify_tls: {
+      default: true,
+      aliases: [ :verify_certificate ],
+      interrogator: true
+    },
+    host: {
+      default: 'api.postageapp.com'.freeze
+    },
+    port: {
+      default: 443
+    },
+    scheme: {
+      default: 'https'.freeze,
+      aliases: [ :protocol ]
+    },
+    proxy_username: {
+      default: nil,
+      aliases: [ :proxy_user ]
+    },
+    proxy_password: {
+      default: nil,
+      aliases: [ :proxy_pass ]
+    },
+    proxy_host: {
+      default: nil
+    },
+    proxy_port: {
+      default: 1080,
+      parse: -> (v) { v.to_i }
+    },
+    open_timeout: {
+      default: 5,
+      aliases: [ :http_open_timeout ],
+      parse: -> (v) { v.to_i }
+    },
+    read_timeout: {
+      default: 5,
+      aliases: [ :http_read_timeout ],
+      parse: -> (v) { v.to_i }
+    },
+    retry_methods: {
+      default: %w[ send_message ].freeze,
+      aliases: [ :requests_to_resend ],
+      parse: -> (v) {
+        case (v)
+        when String
+          v.split(/\s*(?:,|\s)\s*/).grep(/\S/)
+        else
+          v
+        end
+      }
+    },
+    framework: {
+      default: -> {
+        if (defined?(Rails) and Rails.respond_to?(:version))
+          'Ruby %s / Ruby on Rails %s' % [
+            RUBY_VERSION,
+            Rails.version
+          ]
+        else
+          'Ruby %s' % RUBY_VERSION
+        end
+      }
+    },
+    environment: {
+      default: 'production'
+    }
+  }.freeze
 
   # == Properties ===========================================================
 
-  attr_accessor :secure
-  attr_writer :scheme
-  attr_accessor :host
-  attr_writer :port
-  attr_accessor :proxy_host
-  attr_writer :proxy_port
-  attr_accessor :proxy_user
-  attr_accessor :proxy_pass
+  CONFIG_PARAMS.each do |param, config|
+    attr_reader param
 
-  attr_accessor :verify_certificate
-  attr_accessor :http_open_timeout
-  attr_accessor :http_read_timeout
-  attr_accessor :recipient_override
-  attr_accessor :requests_to_resend
-  attr_accessor :project_root
-  attr_accessor :framework
-  attr_accessor :environment
-  attr_accessor :logger
+    ivar = config[:ivar] ||= :"@#{param}"
+    mutator_method = :"#{param}="
+    config[:sources] = [ param ]
+
+    if (parser = config[:parse])
+      define_method(mutator_method) do |v|
+        instance_variable_set(ivar, parser.call(v))
+      end
+    else
+      define_method(mutator_method) do |v|
+        instance_variable_set(ivar, v)
+      end
+    end
+
+    integrrogator_method = nil
+
+    if (config[:interrogator])
+      interrogator_method = :"#{param}?"
+      define_method(interrogator_method) do
+        !!instance_variable_get(ivar)
+      end
+    end
+
+    if (param_aliases = config[:aliases])
+      param_aliases.each do |param_alias|
+        config[:sources] << param_alias
+
+        alias_method param_alias, param
+        alias_method :"#{param_alias}=", mutator_method
+
+        if (config[:interrogator])
+          alias_method :"#{param_alias}?", interrogator_method
+        end
+      end
+    end
+
+    config[:env_vars] = config[:sources].map do |source|
+      'POSTAGEAPP_' + source.to_s.upcase
+    end
+
+    # config[:getters] = config[:sources].map do |source|
+    #   -> (credentials) { credentials[:source] }
+    # end + config[:env_vars].map do |var|
+    #   -> (_) { ENV[var] }
+    # end
+  end
 
   # == Instance Methods =====================================================
   
   def initialize
-    @secure = true
-    @verify_certificate = true
+    credentials = self.rails_credentials
 
-    @host = ENV['POSTAGEAPP_HOST'] || HOST_DEFAULT
+    CONFIG_PARAMS.each do |param, config|
+      value = (
+        config[:sources].map { |s| credentials[s] }.first ||
+        config[:env_vars].map { |v| ENV[v] }.first
+      )
 
-    @proxy_port = SOCKS5_PORT_DEFAULT
-
-    @http_open_timeout = 5
-    @http_read_timeout = 10
-
-    @requests_to_resend = %w[ send_message ]
-
-    @framework = FRAMEWORK_DEFAULT
-    @environment = ENVIRONMENT_DEFAULT
+      if (value)
+        if (config[:parse])
+          instance_variable_set(config[:ivar], config[:parse].call(value))
+        else
+          instance_variable_set(config[:ivar], value)
+        end
+      else
+        case (config[:default])
+        when Proc
+          instance_variable_set(config[:ivar], config[:default].call)
+        else
+          instance_variable_set(config[:ivar], config[:default])
+        end
+      end
+    end
   end
   
   alias_method :secure?, :secure
   alias_method :verify_certificate?, :verify_certificate
 
+  # Returns true if the port used for the API is the default port, otherwise
+  # false. 80 for HTTP, 443 for HTTPS.
   def port_default?
-    if (self.secure?)
-      self.port == HTTPS_PORT_DEFAULT
-    else
-      self.port == HTTP_PORT_DEFAULT
-    end
+    self.port == (self.secure? ? HTTPS_PORT_DEFAULT : HTTP_PORT_DEFAULT)
   end
 
+  # Returns true if a proxy is defined, otherwise false.
   def proxy?
     self.proxy_host and self.proxy_host.match(/\A\S+\z/)
   end
@@ -122,19 +247,17 @@ class PostageApp::Configuration
     @api_key = key
   end
   
-  # Returns the API key used to make API calls. Can be specified as the
-  # `POSTAGEAPP_API_KEY` environment variable.
+  # Returns the API key used to make API calls. Can be specified using Rails
+  # encrypted credentials or as the `POSTAGEAPP_API_KEY` environment variable.
   def api_key
-    @api_key ||= ENV['POSTAGEAPP_API_KEY']
+    @api_key ||= begin
+      if (PostageApp::Env.rails_with_encrypted_credentials?)
+        settings = Rails.application.credentials.postageapp
+        
+        settings and settings[:api_key]
+      end || ENV['POSTAGEAPP_API_KEY']
+    end
   end
-  
-  # Returns the HTTP scheme used to make API calls
-  def scheme
-    @scheme ||= SCHEME_FOR_SECURE[self.secure?]
-  end
-
-  alias_method :protocol=, :scheme=
-  alias_method :protocol, :scheme
   
   # Returns the port used to make API calls
   def port
@@ -158,5 +281,14 @@ class PostageApp::Configuration
   # Returns a connection aimed at the API endpoint
   def http
     PostageApp::HTTP.connect(self)
+  end
+
+protected
+  def rails_credentials
+    if (PostageApp::Env.rails_with_encrypted_credentials?)
+      Rails.application.credentials.postageapp
+    else
+      { }
+    end
   end
 end

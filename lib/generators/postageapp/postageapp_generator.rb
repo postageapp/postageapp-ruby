@@ -10,18 +10,21 @@ class PostageappGenerator < Rails::Generators::Base
   def self.source_root
     @__source_root ||= File.expand_path(
       '../../../generators/postageapp/templates',
-      File.dirname(__FILE__)
+      __dir__
     )
   end
   
   def install
-    unless (options[:api_key])
-      puts 'Must pass --api-key with API key of your PostageApp.com project'
+    unless (PostageApp::Env.rails_with_encrypted_credentials?)
+      unless (options[:api_key])
+        puts 'Must pass --api-key with API key of your PostageApp.com project'
 
-      exit(-1)
+        exit(-1)
+      end
+      
+      template('initializer.rb', 'config/initializers/postageapp.rb')
     end
-    
-    template('initializer.rb', 'config/initializers/postageapp.rb')
+
     copy_file('postageapp_tasks.rake', 'lib/tasks/postageapp_tasks.rake')
 
     puts run('rake postageapp:test')

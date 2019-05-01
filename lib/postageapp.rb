@@ -58,6 +58,8 @@ module PostageApp
   end
 end
 
+require 'postageapp/env'
+
 require 'postageapp/configuration'
 require 'postageapp/diagnostics'
 require 'postageapp/failed_request'
