@@ -89,7 +89,7 @@ request = PostageApp::Request.new(
     },
     attachments: {
       'document.pdf' => {
-        content_type: application/pdf',
+        content_type: 'application/pdf',
         content: Base64.encode64(File.open('/path/to/document.pdf', 'rb').read)
       }
     }
@@ -239,7 +239,7 @@ For projects other than Rails you'll need to tell where the `project_root` is:
 
 ```ruby
 PostageApp.configure do |config|
-  config.api_key      = 'PROJECT_API_KEY'
+  config.api_key = 'PROJECT_API_KEY'
   config.project_root = "/path/to/your/project"
 end
 ```
