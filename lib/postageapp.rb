@@ -60,6 +60,11 @@ end
 
 require 'postageapp/env'
 
+if (PostageApp::Env.rails?)
+  require 'postageapp/engine'
+  # require 'postageapp/ingresses/postage_app'
+end
+
 require 'postageapp/configuration'
 require 'postageapp/diagnostics'
 require 'postageapp/failed_request'
@@ -72,7 +77,9 @@ require 'postageapp/mail/delivery_method'
 require 'postageapp/utils'
 require 'postageapp/version'
 
-require 'postageapp/rails/railtie' if (defined?(Rails::Railtie))
+if (defined?(Rails::Railtie))
+  require 'postageapp/rails/railtie'
+end
 
 require 'postageapp/mail/extensions'
 

@@ -58,6 +58,9 @@ class PostageApp::Configuration
     api_key: {
       default: nil
     },
+    postback_secret: {
+      default: nil
+    },
     project_root: {
       default: -> {
         if (defined?(Rails) and Rails.respond_to?(:root))
