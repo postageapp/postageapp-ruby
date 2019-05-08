@@ -1,4 +1,4 @@
-require_relative './helper'
+require_relative '../helper'
 
 class LiveTest < MiniTest::Test
   # Note: Need access to a live PostageApp.com account
@@ -10,41 +10,6 @@ class LiveTest < MiniTest::Test
 
       assert config
       assert_equal ENV['POSTAGEAPP_API_KEY'], config.api_key
-    end
-
-    def test_request_get_method_list
-      request = PostageApp::Request.new(:get_method_list)
-      response = request.send
-      
-      assert_equal 'PostageApp::Response', response.class.name
-      assert_equal 'ok', response.status
-      assert_match(/^\w{40}$/, response.uid)
-      assert_nil response.message
-      assert_equal(
-        {
-          'methods' => %w[
-            get_account_info
-            get_message_receipt
-            get_message_transmissions
-            get_messages
-            get_method_list
-            get_metrics
-            get_project_info
-            get_recipients_list
-            get_suppression_list
-            message_delivery_status
-            message_status
-            messages_history
-            project_create
-            project_destroy
-            project_info
-            send_message
-            test_mail_server
-            test_recipient
-          ].join(', ')
-        },
-        response.data
-      )
     end
     
     def test_request_send_message

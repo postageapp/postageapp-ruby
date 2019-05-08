@@ -1,4 +1,4 @@
-require_relative './helper'
+require_relative '../helper'
 
 class ConfigurationTest < MiniTest::Test
   def test_initialization_defaults

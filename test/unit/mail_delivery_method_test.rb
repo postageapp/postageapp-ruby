@@ -1,4 +1,4 @@
-require_relative './helper'
+require_relative '../helper'
 
 class MailerDeliveryTest < MiniTest::Test
   def setup

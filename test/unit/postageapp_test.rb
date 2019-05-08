@@ -1,4 +1,4 @@
-require_relative './helper'
+require_relative '../helper'
 
 class PostageAppTest < MiniTest::Test
   def test_method_configure
@@ -12,6 +12,12 @@ class PostageAppTest < MiniTest::Test
 
   ensure
     PostageApp.configuration_reset!
+  end
+
+  def test_version
+    assert PostageApp.version.match(/\A\d+\.\d+\.\d+\z/), -> {
+      "%s is not a valid version number" % PostageApp.version.inspect
+    }
   end
   
   def test_logger

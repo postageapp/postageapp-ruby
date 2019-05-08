@@ -1,4 +1,4 @@
-require_relative './helper'
+require_relative '../helper'
 
 class MailerHelperMethodsTest < MiniTest::Test
   def test_mailer_helper_methods

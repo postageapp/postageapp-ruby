@@ -1,4 +1,4 @@
-require_relative './helper'
+require_relative '../helper'
 
 class RequestTest < MiniTest::Test
   def test_method_uid

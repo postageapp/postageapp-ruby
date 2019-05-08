@@ -1,4 +1,4 @@
-require_relative './helper'
+require_relative '../helper'
 
 class Mailer4Test < MiniTest::Test
   require_action_mailer(4) do
