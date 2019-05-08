@@ -47,7 +47,7 @@ class MiniTest::Test
   def setup
     # Resetting to default configuration
 
-    PostageApp.configure(:reset) do |config|
+    PostageApp.configure(reset: true) do |config|
       config.requests_to_resend = %w( send_message )
       config.project_root = File.expand_path('../', __FILE__)
       config.logger = nil
