@@ -1,12 +1,10 @@
 # encoding: utf-8
 
-$LOAD_PATH.unshift(File.expand_path('../lib', __FILE__))
-
-require 'postageapp/version'
+$LOAD_PATH.unshift(File.expand_path('./lib', __dir__))
 
 Gem::Specification.new do |s|
   s.name = 'postageapp'
-  s.version = PostageApp::VERSION
+  s.version = File.read(File.expand_path('VERSION', __dir__)).gsub(/\s/, '')
   s.authors = [
     'Scott Tadman',
     'Oleg Khabarov',
