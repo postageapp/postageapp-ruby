@@ -1,0 +1,37 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH << File.expand_path('../lib', __dir__)
+
+require 'postageapp'
+require 'postageapp/cli'
+
+exit_code = -1
+
+begin
+  if (ARGV.length > 0)
+    PostageApp::CLI.parse!(*ARGV)
+
+    exit(0)
+  end
+
+rescue PostageApp::CLI::Command::MissingArguments
+  exit(-20)
+rescue PostageApp::CLI::Command::APICallError
+  exit(-30)
+rescue PostageApp::CLI::UnknownCommand => e
+  $stderr.puts("Error: #{e}")
+  exit_code = -11
+end
+
+puts "usage: postageapp command [options]"
+puts
+puts "commands:"
+
+PostageApp::CLI::Command.defined.each do |command, _|
+  puts "  #{command}"
+end
+
+puts
+puts "* Documentation: https://dev.postageapp.com/api/"
+
+exit(exit_code)

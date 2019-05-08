@@ -54,6 +54,10 @@ class PostageApp::Request
     http = PostageApp.configuration.http
 
     PostageApp.logger.info(self)
+
+    if (ENV['DEBUG'])
+      puts JSON.pretty_generate(self.arguments_to_send)
+    end
     
     http_response =
       begin
