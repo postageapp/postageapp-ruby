@@ -1,7 +1,7 @@
 class PostageApp::Request
   # == Constants ============================================================
 
-  API_VERSION = '1.0'
+  API_VERSION = '1.1'
   
   HEADERS_DEFAULT = {
     'Content-type' => 'application/json',
@@ -56,6 +56,7 @@ class PostageApp::Request
     PostageApp.logger.info(self)
 
     if (ENV['DEBUG'])
+      puts "// #{url}"
       puts JSON.pretty_generate(self.arguments_to_send)
     end
     
