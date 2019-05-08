@@ -3,10 +3,10 @@ require_relative './helper'
 class ResponseTest < MiniTest::Test
   def test_initialization
     object = stub(
-      :body => {
+      body: {
         'response' => {
-          'uid'     => 'md5_hash_uid',
-          'status'  => 'ok',
+          'uid' => 'md5_hash_uid',
+          'status' => 'ok',
           'message' => 'api reply message'
         },
         'data' => {

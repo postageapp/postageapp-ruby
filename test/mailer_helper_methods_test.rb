@@ -4,12 +4,12 @@ class MailerHelperMethodsTest < MiniTest::Test
   def test_mailer_helper_methods
     request = PostageApp::Request.new(
       :send_message,
-      :headers => {
+      headers: {
         'from' => 'sender@test.test',
         'subject' => 'Test Message'
       },
-      :recipients => 'test@test.test',
-      :content => {
+      recipients: 'test@test.test',
+      content: {
         'text/plain' => 'text content',
         'text/html' => 'html content'
       }

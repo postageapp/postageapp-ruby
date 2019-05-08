@@ -87,12 +87,12 @@ class FailedRequestTest < MiniTest::Test
     request = PostageApp::Request.new(:get_project_info)
     
     message_receipt_response = stub(
-      :fail? => false,
-      :ok? => false,
-      :not_found? => true
+      fail?: false,
+      ok?: false,
+      not_found?: true
     )
 
-    message_receipt_request = stub(:send => message_receipt_response)
+    message_receipt_request = stub(send: message_receipt_response)
 
     PostageApp::Request.stubs(:new).with do |a,b|
       a == :get_message_receipt
