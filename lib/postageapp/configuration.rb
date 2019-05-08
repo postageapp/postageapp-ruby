@@ -58,6 +58,9 @@ class PostageApp::Configuration
     api_key: {
       default: nil
     },
+    account_api_key: {
+      default: nil
+    },
     postback_secret: {
       default: nil
     },
@@ -185,7 +188,7 @@ class PostageApp::Configuration
       end
     end
 
-    integrrogator_method = nil
+    interrogator_method = nil
 
     if (config[:interrogator])
       interrogator_method = :"#{param}?"
@@ -245,9 +248,6 @@ class PostageApp::Configuration
       end
     end
   end
-  
-  alias_method :secure?, :secure
-  alias_method :verify_certificate?, :verify_certificate
 
   # Returns true if the port used for the API is the default port, otherwise
   # false. 80 for HTTP, 443 for HTTPS.
@@ -260,34 +260,6 @@ class PostageApp::Configuration
     self.proxy_host and self.proxy_host.match(/\A\S+\z/)
   end
 
-  # Assign which API key is used to make API calls. Can also be specified
-  # using the `POSTAGEAPP_API_KEY` environment variable.
-  def api_key=(key)
-    @api_key = key
-  end
-  
-  # Returns the API key used to make API calls. Can be specified using Rails
-  # encrypted credentials or as the `POSTAGEAPP_API_KEY` environment variable.
-  def api_key
-    @api_key ||= begin
-      if (PostageApp::Env.rails_with_encrypted_credentials?)
-        settings = Rails.application.credentials.postageapp
-        
-        settings and settings[:api_key]
-      end || ENV['POSTAGEAPP_API_KEY']
-    end
-  end
-  
-  # Returns the port used to make API calls
-  def port
-    @port ||= (self.secure? ? HTTPS_PORT_DEFAULT : HTTP_PORT_DEFAULT)
-  end
-
-  # Returns the port used to connect via SOCKS5
-  def proxy_port
-    @proxy_port ||= SOCKS5_PORT_DEFAULT
-  end
-  
   # Returns the endpoint URL to make API calls
   def url
     '%s://%s%s' % [
