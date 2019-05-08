@@ -9,4 +9,6 @@ Gemfile.lock
 .ruby-version
 *.gem
 
+.env
+
 .vscode
