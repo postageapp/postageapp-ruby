@@ -11,7 +11,8 @@ class PostageApp::CLI::Command
     @defined ||= { }
   end
 
-  def self.define(command_name, &block)
+  def self.define(command_name = nil, &block)
+    command_name ||= $command_name
     command = self.defined[command_name] = new(command_name)
 
     command.instance_eval(&block) if (block_given?)
@@ -27,12 +28,17 @@ class PostageApp::CLI::Command
     @api_key_context = context
   end
 
-  def argument(name, optional: false, type: String, description: nil)
+  def argument(name, optional: false, type: String, desc: nil, boolean: false)
     @argument[name] = {
       optional: optional,
       type: String,
-      description: description
+      desc: desc,
+      boolean: boolean
     }
+  end
+
+  def perform(&block)
+    @perform = block
   end
 
   def parse!(*args)
@@ -42,8 +48,14 @@ class PostageApp::CLI::Command
       parser.banner = "Usage: postageapp #{@command_name} [options]"
 
       @argument.each do |name, attributes|
-        parser.on("--#{name} VALUE", "#{attributes[:description]} (#{attributes[:optional] ? 'optional' : 'required'})") do |v|
-          arguments[name] = v
+        if (attributes[:boolean])
+          parser.on("--#{name}", attributes[:desc]) do
+            arguments[name] = true
+          end
+        else
+          parser.on("--#{name} VALUE", "#{attributes[:desc]} (#{attributes[:optional] ? 'optional' : 'required'})") do |v|
+            arguments[name] = v
+          end
         end
       end
     end
@@ -67,10 +79,17 @@ class PostageApp::CLI::Command
       arguments['api_key'] = PostageApp.configuration.account_api_key
     end
 
+    case (@perform&.arity)
+    when 1
+      return @perform.call(arguments)
+    when 0
+      return @perform.call
+    end
+
     response = PostageApp::Request.new(@command_name, arguments).send
 
     case (response.status)
-    when "200"
+    when "ok"
       puts JSON.pretty_generate(response.data)
     else
       $stderr.puts("Received error: #{response.status}")
@@ -85,5 +104,7 @@ class PostageApp::CLI::Command
 end
 
 Dir.glob(File.expand_path('./command/*.rb', __dir__)) do |command|
+  $command_name = File.basename(command, '.rb').to_sym
+
   require command
 end

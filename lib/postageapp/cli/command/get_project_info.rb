@@ -1,2 +1,3 @@
-PostageApp::CLI::Command.define(:get_project_info) do
+PostageApp::CLI::Command.define do
+  # No arguments required for this command
 end

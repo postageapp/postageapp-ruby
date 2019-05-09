@@ -1,21 +1,21 @@
-PostageApp::CLI::Command.define(:create_mailbox) do
+PostageApp::CLI::Command.define do
   api_key :account
 
   argument :uid,
     optional: true,
-    description: 'An identifier to refer to this mailbox on subsequent API calls'
+    desc: 'An identifier to refer to this mailbox on subsequent API calls'
   argument :label,
     optional: true,
-    description: 'A descriptive name for this mailbox'
+    desc: 'A descriptive name for this mailbox'
   argument :host,
-    description: 'IMAP server hostname'
+    desc: 'IMAP server hostname'
   argument :port,
     optional: true,
-    description: 'IMAP server port (default 993)'
+    desc: 'IMAP server port (default 993)'
   argument :username,
-    description: 'Username/email-address used to authenticate with the IMAP server'
+    desc: 'Username/email-address used to authenticate with the IMAP server'
   argument :password,
-    description: 'Password used to authenticate with the IMAP server'
+    desc: 'Password used to authenticate with the IMAP server'
   argument :postback_url,
-    description: 'The URL to post received email content to'
+    desc: 'The URL to post received email content to'
 end

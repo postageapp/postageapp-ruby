@@ -56,13 +56,18 @@ class PostageApp::Configuration
 
   CONFIG_PARAMS = {
     api_key: {
-      default: nil
+      default: nil,
+      desc: 'Project API key to use',
+      required: 'for project API functions'
     },
     account_api_key: {
-      default: nil
+      default: nil,
+      desc: 'Account API key to use',
+      required: 'for account API functions'
     },
     postback_secret: {
-      default: nil
+      default: nil,
+      desc: 'Secret to use for validating ActionMailbox requests'
     },
     project_root: {
       default: -> {
@@ -71,18 +76,23 @@ class PostageApp::Configuration
         else
           Dir.pwd
         end
-      }
+      },
+      desc: 'Project root for logging purposes'
     },
     recipient_override: {
       default: nil,
-      interrogator: true
+      interrogator: true,
+      desc: 'Override sender on `send_message` calls'
     },
     logger: {
-      default: nil
+      default: nil,
+      env: false,
+      desc: 'Logger instance to use'
     },
     secure: {
       default: true,
       interrogator: true,
+      env: false,
       after_set: -> (config) {
         if (config.secure?)
           config.protocol = 'https'
@@ -95,47 +105,68 @@ class PostageApp::Configuration
             config.port = 80
           end
         end
-      }
+      },
+      desc: 'Enable verifying TLS connections'
     },
     verify_tls: {
       default: true,
       aliases: [ :verify_certificate ],
-      interrogator: true
+      interrogator: true,
+      parse: -> (v) {
+        case (v)
+        when 'true', 'yes', 'on'
+          true
+        when String
+          v.to_i != 0
+        else
+          !!v
+        end
+      },
+      desc: 'Enable TLS certificate verification'
     },
     host: {
-      default: 'api.postageapp.com'.freeze
+      default: 'api.postageapp.com'.freeze,
+      desc: 'API host to contact'
     },
     port: {
-      default: 443
+      default: 443,
+      desc: 'API port to contact'
     },
     scheme: {
       default: 'https'.freeze,
-      aliases: [ :protocol ]
+      aliases: [ :protocol ],
+      desc: 'HTTP scheme to use'
     },
     proxy_username: {
       default: nil,
-      aliases: [ :proxy_user ]
+      aliases: [ :proxy_user ],
+      desc: 'SOCKS5 proxy username'
     },
     proxy_password: {
       default: nil,
-      aliases: [ :proxy_pass ]
+      aliases: [ :proxy_pass ],
+      desc: 'SOCKS5 proxy password'
     },
     proxy_host: {
-      default: nil
+      default: nil,
+      desc: 'SOCKS5 proxy host'
     },
     proxy_port: {
       default: 1080,
-      parse: -> (v) { v.to_i }
+      parse: -> (v) { v.to_i },
+      desc: 'SOCKS5 proxy port'
     },
     open_timeout: {
       default: 5,
       aliases: [ :http_open_timeout ],
-      parse: -> (v) { v.to_i }
+      parse: -> (v) { v.to_i },
+      desc: 'Timeout in seconds when initiating requests'
     },
     read_timeout: {
       default: 10,
       aliases: [ :http_read_timeout ],
-      parse: -> (v) { v.to_i }
+      parse: -> (v) { v.to_i },
+      desc: 'Timeout in seconds when awaiting responses'
     },
     retry_methods: {
       default: %w[ send_message ].freeze,
@@ -147,7 +178,8 @@ class PostageApp::Configuration
         else
           v
         end
-      }
+      },
+      desc: 'Which API calls to retry, comma and/or space separated'
     },
     framework: {
       default: -> {
@@ -159,10 +191,12 @@ class PostageApp::Configuration
         else
           'Ruby %s' % RUBY_VERSION
         end
-      }
+      },
+      desc: 'Framework used'
     },
     environment: {
-      default: 'production'
+      default: 'production',
+      desc: 'Environment to use'
     }
   }.freeze
 
@@ -210,8 +244,10 @@ class PostageApp::Configuration
       end
     end
 
-    config[:env_vars] = config[:sources].map do |source|
-      'POSTAGEAPP_' + source.to_s.upcase
+    unless (config[:env] === false)
+      config[:env_vars] = config[:sources].map do |source|
+        'POSTAGEAPP_' + source.to_s.upcase
+      end
     end
 
     # config[:getters] = config[:sources].map do |source|
@@ -219,6 +255,12 @@ class PostageApp::Configuration
     # end + config[:env_vars].map do |var|
     #   -> (_) { ENV[var] }
     # end
+  end
+
+  # == Class Methods ========================================================
+
+  def self.params
+    CONFIG_PARAMS
   end
 
   # == Instance Methods =====================================================
