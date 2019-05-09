@@ -244,6 +244,84 @@ PostageApp.configure do |config|
 end
 ```
 
-# Copyright
+# Configuration Details
+
+Configuration can be done either via Ruby code directly, by environment
+variables, or by a combination of both. Where both are supplied, the
+Ruby setting will take precedence.
+
+## Configuration Arguments
+
+These can all be set with `PostageApp.config`:
+
+* `api_key`: Project API key to use (required for project API functions)
+* `account_api_key`: Account API key to use (required for account API functions)
+* `postback_secret`: Secret to use for validating ActionMailbox requests (optional)
+* `project_root`: Project root for logging purposes (default: current working directory)
+* `recipient_override`: Override sender on `send_message` calls (optional)
+* `logger`: Logger instance to use (optional)
+* `secure`: Enable verifying TLS connections (default: `true`)
+* `verify_tls`: Enable TLS certificate verification (default: `true`)
+* `verify_certificate`: Alias for `verify_tls`
+* `host`: API host to contact (default: `api.postageapp.com`)
+* `port`: API port to contact (default: `443`)
+* `scheme`: HTTP scheme to use (default: `https`)
+* `protocol`: Alias for `scheme`
+* `proxy_username`: SOCKS5 proxy username (optional)
+* `proxy_user`: Alias for `proxy_username`
+* `proxy_password`: SOCKS5 proxy password (optional)
+* `proxy_pass`: Alias for `proxy_password`
+* `proxy_host`: SOCKS5 proxy host (optional)
+* `proxy_port`: SOCKS5 proxy port (default: `1080`)
+* `open_timeout`: Timeout in seconds when initiating requests (default: `5`)
+* `http_open_timeout`: Alias for `open_timeout`
+* `read_timeout`: Timeout in seconds when awaiting responses (default: `10`)
+* `http_read_timeout`: Alias for `read_timeout`
+* `retry_methods`: Which API calls to retry, comma and/or space separated (default: `send_message`)
+* `requests_to_resend`: Alias for `retry_methods`
+* `framework`: Framework used (default: `Ruby`)
+* `environment`: Environment to use (default: `production`)
+
+A typical configuration involves setting the project API key:
+
+    PostageApp.config do |config|
+      config.api_key = 'PROJECT_API_KEY'
+    end
+
+Where additional settings can be applied as necessary.
+
+## Environment Variables
+
+Most configuration parameters can be set via the environment:
+
+* `POSTAGEAPP_API_KEY`: Project API key to use (required for project API functions)
+* `POSTAGEAPP_ACCOUNT_API_KEY`: Account API key to use (required for account API functions)
+* `POSTAGEAPP_POSTBACK_SECRET`: Secret to use for validating ActionMailbox requests (optional)
+* `POSTAGEAPP_PROJECT_ROOT`: Project root for logging purposes (default: current working directory)
+* `POSTAGEAPP_RECIPIENT_OVERRIDE`: Override sender on `send_message` calls (optional)
+* `POSTAGEAPP_VERIFY_TLS`:  (default: `true`)
+* `POSTAGEAPP_VERIFY_CERTIFICATE`: Alias for `POSTAGEAPP_VERIFY_TLS`
+* `POSTAGEAPP_HOST`: API host to contact (default: `api.postageapp.com`)
+* `POSTAGEAPP_PORT`: API port to contact (default: `443`)
+* `POSTAGEAPP_SCHEME`: HTTP scheme to use (default: `https`)
+* `POSTAGEAPP_PROTOCOL`: Alias for `POSTAGEAPP_SCHEME`
+* `POSTAGEAPP_PROXY_USERNAME`: SOCKS5 proxy username (optional)
+* `POSTAGEAPP_PROXY_USER`: Alias for `POSTAGEAPP_PROXY_USERNAME`
+* `POSTAGEAPP_PROXY_PASSWORD`: SOCKS5 proxy password (optional)
+* `POSTAGEAPP_PROXY_PASS`: Alias for `POSTAGEAPP_PROXY_PASSWORD`
+* `POSTAGEAPP_PROXY_HOST`: SOCKS5 proxy host (optional)
+* `POSTAGEAPP_PROXY_PORT`: SOCKS5 proxy port (default: `1080`)
+* `POSTAGEAPP_OPEN_TIMEOUT`: Timeout in seconds when initiating requests (default: `5`)
+* `POSTAGEAPP_HTTP_OPEN_TIMEOUT`: Alias for `POSTAGEAPP_OPEN_TIMEOUT`
+* `POSTAGEAPP_READ_TIMEOUT`: Timeout in seconds when awaiting responses (default: `10`)
+* `POSTAGEAPP_HTTP_READ_TIMEOUT`: Alias for `POSTAGEAPP_READ_TIMEOUT`
+* `POSTAGEAPP_RETRY_METHODS`: Which API calls to retry, comma and/or space separated (default: `send_message`)
+* `POSTAGEAPP_REQUESTS_TO_RESEND`: Alias for `POSTAGEAPP_RETRY_METHODS`
+* `POSTAGEAPP_FRAMEWORK`: Framework used (default: `Ruby`)
+* `POSTAGEAPP_ENVIRONMENT`: Environment to use (default: `production`)
+
+# Copyright and Licensing
 
 (C) 2011-2019 Scott Tadman, Oleg Khabarov, [PostageApp](https://postageapp.com/)
+
+This is released under the [MIT License](LICENSE.md).
