@@ -76,6 +76,10 @@ class MiniTest::Test
     Net::HTTP.any_instance.stubs(:post).returns(nil)
   end
 
+  def mock_errored_send(e)
+    Net::HTTP.any_instance.stubs(:post).raises(e)
+  end
+
   # Briefly substitutes a new object in place of an existing constant.
   def const_replace(name, object)
     original = Object.const_defined?(name) && Object.const_get(name)
