@@ -39,6 +39,8 @@ module PostageApp::FailedRequest
         uid: filename
       ).send(true)
 
+      PostageApp.logger.info(receipt_response)
+
       if (receipt_response.fail?)
         return
       elsif (receipt_response.ok?)
@@ -50,6 +52,8 @@ module PostageApp::FailedRequest
 
         response = request.send(true)
         
+        PostageApp.logger.info(receipt_response)
+
         # Not a fail, so we can remove this file, if it was then
         # there will be another attempt to resend
 
