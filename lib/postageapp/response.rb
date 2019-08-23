@@ -10,8 +10,8 @@ class PostageApp::Response
   # PostageApp service should generate it for the Response
   attr_reader :uid
   
-  # The status of the response in string format (like: ok, bad_request)
-  # Will be set to +fail+ if Request times out
+  # The status of the response in string format (like: ok, bad_request, fail, etc.)
+  # Will be set to +timeout+ if Request times out
   attr_reader :status
   
   # The message of the response. Could be used as an error explanation.
@@ -29,7 +29,7 @@ class PostageApp::Response
   # If something goes wrong Response will be thought of as failed
   def initialize(http_response)
     case (http_response)
-    when Exception
+    when Exception # Note this may be due to non-timeout exceptions, e.g. EHOSTUNREACH
       @status = STATUS_TIMEOUT
       @message = '[%s] %s' % [ http_response.class, http_response.to_s ]
     else
@@ -47,12 +47,23 @@ class PostageApp::Response
     @status = STATUS_FAIL
     @exception = '[%s] %s' % [ e.class, e ]
   end
-  
+
+  # Indicates if request can be retried as-is with the possibility of success,
+  # e.g. the PostageApp server may have been down (e.g. status: fail) or a
+  # client configuration can be fixed (e.g. status: unauthorized)
+  def retryable?
+    # TODO: what statuses should be considered not retryable?
+    !%w{ok invalid_json invalid_utf8 call_error}.include?(self.status)
+  end
+
   # Little helper that checks for the Response status
   #   => @response.ok?
   #   >> true
   #   => @response.fail?
   #   >> false
+  #   => @response.unauthorized?
+  #   >> false
+  #   etc.
   def method_missing(method)
     /.*?\?$/.match(method.to_s) ? "#{self.status}?" == method.to_s : super(method)
   end

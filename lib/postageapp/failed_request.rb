@@ -39,25 +39,21 @@ module PostageApp::FailedRequest
         uid: filename
       ).send(true)
 
-      if (receipt_response.fail?)
-        return
-      elsif (receipt_response.ok?)
-        PostageApp.logger.info("Skipping failed request (already sent) [#{filename}]")
-
-        force_delete!(file_path(filename))
-      elsif (receipt_response.not_found?)
+      if (receipt_response.not_found?)
         PostageApp.logger.info("Retrying failed request [#{filename}]")
 
         response = request.send(true)
         
+        PostageApp.logger.info(response)
+
         # Not a fail, so we can remove this file, if it was then
         # there will be another attempt to resend
 
-        unless (response.fail?)
+        unless (response.retryable?)
           force_delete!(file_path(filename))
         end
-      else
-        PostageApp.logger.info("Skipping failed request (non-replayable request type) [#{filename}]")
+      elsif (receipt_response.ok?)
+        PostageApp.logger.info("Skipping failed request (already sent) [#{filename}]")
 
         force_delete!(file_path(filename))
       end

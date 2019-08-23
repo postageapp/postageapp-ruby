@@ -74,7 +74,7 @@ class PostageApp::Request
     PostageApp.logger.info(response)
     
     unless (skip_failed_requests_processing)
-      if (response.fail?)
+      if (response.retryable?)
         PostageApp::FailedRequest.store(self)
       elsif (response.ok?)
         PostageApp::FailedRequest.resend_all

@@ -104,7 +104,45 @@ class FailedRequestTest < MiniTest::Test
     
     assert !File.exist?(file_path)
   end
-  
+
+  def test_resent_all_timeout
+    errors = [TimeoutError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH]
+
+    errors.each do |error|
+      mock_errored_send(error)
+
+      request = PostageApp::Request.new(:send_message, {
+        headers: {
+          'from' => 'sender@test.test',
+          'subject' => 'Test Message'
+        },
+        recipients: 'test@test.test',
+        content: {
+          'text/plain' => 'text content',
+          'text/html' => 'html content'
+        }
+      })
+
+      response = request.send
+
+      refute response.fail? # these exceptions are not considered 'fail'
+      assert response.timeout?
+
+      file_path = File.join(PostageApp::FailedRequest.store_path, request.uid)
+      assert File.exist?(file_path)
+
+      mock_errored_send(error)
+      mock_failed_send
+
+      # Forcing to resend. Should quit right away as we can't connect
+      PostageApp::FailedRequest.resend_all
+
+      assert File.exist?(file_path)
+
+      PostageApp::FailedRequest.force_delete!(file_path)
+    end
+  end
+
   def test_resend_all_failure
     mock_failed_send
     request = PostageApp::Request.new(:send_message, {
