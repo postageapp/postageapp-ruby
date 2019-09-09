@@ -8,7 +8,26 @@ class PostageApp::Request
     'Accept' => 'text/json, application/json'
   }
 
-  TimeoutError = defined?(::Timeout) ? ::Timeout::Error : ::TimeoutError
+  NET_HTTP_EXCEPTIONS = [
+    defined?(::Timeout) ? ::Timeout::Error : ::TimeoutError,
+    Errno::ECONNABORTED,
+    Errno::ECONNREFUSED,
+    Errno::ECONNRESET,
+    Errno::EHOSTUNREACH,
+    Errno::EINVAL,
+    Errno::ENETUNREACH,
+    Errno::EPIPE,
+    IOError,
+    Net::HTTPBadResponse,
+    Net::HTTPHeaderSyntaxError,
+    Net::ProtocolError,
+    SocketError,
+    Zlib::GzipFile::Error,
+  ]
+
+  NET_HTTP_EXCEPTIONS << OpenSSL::SSL::SSLError if defined?(OpenSSL)
+  NET_HTTP_EXCEPTIONS << Net::OpenTimeout if defined?(Net::OpenTimeout)
+
 
   # == Properties ===========================================================
   
@@ -65,7 +84,7 @@ class PostageApp::Request
           )
         )
 
-      rescue TimeoutError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH, Errno::EPIPE => e
+      rescue *NET_HTTP_EXCEPTIONS => e
         e
       end
     

@@ -106,9 +106,7 @@ class FailedRequestTest < MiniTest::Test
   end
 
   def test_resent_all_timeout
-    errors = [TimeoutError, Errno::ECONNREFUSED, Errno::EHOSTUNREACH]
-
-    errors.each do |error|
+    PostageApp::Request::NET_HTTP_EXCEPTIONS.each do |error|
       mock_errored_send(error)
 
       request = PostageApp::Request.new(:send_message, {
