@@ -7,9 +7,13 @@ module PostageApp::FailedRequest
     return false unless (self.store_path) 
     return false unless (PostageApp.configuration.requests_to_resend.member?(request.method.to_s))
     
-    unless (File.exist?(file_path(request.uid)))
-      open(file_path(request.uid), 'wb') do |f|
+    path = file_path(request.uid)
+    unless (File.exist?(path))
+      open(path, 'wb') do |f|
         f.write(Marshal.dump(request))
+      rescue StandardError => e
+        self.force_delete!(path)
+        raise e
       end
     end
     
@@ -33,6 +37,7 @@ module PostageApp::FailedRequest
       next unless (filename.match(/^\w{40}$/))
       
       request = initialize_request(filename)
+      next unless request
       
       receipt_response = PostageApp::Request.new(
         :get_message_receipt,
@@ -67,9 +72,14 @@ module PostageApp::FailedRequest
     return false unless (self.store_path)
     return false unless (File.exist?(file_path(uid)))
 
-    Marshal.load(File.read(file_path(uid))) 
+    request = Marshal.load(File.read(file_path(uid)))
+    raise "Marshaled file is not PostageApp::Request" unless request.is_a?(PostageApp::Request)
 
-  rescue
+    return request
+
+  rescue StandardError => e
+    PostageApp.logger.warn("Skipping failed request [#{uid}]: #{e}")
+
     force_delete!(file_path(uid))
 
     false

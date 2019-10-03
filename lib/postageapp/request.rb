@@ -96,7 +96,11 @@ class PostageApp::Request
       if (response.retryable?)
         PostageApp::FailedRequest.store(self)
       elsif (response.ok?)
-        PostageApp::FailedRequest.resend_all
+        begin
+          PostageApp::FailedRequest.resend_all
+        rescue StandardError => e
+          PostageApp.logger.error("FailedRequest.resend_all failed: #{e}")
+        end
       end
     end
     

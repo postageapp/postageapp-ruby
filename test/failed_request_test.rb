@@ -36,6 +36,20 @@ class FailedRequestTest < MiniTest::Test
     assert_equal request.arguments_to_send, stored_request.arguments_to_send
   end
   
+  def test_store_bad_data
+    request = PostageApp::Request.new(:send_message, {
+      undumpable: Proc.new {}
+    })
+
+    assert_raises do
+      PostageApp::FailedRequest.store(request)
+    end
+
+    file_path = File.join(PostageApp::FailedRequest.store_path, request.uid)
+
+    refute File.exist?(file_path)
+  end
+
   def test_initialize_request_when_not_found
     assert !PostageApp::FailedRequest.initialize_request('not_there')
   end
@@ -48,6 +62,16 @@ class FailedRequestTest < MiniTest::Test
     assert !PostageApp::FailedRequest.initialize_request('1234567890')
   end
   
+  def test_initialize_requests_with_invalid_file
+    file_path = File.join(PostageApp::FailedRequest.store_path, 'invalid')
+
+    open(file_path, 'wb') do |f|
+      f.write(Marshal.dump({}))
+    end
+
+    assert !PostageApp::FailedRequest.initialize_request('invalid')
+  end
+
   def test_store_for_wrong_call_type
     request = PostageApp::Request.new(:get_project_info)
 
@@ -97,7 +121,11 @@ class FailedRequestTest < MiniTest::Test
     PostageApp::Request.stubs(:new).with do |a,b|
       a == :get_message_receipt
     end.returns(message_receipt_request)
-    
+
+    # Include a bad file, which should be ignored
+    FileUtils.touch(File.join(PostageApp::FailedRequest.store_path,
+      '01bc375d04cf3fd395a157dc379f14a1852ec93c'))
+
     response = request.send
 
     assert response.ok?
@@ -167,5 +195,28 @@ class FailedRequestTest < MiniTest::Test
     PostageApp::FailedRequest.resend_all
     
     assert File.exist?(file_path)
+  end
+
+  def test_resend_all_error_rescued
+    mock_successful_send
+
+    request = PostageApp::Request.new('send_message',
+      'headers' => {
+        'from' => 'sender@test.test',
+        'subject' => 'Test Message'
+      },
+      'recipients' => 'test@test.test',
+      'content' => {
+        'text/plain' => 'text content',
+        'text/html' => 'html content'
+      }
+    )
+
+    # This should be rescued
+    PostageApp::FailedRequest.stubs(:resend_all).raises(StandardError)
+
+    response = request.send
+
+    assert_equal 'ok', response.status
   end
 end
