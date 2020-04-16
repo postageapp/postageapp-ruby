@@ -133,7 +133,7 @@ class PostageApp::Mailer < ActionMailer::Base
     # Call all the procs (if any)
     class_default = self.class.default
     default_values = class_default.merge(self.class.default) do |k,v|
-      v.respond_to?(:call) ? v.bind(self).call : v
+      v.respond_to?(:call) ? v.call : v
     end
 
     # Handle defaults
