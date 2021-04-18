@@ -24,7 +24,7 @@
 # Sending email
 #
 #   # Create a PostageApp::Request object
-#   request = Notifier.signup_notification(user) 
+#   request = Notifier.signup_notification(user)
 #   # Deliver the message and return a PostageApp::Response
 #   response = request.deliver_now
 
@@ -156,7 +156,7 @@ class PostageApp::Mailer < ActionMailer::Base
       :template_name,
       :template_path
     )
-    
+
     m.headers.merge!(assignable)
 
     # Render the templates and blocks
@@ -166,13 +166,33 @@ class PostageApp::Mailer < ActionMailer::Base
     m
   end
 
-protected
-  def each_template(paths, name, &block) #:nodoc:
-    (lookup_context.find_all(name, paths) || [ ]).uniq do |t|
-      t.formats
-    end.each(&block)
+  def find_first_mime_type(mt)
+    part = arguments['content'].detect{ |mime_type, body| mime_type == mt }
+
+    OpenStruct.new(mime_type: part[0], decoded: part[1]) if part
   end
 
+  def header
+    arguments['headers']
+  end
+
+  def reply_to
+    arguments.dig('headers', 'reply_to')
+  end
+
+  def cc
+    arguments.dig('headers', 'cc')
+  end
+
+  def attachments
+    arguments['attachments']
+  end
+
+  def multipart?
+    %w[ text/plain text/html ].all? { |mt| arguments['content'].key?(mt) }
+  end
+
+protected
   def create_parts_from_responses(m, responses) #:nodoc:
     content = m.arguments['content'] ||= { }
 
@@ -198,17 +218,17 @@ class PostageApp::Request
   def deliver_now
     inform_interceptors
 
-    if (perform_deliveries)
-      if (@delivery_method == Mail::TestMailer)
-        @delivery_method.deliveries << self
-      else
-        self.send
-      end
+    return unless (perform_deliveries)
+
+    if (@delivery_method == Mail::TestMailer)
+      @delivery_method.deliveries << self
+    else
+      self.send
     end
   end
   alias_method :deliver, :deliver_now
 
-  # Not 100% on this, but I need to assign this so I can properly handle deliver method
+  # Allows overriding the delivery method setting
   def delivery_method(method = nil, settings = nil)
     @delivery_method = method
   end
