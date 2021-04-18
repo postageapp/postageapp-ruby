@@ -264,14 +264,14 @@ class PostageApp::Configuration
   end
 
   # == Instance Methods =====================================================
-  
+
   def initialize
     credentials = self.rails_credentials
 
     CONFIG_PARAMS.each do |param, config|
       value = (
-        config[:sources].map { |s| credentials[s] }.first ||
-        config[:env_vars].map { |v| ENV[v] }.first
+        config[:sources]&.map { |s| credentials[s] }&.compact&.first ||
+        config[:env_vars]&.map { |v| ENV[v] }&.compact&.first
       )
 
       if (value)
@@ -320,8 +320,6 @@ protected
   def rails_credentials
     if (PostageApp::Env.rails_with_encrypted_credentials?)
       Rails.application.credentials.postageapp
-    else
-      { }
-    end
+    end or { }
   end
 end
