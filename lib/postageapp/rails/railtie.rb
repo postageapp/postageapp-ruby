@@ -1,7 +1,5 @@
-require 'postageapp'
-
 if (defined?(ActionMailer))
-  require 'postageapp/mailer'
+  require_relative '../mailer'
 
   # Register as a delivery method with ActionMailer
   ActionMailer::Base.add_delivery_method(
