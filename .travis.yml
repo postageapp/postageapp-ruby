@@ -3,9 +3,6 @@ before_install: "WITH_VERBOSE=1 script/with current bootstrap"
 install: "WITH_VERBOSE=1 script/with current bundle install"
 script: "WITH_VERBOSE=1 script/with current bundle exec rake test"
 rvm:
-  - 2.0.0-p648
-  - 2.1.10
-  - 2.2.10
   - 2.3.3
   - 2.4.2
   - 2.5.3
@@ -14,32 +11,9 @@ rvm:
   - jruby-9.2.7.0
 gemfile:
   - test/gemfiles/Gemfile.ruby
-  - test/gemfiles/Gemfile.rails-2.3.x
-  - test/gemfiles/Gemfile.rails-3.0.x
-  - test/gemfiles/Gemfile.rails-3.1.x
-  - test/gemfiles/Gemfile.rails-3.2.x
-  - test/gemfiles/Gemfile.rails-4.0.x
-  - test/gemfiles/Gemfile.rails-4.1.x
-  - test/gemfiles/Gemfile.rails-4.2.x
   - test/gemfiles/Gemfile.rails-5.0.x
   - test/gemfiles/Gemfile.rails-5.2.x
+  - test/gemfiles/Gemfile.rails-6.0.x
+  - test/gemfiles/Gemfile.rails-6.1.x
 matrix:
   exclude:
-    - rvm: 2.0.0-p648
-      gemfile: test/gemfiles/Gemfile.rails-2.3.x
-    - rvm: 2.1.10
-      gemfile: test/gemfiles/Gemfile.rails-2.3.x
-    - rvm: 2.2.5
-      gemfile: test/gemfiles/Gemfile.rails-2.3.x
-    - rvm: 2.3.1
-      gemfile: test/gemfiles/Gemfile.rails-2.3.x
-    - rvm: jruby-9.1.2.0
-      gemfile: test/gemfiles/Gemfile.rails-2.3.x
-    - rvm: 2.0.0-p648
-      gemfile: test/gemfiles/Gemfile.rails-5.0.x
-    - rvm: 2.0.0-p648
-      gemfile: test/gemfiles/Gemfile.rails-5.2.x
-    - rvm: 2.1.10
-      gemfile: test/gemfiles/Gemfile.rails-5.0.x
-    - rvm: 2.1.10
-      gemfile: test/gemfiles/Gemfile.rails-5.2.x
