@@ -3,7 +3,6 @@ before_install: "WITH_VERBOSE=1 script/with current bootstrap"
 install: "WITH_VERBOSE=1 script/with current bundle install"
 script: "WITH_VERBOSE=1 script/with current bundle exec rake test"
 rvm:
-  - 2.4.10
   - 2.5.9
   - 2.6.7
   - 2.7.3
@@ -16,5 +15,3 @@ gemfile:
   - test/gemfiles/Gemfile.rails-5.2.x
   - test/gemfiles/Gemfile.rails-6.0.x
   - test/gemfiles/Gemfile.rails-6.1.x
-matrix:
-  exclude:

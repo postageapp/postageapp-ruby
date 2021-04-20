@@ -21,13 +21,12 @@ Gem::Specification.new do |s|
   s.summary = 'Client library for PostageApp Email API'
   s.description = 'PostageApp Library for Ruby and Ruby on Rails applications'
   s.license = 'MIT'
-  
+
   s.files = `git ls-files`.split("\n")
   s.platform = Gem::Platform::RUBY
   s.require_paths = [ 'lib' ]
 
-  s.required_ruby_version = '>= 2.0.0'
-  
-  s.add_dependency 'json', '>= 1.8'
+  s.required_ruby_version = '>= 2.5.0'
+
   s.add_dependency 'mail', '~> 2.4'
 end

@@ -1,15 +1,18 @@
 #!/usr/bin/env ruby
 
 require 'yaml'
+require 'open3'
+require 'shellwords'
 
-require File.expand_path('with_environment', __dir__)
+require_relative './with_environment'
 
 class TravisTest
   extend WithEnvironment
 
   ENV_VARIABLE = {
-    rvm: "RBENV_VERSION",
-    gemfile: "BUNDLE_GEMFILE"
+    rvm: 'RBENV_VERSION',
+    version: 'RBENV_VERSION',
+    gemfile: 'BUNDLE_GEMFILE'
   }
 
   def self.bash_env(env)
@@ -20,30 +23,44 @@ class TravisTest
     end.compact.join(' ')
   end
 
-  def self.env_expanded(env)
-    Hash[
-      env.collect do |key, value|
-        [ ENV_VARIABLE[key], value ]
-      end
-    ]
+  def self.environment(env)
+    env.map do |key, value|
+      [ ENV_VARIABLE[key], value ]
+    end.to_h
   end
 
-  def self.shell_command!(args, env)
-    commands = args.collect do |s|
+  def self.shell!(commands, env)
+    commands = commands.collect do |s|
       s % env
     end
 
-    env_expanded(env).each do |key, value|
-      puts 'export %s=%s' % [ key, value ]
-    end
-    puts(commands.join(' && '))
-    
-    with_environment(env_expanded(env)) do
-      result = system(commands.join(' && '))
+    shell_cmds = [
+      'eval "$(rbenv init -)"',
+      'set -e',
+      *commands
+    ].join('; ')
 
-      yield(result) if (block_given?)
+    # p environment(env)
+    # puts shell_cmds
 
-      result
+    Open3.popen3(
+      environment(env),
+      shell_cmds
+    ) do |_sin, sout, serr, proc|
+      status = proc.value.exitstatus
+
+      yield(status) if (block_given?)
+
+      status.tap do |status|
+        if (status != 0)
+          $stderr.puts 'Error code: %d' % status
+        end
+
+        if (status != 0 or ENV['VERBOSE'])
+          puts sout.read
+          puts serr.read
+        end
+      end
     end
   end
 
@@ -55,12 +72,12 @@ class TravisTest
         rvm: entry[:rvm]
       }
     end.uniq.each do |entry|
-      puts "Ruby %{rvm}" % entry
+      puts 'Ruby %{rvm}' % entry
 
-      shell_command!(
+      shell!(
         [
-          "rbenv install %{version}",
-          "gem install bundler"
+          'rbenv install %{version}',
+          'gem install bundler'
         ],
         entry
       )
@@ -77,9 +94,9 @@ class TravisTest
 
       versions[entry[:rvm]] = true
 
-      shell_command!(
+      shell!(
         [
-          "ruby -e 'puts RUBY_VERSION'"
+          %q[ruby -e 'puts RUBY_VERSION']
         ],
         entry
       )
@@ -103,14 +120,15 @@ class TravisTest
     results = { }
 
     travis_test.matrix.each do |entry|
-      puts "RBENV_VERSION=%{rvm} BUNDLE_GEMFILE=%{gemfile}" % entry
+      puts 'RBENV_VERSION=%{rvm} BUNDLE_GEMFILE=%{gemfile}' % entry
 
       gemfile_lock_remove!(entry[:gemfile])
 
-      shell_command!(
+      shell!(
         [
-          "bundle install --quiet",
-          "rake test"
+          'gem install bundler --no-doc',
+          'bundle install --quiet',
+          'bundle exec rake test'
         ],
         entry
       ) do |code|
@@ -125,7 +143,7 @@ class TravisTest
       puts '%-20s %-24s %-6s' % [
         entry[:rvm],
         File.basename(entry[:gemfile]).sub(/\AGemfile\./,''),
-        code
+        code ? 'Pass' : 'Fail'
       ]
     end
   end
@@ -143,16 +161,16 @@ class TravisTest
   end
 
   def ruby_versions
-    travis_config['rvm']
+    travis_config['rvm'].sort
   end
 
   def matrix_exclusions
-    travis_config['matrix']['exclude'].collect do |entry|
+    travis_config.dig('matrix', 'exclude')&.collect do |entry|
       {
         rvm: entry['rvm'],
         gemfile: entry['gemfile']
       }
-    end
+    end or [ ]
   end
 
   def matrix

@@ -1,8 +1,7 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'rails', '~> 6.1'
+gem 'rails', '~> 6.0.3.6'
 
-gem 'json'
 gem 'mail'
 
 group :test do

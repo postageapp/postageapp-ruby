@@ -1,8 +1,7 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 
-gem 'json', '~> 1.8.3'
 gem 'mail'
-gem 'mime-types', '2.99.1' # Locked for 1.9 compatibility
+gem 'mime-types'
 
 group :test do
   gem 'rake'
