@@ -173,19 +173,15 @@ class PostageApp::Mailer < ActionMailer::Base
   end
 
   def header
-    arguments['headers']
+    @_message.arguments['headers']
   end
 
   def reply_to
-    arguments.dig('headers', 'reply_to')
+    @_message.arguments.dig('headers', 'reply_to')
   end
 
   def cc
-    arguments.dig('headers', 'cc')
-  end
-
-  def attachments
-    arguments['attachments']
+    @_message.arguments.dig('headers', 'cc')
   end
 
   def multipart?
