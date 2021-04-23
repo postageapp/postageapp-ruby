@@ -1,9 +1,5 @@
 # Avoid contaminating ENV with lots of BUNDLER_ variables
-ENV_CLEAN = ENV.to_h
-
-require 'bundler/setup'
-
-ENV.replace(ENV_CLEAN)
+# require 'bundler/setup'
 
 require 'rake/testtask'
 
@@ -30,3 +26,13 @@ namespace :travis do
 end
 
 task default: :test
+
+namespace :test do
+  task :rails do
+    ENV['BUNDLE_GEMFILE'] = File.expand_path('./test/gemfiles/Gemfile.rails-6.1.x', __dir__)
+
+    require 'bundler/setup'
+
+    p Rails
+  end
+end
