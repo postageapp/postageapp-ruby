@@ -12,11 +12,10 @@ Gem::Specification.new do |s|
   ]
   s.email = [
     'tadman@postageapp.com',
-    'oleg@khabarov.ca',
-    'info@postageapp.com'
+    'oleg@khabarov.ca'
   ]
 
-  s.homepage = 'http://github.com/postageapp/postageapp-ruby'
+  s.homepage = 'https://github.com/postageapp/postageapp-ruby'
 
   s.summary = 'Client library for PostageApp Email API'
   s.description = 'PostageApp Library for Ruby and Ruby on Rails applications'

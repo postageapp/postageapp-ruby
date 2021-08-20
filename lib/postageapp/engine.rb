@@ -3,7 +3,9 @@ module PostageApp
     isolate_namespace PostageApp
 
     initializer 'postageapp' do |app|
-      app.config.action_mailbox.ingress = :postage_app
+      if (app.config.respond_to?(:action_mailbox))
+        app.config.action_mailbox.ingress = :postage_app
+      end
     end
   end
 end
