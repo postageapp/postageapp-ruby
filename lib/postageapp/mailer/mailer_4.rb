@@ -166,6 +166,26 @@ class PostageApp::Mailer < ActionMailer::Base
     m
   end
 
+  def template_exists?(headers)
+    templates_path = headers[:template_path] || self.class.mailer_name
+    templates_name = headers[:template_name] || action_name
+
+    lookup_context.find_all(templates_name, Array(templates_path)).any?
+  end
+
+  def each_template(paths, name, &block)
+    # NOTE: Patched to avoid tripping over a "missing template" exception,
+    #       as no application-side template is required for PostageApp.
+    templates = lookup_context.find_all(name, paths)
+
+    if (templates.empty?)
+      [ ]
+    else
+      templates.uniq(&:formats).each(&block)
+    end
+  end
+
+
   def find_first_mime_type(mt)
     part = arguments['content'].detect{ |mime_type, body| mime_type == mt }
 
