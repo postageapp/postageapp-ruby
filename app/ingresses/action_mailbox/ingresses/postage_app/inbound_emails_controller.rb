@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-if (defined?(ActionMailbox))
+if (defined?(ActionMailbox) and defined?(ActionMailbox::BaseController))
   class ActionMailbox::Ingresses::PostageApp::InboundEmailsController < ActionMailbox::BaseController
     before_action :hmac_authenticate
 

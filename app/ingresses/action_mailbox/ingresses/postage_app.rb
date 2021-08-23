@@ -1,2 +1,4 @@
-module ActionMailbox::Ingresses::PostageApp
+if (defined?(ActionMailbox))
+  module ActionMailbox::Ingresses::PostageApp
+  end
 end
